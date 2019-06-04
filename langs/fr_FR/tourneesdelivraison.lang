@@ -1,0 +1,181 @@
+# Copyright (C) 2019 Thomas Kolli <thomas@brasserieteddybeer.fr>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#
+# Générique
+#
+
+# Module label 'ModuleTourneesDeLivraisonName'
+ModuleTourneesDeLivraisonName = TourneesDeLivraison
+# Module description 'ModuleTourneesDeLivraisonDesc'
+ModuleTourneesDeLivraisonDesc = Description de TourneesDeLivraison
+
+#
+# Page d'administration
+#
+TourneesDeLivraisonSetup = Configuration du module TourneesDeLivraison
+Settings = Réglages
+TourneesDeLivraisonSetupPage = Page de configuration du module TourneesDeLivraison
+
+#
+# Page À propos
+#
+About = À propos
+TourneesDeLivraisonAbout = À propos de TourneesDeLivraison
+TourneesDeLivraisonAboutPage = Page à propos de TourneesDeLivraison
+
+#
+# Page d'exemple
+#
+MyPageName = Nom de ma page
+
+#
+# Box d'exemple
+#
+MyWidget = Mon widget
+MyWidgetDescription = Description de mon widget
+
+#
+# Objets
+#
+TourneeDeLivraison = Tournée de livraison
+TourneeUnique = Tournée unique
+InfoLivraison = Info pour la livraison
+AdresseLivraison = Adresse de livraison
+TempsTheorique = Temps théorique de livraison
+BL = Bordereau de Livraison
+Facture = Facture
+Etiquettes = Étiquettes
+DocumentsLivraison = Documents de livraison
+DistanceTotale = Distance totale
+DureeTrajet = Durée du trajet (hors arrêt)
+DateTournee = Date de la tournée
+DateProchaineTournee = Date de la prochaine
+TourneeUniqueCategoriesShort = tags tournée
+TourneeDeLivraisonCategoriesShort = tags tournée
+TourneeUnique_linesCategoriesShort = tags
+TourneeDeLivraison_linesCategoriesShort = tags
+
+#
+# Commandes
+#
+CreerTournee = Créer Tournée
+AjouterContact = Ajouter un contact
+AffectationAuto = Affectation Automatique
+SendMailToAll = Envoyer mail à tous
+SendMailToManquant = Envoyer mail aux manquants
+ChangeDateLivraison = Changer la date de livraison
+AffecterCetteTournee = Affecter à cette tournée
+NePasAffecterCetteTournee = Ne pas affecter à cette tournée
+MettreAffectationInconnue = Mettre en affectation inconnue
+GenererDocs = Générer tous les documents
+PasDeCmde = Ne commande pas cette fois
+DerniereLivraisonLe = Dernière livraison le
+
+#
+# Etats
+#
+Annulee = Annulée
+Clos = Clos
+
+#
+# Action
+#
+Reopen = Réouvrir
+DeleteTourneeDeLivraison = Effacer la tournée de livraison
+DeletelineTourneeDeLivraison = Effacer la ligne
+DeletecontactTourneeDeLivraison = Enlever ce contact
+CloneTourneeDeLivraison = Cloner la tournée de livraison
+ValidateTourneeDeLivraison = Valider la tournée de livraison
+UnvalidateTourneeDeLivraison = Dévalider la tournée de livraison
+CloseTourneeDeLivraison = Clore la tournée de livraison
+ReopenTourneeDeLivraison = Réouvrir la tournée de livraison
+CancelTourneeDeLivraison = Annuler la tournée de livraison
+AffectationAutoTourneeUnique = Affectation automatique
+ChangeStatutElt = Changement de statut
+ChangeDateElt = Changement de date de livraison
+ConfirmDeleteTourneeDeLivraison = Êtes-vous sûr de vouloir effacer cette tournée de livraison ?
+ConfirmDeletelineTourneeDeLivraison = Êtes-vous sûr de vouloir effacer cette ligne ?
+ConfirmDeletecontactTourneeDeLivraison = Êtes-vous sûr de vouloir enlever ce contact ?
+ConfirmCloneTourneeDeLivraison = Êtes-vous sûr de vouloir cloner cette tournée de livraison ?
+ConfirmValidateTourneeDeLivraison = Êtes-vous sûr de vouloir valider cette tournée de livraison sous la référence <b>%s</b> ?
+ConfirmUnvalidateTourneeDeLivraison = Êtes-vous sûr de vouloir restaurer la tournée de livraison <b>%s</b> au statut brouillon ?
+ConfirmCloseTourneeDeLivraison=Êtes-vous sûr de vouloir clôturer cette tournée de livraison ?
+ConfirmReopenTourneeDeLivraison=Êtes-vous sûr de vouloir réouvrir cette tournée de livraison ?
+ConfirmCancelTourneeDeLivraison=Êtes-vous sûr de vouloir annuler cette tournée de livraison ?
+ConfirmAffectationAutoTourneeUnique = Êtes-vous sûr de vouloir affecter automatiquement toutes les commandes/expéditions dont la date correspond avec celle de la tournée ?
+ConfirmChangeStatutElt = Êtes-vous sur de vouloir changer le statut de le/la %s ?
+ConfirmChangeDateEltToDateTournee = Êtes-vous sur de vouloir changer la date de le/la %s et de la fixer à la date de la tournée ?
+ConfirmGenererDocs = Êtes-vous sur de vouloir générer tous les documents de la %s ?
+
+#
+# Erreurs
+#
+ErreurTdLAddLineType = Erreur : Type non remplit ou non valide
+ErreurTdLAddLineRedondanceClient = Erreur : Une ligne avec le même client est déjà présente
+ErreurTdLAddLineRedondanceTournee = Erreur : Une ligne avec la même tournée est déjà présente
+
+#
+# Status
+#
+NonAffecteDateKO = Non affecté, date différente
+NonAffecteDateOK = Non affecté, date OK
+AffecteDateKO = Affecté, Erreur Date
+AffecteDateOK = Affecté, Date OK
+AutreAffectation = Autre affectation
+NonAffecte = Non Affecté
+AffecteTournee = Affecté à cette tournée
+DateTourneeDifferente = Date de livraison prévue différente de la date de la tournée
+
+#
+# Messages
+#
+MsgAttentionDateDifferente = Attention, dates de tournée différente de la commande
+date_tourneeModifiee = Date de tournée modifiée
+labelModifiee = Libellé modifié
+descriptionModifiée = Description modifiée
+StatutEltModifiee = Satut de le/la %s modifié
+DateEltModifiee = Date de livraison de le/la %s modifiée
+
+
+#
+# Paramètres
+#
+ReglesAutoAffectation = Règles d'auto-affectation
+AffecteAutoDateLivraisonOK = Affecte automatiquement les éléments (commande/livraison) si la date de livraison est la même que la date de la tournée
+AffecteAuto1ereFutureCmde = Affecte automatiquement la 1ère future commande d'un client lié à une tournée
+AffectationAutoSi1EltParCmde = Affectation automatique de l'élément (livraison/facture) si 1 seul élément par commande
+ChangeAutoDateLivraison = Changement automatique de la date de livraison à l'affectation
+AffectationsManuellesSeulement = Affectations manuelles seulement
+AffectationsManuellesEtAuto = Affectations manuelles et automatiques
+TourneeModelModule = Modèles des documents de tournées
+CacheSurBL = Caché sur les BL
+CodeCarton = Code carton
+Colisage = Colisage
+
+#
+# Autres
+#
+default = Defaut
+
+#
+# modèles Pdf
+#
+PDFFourgonDescription = Modèle de bordereau de tournée de livraison
+ParametersDocsTournee = Paramètres des bordereaux de tournée de livraison
+PdfTourneeTitle = Tournée
+RefTournee = Réf. tournée :
+BLTournee = Bordereau de tournée de livraison
+PoidsSurBL = Indication du poids sur les bordereaux

@@ -1,0 +1,5 @@
+A FAIRE:
+
+* ajouter un trigger pour à la suppression d'une commande/expedition/facture supprimer tous les liens s'y référant
+
+* ajouter une suppression des documents à chaque modification (ou un choix dans les paramètres de regénération des documents automatiquement

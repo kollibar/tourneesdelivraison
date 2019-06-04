@@ -1,0 +1,462 @@
+<form name="addproduct" id="addproduct" action="/dolibarr/htdocs/commande/card.php?id=904#addline" method="POST">
+		<input type="hidden" name="token" value="d49ff80143cac36e2b68c95372374f1a4a0a130b">
+		<input type="hidden" name="action" value="addline">
+		<input type="hidden" name="mode" value="">
+		<input type="hidden" name="id" value="904">
+		
+<!-- BEGIN PHP TEMPLATE AJAXROW.TPL.PHP - Script to enable drag and drop on lines of a table -->
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".imgupforline").hide();
+	$(".imgdownforline").hide();
+    $(".lineupdown").removeAttr('href');
+    $(".tdlineupdown").css("background-image",'url(/dolibarr/htdocs/theme/eldy/img/grip.png)');
+    $(".tdlineupdown").css("background-repeat","no-repeat");
+    $(".tdlineupdown").css("background-position","center center");
+
+    console.log("Prepare tableDnd for #tablelines");
+    $("#tablelines").tableDnD({
+		onDrop: function(table, row) {
+			var reloadpage = "0";
+			console.log("tableDND onDrop");
+			console.log(decodeURI($("#tablelines").tableDnDSerialize()));
+			$('#tablelines tr[data-element=extrafield]').attr('id', '');	// Set extrafields id to empty value in order to ignore them in tableDnDSerialize function
+			var roworder = cleanSerialize(decodeURI($("#tablelines").tableDnDSerialize()));
+			var table_element_line = "commandedet";
+			var fk_element = "fk_commande";
+			var element_id = "904";
+			var filepath = "";
+			$.post("/dolibarr/htdocs/core/ajax/row.php",
+					{
+						roworder: roworder,
+						table_element_line: table_element_line,
+						fk_element: fk_element,
+						element_id: element_id,
+						filepath: filepath
+					},
+					function() {
+						console.log("tableDND end of ajax call");
+						if (reloadpage == 1) {
+							//console.log('id=904');
+							location.href = '/dolibarr/htdocs/commande/card.php?id=904';
+						} else {
+							$("#tablelines .drag").each(
+									function( intIndex ) {
+										// $(this).removeClass("pair impair");
+										//if (intIndex % 2 == 0) $(this).addClass('impair');
+										//if (intIndex % 2 == 1) $(this).addClass('pair');
+									});
+						}
+					});
+		},
+		onDragClass: "dragClass",
+		dragHandle: "td.tdlineupdown"
+	});
+    $(".tdlineupdown").hover( function() { $(this).addClass('showDragHandle'); },
+    	function() { $(this).removeClass('showDragHandle'); }
+    );
+});
+</script>
+<!-- END PHP TEMPLATE AJAXROW.TPL.PHP -->
+<div class="div-table-responsive-no-min"><table id="tablelines" class="noborder noshadow" width="100%">
+	<thead>
+		<tr class="liste_titre nodrag nodrop">
+			<td class="linecoldescription">Description</td><td class="linecolvat" align="right" width="80">TVA</td>
+			<td class="linecoluht" align="right" width="80">P.U. HT</td><td class="linecolqty" align="right">Qt&eacute;</td>
+			<td class="linecoldiscount" align="right">R&eacute;duc.</td><td class="linecolht" align="right">Total HT</td>
+			<td class="linecoledit"></td>
+			<td class="linecoldelete" width="10"></td>
+			<td class="linecolmove" width="10"></td>
+		</tr>
+	</thead>
+	<tbody>
+<!-- BEGIN PHP TEMPLATE objectline_view.tpl.php -->
+		<tr  id="row-5019" class="drag drop oddeven"  data-element="commandedet" data-id="5019" data-qty="6" data-product_type="0" >
+			<td class="linecoldescription minwidth300imp"><div id="line_5019"></div>
+				<table class="nobordernopadding" summary="">
+					<tr style="height: auto;">
+						<td class="cursorpointer classfortooltip inline-block" style="padding: 0px;"  title="Bi&egrave;re de type &quot;Barley Wine&quot; - 75cl - Agriculture biologique">
+							<a href="/dolibarr/htdocs/product/card.php?id=81" title="&lt;u&gt;Afficher produit&lt;/u&gt;&lt;br&gt;&lt;b&gt;R&eacute;f. produit:&lt;/b&gt; barley75&lt;br&gt;&lt;b&gt;Poids&lt;/b&gt;: 1.33 Kg&lt;br&gt;&lt;b&gt;Volume&lt;/b&gt;: 0.75 dm&sup3; (L)&lt;br&gt;&lt;b&gt;Utiliser les num&eacute;ros de lots/s&eacute;rie&lt;/b&gt;: Oui (Lot/S&eacute;rie requis)&lt;br&gt;&lt;b&gt;Code comptable (vente):&lt;/b&gt; 7011BS&lt;br&gt;&lt;b&gt;Code comptable (vente intra-communautaire):&lt;/b&gt; &lt;br&gt;&lt;b&gt;Code comptable (vente &agrave; l'export):&lt;/b&gt; &lt;br&gt;&lt;!-- Photo --&gt;&lt;a href=&quot;javascript:document_preview('/dolibarr/htdocs/document.php?modulepart=product&amp;attachment=0&amp;file=barley75%2Fbarley75-BarleyWine_9.5_75cl-page001.jpg&amp;entity=1', 'image/jpeg', 'Aper&ccedil;u')&quot;&gt;&lt;!-- Show thumb --&gt;&lt;img class=&quot;photo photowithmargin&quot; border=&quot;0&quot; height=&quot;80&quot; src=&quot;/dolibarr/htdocs/viewimage.php?modulepart=product&amp;entity=1&amp;file=%2Fbarley75%2Fthumbs%2Fbarley75-BarleyWine_9.5_75cl-page001_small.jpg&quot; title=&quot;Fichier: barley75/barley75-BarleyWine_9.5_75cl-page001.jpg - Taille: 2008x2480&quot;&gt;&lt;/a&gt;" class="classfortooltip"><img src="/dolibarr/htdocs/theme/eldy/img/object_product.png" alt="" class="paddingright classfortooltip">barley75</a> - Cyclobulle - 75cl
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td align="right" class="linecolvat nowrap">20%</td>
+			<td align="right" class="linecoluht nowrap">3,58333</td
+			<td align="right" class="linecolqty nowrap">	6	</td>
+			<td class="linecoldiscount">&nbsp;</td>
+			<td align="right" class="linecolht nowrap">21,50</td>
+			<td class="linecoledit" align="center">
+				<a href="/dolibarr/htdocs/commande/card.php?id=904&amp;action=editline&amp;lineid=5019#line_5019"><span class="fa fa-pencil marginleftonly valignmiddle pictoedit" style=" color: #444;" alt="Modifier" title="Modifier"  class="pictoedit"></span>		</a>
+			</td>
+			<td class="linecoldelete" align="center">
+				<a href="/dolibarr/htdocs/commande/card.php?id=904&amp;action=ask_deleteline&amp;lineid=5019"><span class="fa fa-trash marginleftonly valignmiddle pictodelete" style=" color: #444;" alt="Supprimer" title="Supprimer" class="pictodelete"></span></a>
+			</td>
+			<td align="center" class="linecolmove tdlineupdown">
+				<a class="lineupdown" href="/dolibarr/htdocs/commande/card.php?id=904&amp;action=down&amp;rowid=5019"><span class="fa fa-caret-down marginleftonlyshort valignmiddle imgdown imgdownforline" style="" alt="Down" title="Down" class="imgdown imgdownforline"></span>		</a>
+			</td>    	
+		</tr>
+<!-- showOptionalsInput --> 
+		<tr id="extrarow-commandedet_fk_ligneLiee_5019" class="drag drop oddeven" class="commandedet_extras_fk_ligneLiee"  data-element="extrafield" data-targetelement="commandedet" data-targetid="5019" >
+			<td class="titlefield">ligne liée (Consigne)</td>
+			<td id="commandedet_extras_fk_ligneLiee_5019" class="commandedet_extras_fk_ligneLiee"  colspan="9"></td>
+		</tr>
+
+				<script type="text/javascript">
+				    jQuery(document).ready(function() {
+				    	function showOptions(child_list, parent_list)
+				    	{
+				    		var val = $("select[name=\"options_"+parent_list+"\"]").val();
+				    		var parentVal = parent_list + ":" + val;
+							if(val > 0) {
+					    		$("select[name=\""+child_list+"\"] option[parent]").hide();
+					    		$("select[name=\""+child_list+"\"] option[parent=\""+parentVal+"\"]").show();
+							} else {
+								$("select[name=\""+child_list+"\"] option").show();
+							}
+				    	}
+						function setListDependencies() {
+					    	jQuery("select option[parent]").parent().each(function() {
+					    		var child_list = $(this).attr("name");
+								var parent = $(this).find("option[parent]:first").attr("parent");
+								var infos = parent.split(":");
+								var parent_list = infos[0];
+								$("select[name=\""+parent_list+"\"]").change(function() {
+									showOptions(child_list, parent_list);
+								});
+					    	});
+						}
+
+						setListDependencies();
+				    });
+				</script>
+<!-- /showOptionalsInput --> 
+<!-- END PHP TEMPLATE objectline_view.tpl.php -->
+
+	</tbody>
+
+<!-- BEGIN PHP TEMPLATE objectline_create.tpl.php -->
+	<tr class="pair nodrag nodrop nohoverpair liste_titre_create">
+		<td class="nobottom linecoldescription minwidth500imp">
+
+	<span class="prod_entry_mode_free">
+	<label for="prod_entry_mode_free">
+	<input type="radio" class="prod_entry_mode_free" name="prod_entry_mode" id="prod_entry_mode_free" value="free"> Ligne libre de type</label>
+		<select class="flat" id="select_type" name="type">
+		<option value="-1" selected>&nbsp;</option>
+		<option value="0">Produit
+		<option value="1">Service
+		</select>
+	</span><br>
+	<span class="prod_entry_mode_predef"><label for="prod_entry_mode_predef">
+	<input type="radio" class="prod_entry_mode_predef" name="prod_entry_mode" id="prod_entry_mode_predef" value="predef">
+	Produits/Services pr&eacute;d&eacute;finis en vente</label> 
+<!-- JS CODE TO ENABLE select2 for id = idprod -->
+          <script type="text/javascript">
+        	$(document).ready(function () {
+        		$('#idprod').select2({
+        		    dir: 'ltr',
+        			width: 'resolve',		/* off or resolve */
+					minimumInputLength: 0,
+					language: select2arrayoflanguage,
+    				containerCssClass: ':all:',					/* Line to add class of origin SELECT propagated to the new <span class="select2-selection...> tag */
+					templateResult: function (data, container) {	/* Format visible output into combo list */
+	 					/* Code to add class of origin OPTION propagated to the new select2 <li> tag */
+						if (data.element) { $(container).addClass($(data.element).attr("class")); }
+					    //console.log(data.html);
+						if ($(data.element).attr("data-html") != undefined) return htmlEntityDecodeJs($(data.element).attr("data-html"));		// If property html set, we decode html entities and use this
+					    return data.text;
+					},
+					templateSelection: function (selection) {		/* Format visible output of selected value */
+						return selection.text;
+					},
+					escapeMarkup: function(markup) {
+						return markup;
+					},
+					dropdownCssClass: 'ui-dialog'
+				});
+});
+</script>
+<select class="flat maxwidth300" name="idprod" id="idprod"><option value="0" selected></option><option value="82" class="product_line_stock_too_low">barley20 - Cyclobulle - 20l - 0 € HT - Stock:0</option>
+<option value="83" class="product_line_stock_too_low">barley50 - Cyclobulle - 50l - 0 € HT - Stock:0</option>
+<option value="81" class="product_line_stock_ok">barley75 (3770009125178) - Cyclobulle - 75cl - 4,3 € TTC - Stock:27</option>
+<option value="53" class="product_line_stock_ok">caisseConsigne - Caisse plastique consigné - 2,1 € HT - Stock:23</option>
+<option value="84">carton - Carton 75cl - 0 € TTC</option>
+<option value="70" class="product_line_stock_ok">co2_10kg - charge co2 - 10kg - 30 € HT - Stock:2</option>
+<option value="91">ConesBrewersGold - Houblon Brewers Gold en cônes - 0 € TTC</option>
+<option value="14" class="product_line_stock_ok">consigne75 - Bouteille 75cl consigné - 0,2 € TTC - Stock:85047</option>
+<option value="79">degustation - Dégustation - 0 € TTC</option>
+<option value="68">demi - bière au verre - 25cl - 0 € TTC</option>
+<option value="78">formation - Formation - 0 € TTC</option>
+<option value="50" class="product_line_stock_ok">futConsigne - Fût consigné - 30 € HT - Stock:493</option>
+<option value="51">futVendu - Fût vendu - 30 € HT</option>
+<option value="71" class="product_line_stock_ok">gobelet - Gobelet consigné non retourné - 1 € TTC - Stock:693</option>
+<option value="85">houblon - Houblons - 0 € TTC</option>
+<option value="54" class="product_line_stock_too_low">imp20 - Fût Impérial Stout 20l - 0 € HT - Stock:0</option>
+<option value="93">imp33 (3770009125123) - La dernière Bière - 33cl - 2,2833 € TTC</option>
+<option value="56" class="product_line_stock_ok">imp75 (3770009125116) - La dernière Bière - 75cl - 4,46667 € TTC - Stock:4</option>
+<option value="63">locBouteilleC02 - Location Bouteille CO2 - mensuel - 10 € TTC - 1 Mois</option>
+<option value="69">locLaveVerres - Location d'un lave-verres manuel - 10 € TTC</option>
+<option value="67">locTireuse - Location de tireuse - 15 € TTC</option>
+<option value="75">maltMunich - Malt Munich - 0 € TTC</option>
+<option value="74">maltPale - Malt Pale Ale couleur standard - 0 € TTC</option>
+<option value="61" class="product_line_stock_too_low">miel20 - Ô Miel - Futs 20l - 0 € TTC - Stock:0</option>
+<option value="62" class="product_line_stock_ok">miel33 (3770009125109) - Ô Miel - 33 cl - 2,28333 € TTC - Stock:198</option>
+<option value="55" class="product_line_stock_ok">miel75 (3770009125093) - Ô Miel - 75cl - 4,46667 € TTC - Stock:262</option>
+<option value="13" class="product_line_stock_too_low">noel20 - Fût L'ours de Noël - 20L - 68 € TTC - Stock:0</option>
+<option value="8">noel33 (3770009125086) - L'ours de Noël - 33cl - 2,08333 € TTC</option>
+<option value="10" class="product_line_stock_ok">noel75 (3770009125079) - L'ours de Noël - 75cl - 3,96667 € TTC - Stock:39</option>
+<option value="12" class="product_line_stock_too_low">oclock20 - Fût Bear o'clock 20L - 70 € TTC - Stock:0</option>
+<option value="66" class="product_line_stock_too_low">oclock30 - Fût Bear o'clock 30L - 0 € HT - Stock:0</option>
+<option value="4" class="product_line_stock_ok">oclock33 (3770009125048) - Bear o'clock - 33cl - 2,08333 € TTC - Stock:595</option>
+<option value="64" class="product_line_stock_too_low">oclock50 - Fût Bear o'clock 50L - 55 € HT - Stock:0</option>
+<option value="1" class="product_line_stock_ok">oclock75 (3770009125017) - Bear o'clock - 75cl - 3,96667 € TTC - Stock:1304</option>
+<option value="86">PelletsCentenial - Houblon Centenial en pellets - 0 € TTC</option>
+<option value="87">PelletsPacificGem - Houblon Pacific Gem en pellets - 0 € TTC</option>
+<option value="88">PelletsSimcoe - Houblon Simcoe en pellets - 0 € TTC</option>
+<option value="90">PelletsSovereign - Houblon Sovereign pellets - 0 € TTC</option>
+<option value="89">PelletsWGV - Houblon WGVen pellets - 0 € TTC</option>
+<option value="58" class="product_line_stock_ok">pirate20 - Fût "Pirate de l'espoir" 20l - 70 € TTC - Stock:8</option>
+<option value="65" class="product_line_stock_too_low">pirate30 - Fût "Pirate de l'espoir" 30l - 0 € HT - Stock:0</option>
+<option value="60" class="product_line_stock_ok">pirate33 (3770009125147) - Pirate de l'espoir - 33 cl - 2,08333 € TTC - Stock:372</option>
+<option value="59" class="product_line_stock_ok">pirate75 (3770009125130) - Pirate de l'espoir - 75 cl - 3,96667 € TTC - Stock:447</option>
+<option value="76">port - Frais de port - 0 € TTC</option>
+<option value="57" class="product_line_stock_ok">repriseConsigne75 - Reprise de bouteille consignée 75 cl - -0,2 € TTC - Stock:99926</option>
+<option value="77">repriseFutConsigne - Reprise de fût consigné - -30 € HT</option>
+<option value="72" class="product_line_stock_ok">stout20 - Fût Complètement Stout 20L - 70 € TTC - Stock:6</option>
+<option value="80" class="product_line_stock_too_low">stout30 - Fût Complètement Stout 30L - 94,5 € HT - Stock:0</option>
+<option value="6" class="product_line_stock_ok">Stout33 (3770009125062) - Complètement Stout - 33cl - 2,08333 € TTC - Stock:480</option>
+<option value="5" class="product_line_stock_ok">Stout75 (3770009125055) - Complètement Stout - 75cl - 3,96667 € TTC - Stock:576</option>
+<option value="48" class="product_line_stock_too_low">tranquille10 - Fût Tranquille Achille 10L - 34 € TTC - Stock:0</option>
+<option value="17" class="product_line_stock_ok">tranquille20 - Fût Tranquille Achille 20L - 70 € TTC - Stock:28</option>
+<option value="15" class="product_line_stock_ok">tranquille33 - Tranquille Achille - 33cl - 2,08333 € TTC - Stock:1567</option>
+<option value="16" class="product_line_stock_ok">tranquille75 - Tranquille Achille - 75cl - 3,96667 € TTC - Stock:26</option>
+<option value="73" class="product_line_stock_ok">venteFut - Fût inox tête plate - 0 € TTC - Stock:96</option>
+</select><input type="hidden" name="pbq" id="pbq" value=""></span><br><textarea id="dp_desc" name="dp_desc" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>	</td>
+
+	
+	<td class="nobottom linecolvat" align="right"><select class="flat minwidth75imp" id="tva_tx" name="tva_tx"><option value="0">0%</option><option value="5.5">5,5%</option><option value="20" selected>20%</option></select>	</td>
+	<td class="nobottom linecoluht" align="right">
+	<input type="text" size="5" name="price_ht" id="price_ht" class="flat right" value="">
+	</td>
+
+	
+		<td class="nobottom linecolqty" align="right"><input type="text" size="2" name="qty" id="qty" class="flat right" value="1">
+	</td>
+		<td class="nobottom nowrap linecoldiscount" align="right"><input type="text" size="1" name="remise_percent" id="remise_percent" class="flat right" value=""><span class="hideonsmartphone">%</span></td>
+		<td class="nobottom linecoledit" align="center" valign="middle" colspan="4">
+		<input type="submit" class="button" value="Ajouter" name="addline" id="addline">
+	</td>
+</tr>
+
+
+<!-- showOptionalsInput --> 
+
+
+				<script type="text/javascript">
+				    jQuery(document).ready(function() {
+				    	function showOptions(child_list, parent_list)
+				    	{
+				    		var val = $("select[name=\"options_"+parent_list+"\"]").val();
+				    		var parentVal = parent_list + ":" + val;
+							if(val > 0) {
+					    		$("select[name=\""+child_list+"\"] option[parent]").hide();
+					    		$("select[name=\""+child_list+"\"] option[parent=\""+parentVal+"\"]").show();
+							} else {
+								$("select[name=\""+child_list+"\"] option").show();
+							}
+				    	}
+						function setListDependencies() {
+					    	jQuery("select option[parent]").parent().each(function() {
+					    		var child_list = $(this).attr("name");
+								var parent = $(this).find("option[parent]:first").attr("parent");
+								var infos = parent.split(":");
+								var parent_list = infos[0];
+								$("select[name=\""+parent_list+"\"]").change(function() {
+									showOptions(child_list, parent_list);
+								});
+					    	});
+						}
+
+						setListDependencies();
+				    });
+				</script>
+<!-- /showOptionalsInput --> 
+
+
+	<tr id="trlinefordates" >
+		<td colspan="9">
+	Si produit de type service &agrave; dur&eacute;e limit&eacute;e : Du <script type='text/javascript'>$(function(){ $('#date_start').datepicker({
+							dateFormat: 'dd/mm/yy',
+							autoclose: true,
+							todayHighlight: true,
+								showOn: 'button',
+								buttonImage: '/dolibarr/htdocs/theme/eldy/img/object_calendarday.png',
+								buttonImageOnly: true
+							}) });</script><div class="nowrap inline-block"><input id="date_start" name="date_start" type="text" class="maxwidth75" maxlength="11" value="" onChange="dpChangeDay('date_start','dd/MM/yyyy'); "></div><input type="hidden" id="date_startday"   name="date_startday"   value="">
+<input type="hidden" id="date_startmonth" name="date_startmonth" value="">
+<input type="hidden" id="date_startyear"  name="date_startyear"  value="">
+ au <script type='text/javascript'>$(function(){ $('#date_end').datepicker({
+							dateFormat: 'dd/mm/yy',
+							autoclose: true,
+							todayHighlight: true,
+								showOn: 'button',
+								buttonImage: '/dolibarr/htdocs/theme/eldy/img/object_calendarday.png',
+								buttonImageOnly: true
+							}) });</script><div class="nowrap inline-block">
+							<input id="date_end" name="date_end" type="text" class="maxwidth75" maxlength="11" value="" onChange="dpChangeDay('date_end','dd/MM/yyyy'); "></div><input type="hidden" id="date_endday"   name="date_endday"   value="">
+<input type="hidden" id="date_endmonth" name="date_endmonth" value="">
+<input type="hidden" id="date_endyear"  name="date_endyear"  value="">
+<script type="text/javascript"></script>	</td>
+	</tr>
+
+<script type="text/javascript">
+
+
+/* JQuery for product free or predefined select */
+jQuery(document).ready(function() {
+	$("#prod_entry_mode_free").on( "click", function() {
+		setforfree();
+	});
+	$("#select_type").change(function()
+	{
+		setforfree();
+		if (jQuery('#select_type').val() >= 0)
+		{
+			/* focus work on a standard textarea but not if field was replaced with CKEDITOR */
+			jQuery('#dp_desc').focus();
+			/* focus if CKEDITOR */
+			if (typeof CKEDITOR == "object" && typeof CKEDITOR.instances != "undefined")
+			{
+				var editor = CKEDITOR.instances['dp_desc'];
+   				if (editor) { editor.focus(); }
+			}
+		}
+		console.log("Hide/show date according to product type");
+		if (jQuery('#select_type').val() == '0')
+		{
+			jQuery('#trlinefordates').hide();
+			jQuery('.divlinefordates').hide();
+		}
+		else
+		{
+			jQuery('#trlinefordates').show();
+			jQuery('.divlinefordates').show();
+		}
+	});
+
+	$("#prod_entry_mode_predef").on( "click", function() {
+		console.log("click prod_entry_mode_predef");
+		setforpredef();
+		jQuery('#trlinefordates').show();
+	});
+
+	
+	/* When changing predefined product, we reload list of supplier prices required for margin combo */
+	$("#idprod, #idprodfournprice").change(function()
+	{
+		console.log("#idprod, #idprodfournprice change triggered");
+
+		setforpredef();		// TODO Keep vat combo visible and set it to first entry into list that match result of get_default_tva
+
+		jQuery('#trlinefordates').show();
+
+		
+        /* To process customer price per quantity */
+        var pbq = parseInt($('option:selected', this).attr('data-pbq'));
+        var pbqqty = parseFloat($('option:selected', this).attr('data-pbqqty'));
+        var pbqpercent = parseFloat($('option:selected', this).attr('data-pbqpercent'));
+
+        if ((jQuery('#idprod').val() > 0 || jQuery('#idprodfournprice').val()) && typeof pbq !== "undefined")
+        {
+            console.log("We choose a price by quanty price_by_qty id = "+pbq+" price_by_qty qty = "+pbqqty+" price_by_qty percent = "+pbqpercent);
+            jQuery("#pbq").val(pbq);
+            if (jQuery("#qty").val() < pbqqty)
+            {
+                    jQuery("#qty").val(pbqqty);
+            }
+            if (jQuery("#remise_percent").val() < pbqpercent)
+            {
+                    jQuery("#remise_percent").val(pbqpercent);
+            }
+        }
+        else
+        {
+            jQuery("#pbq").val('');
+        }
+
+  		/* To set focus */
+  		if (jQuery('#idprod').val() > 0 || jQuery('#idprodfournprice').val() > 0)
+  	  	{
+			/* focus work on a standard textarea but not if field was replaced with CKEDITOR */
+			jQuery('#dp_desc').focus();
+			/* focus if CKEDITOR */
+			if (typeof CKEDITOR == "object" && typeof CKEDITOR.instances != "undefined")
+			{
+				var editor = CKEDITOR.instances['dp_desc'];
+   				if (editor) { editor.focus(); }
+			}
+  	  	}
+	});
+
+	
+});
+
+/* Function to set fields from choice */
+function setforfree() {
+	console.log("Call setforfree. We show most fields");
+	jQuery("#search_idprod").val('');
+	jQuery("#idprod").val('');
+	jQuery("#idprodfournprice").val('0');	// Set cursor on not selected product
+	jQuery("#search_idprodfournprice").val('');
+	jQuery("#prod_entry_mode_free").prop('checked',true).change();
+	jQuery("#prod_entry_mode_predef").prop('checked',false).change();
+	jQuery("#price_ht").show();
+	jQuery("#multicurrency_price_ht").show();
+	jQuery("#price_ttc").show();	// May no exists
+	jQuery("#fourn_ref").show();
+	jQuery("#tva_tx").show();
+	jQuery("#buying_price").val('').show();
+	jQuery("#fournprice_predef").hide();
+	jQuery("#title_vat").show();
+	jQuery("#title_up_ht").show();
+	jQuery("#title_up_ht_currency").show();
+	jQuery("#title_up_ttc").show();
+	jQuery("#title_up_ttc_currency").show();
+	jQuery("#np_marginRate").show();	// May no exists
+	jQuery("#np_markRate").show();	// May no exists
+	jQuery(".np_marginRate").show();	// May no exists
+	jQuery(".np_markRate").show();	// May no exists
+	jQuery("#units, #title_units").show();
+}
+function setforpredef() {
+	console.log("Call setforpredef. We hide some fields and show dates");
+	jQuery("#select_type").val(-1);
+
+	jQuery("#prod_entry_mode_free").prop('checked',false).change();
+	jQuery("#prod_entry_mode_predef").prop('checked',true).change();
+	jQuery("#price_ht").val('').hide();
+	jQuery("#multicurrency_price_ht").hide();
+	jQuery("#price_ttc").hide();	// May no exists
+	jQuery("#fourn_ref").hide();
+	jQuery("#tva_tx").hide();
+	jQuery("#buying_price").show();
+	jQuery("#title_vat").hide();
+	jQuery("#title_up_ht").hide();
+	jQuery("#title_up_ht_currency").hide();
+	jQuery("#title_up_ttc").hide();
+	jQuery("#title_up_ttc_currency").hide();
+	jQuery("#np_marginRate").hide();	// May no exists
+	jQuery("#np_markRate").hide();	// May no exists
+	jQuery(".np_marginRate").hide();	// May no exists
+	jQuery(".np_markRate").hide();	// May no exists
+	jQuery("#units, #title_units").hide();
+
+	jQuery('#trlinefordates').show();
+	jQuery('.divlinefordates').show();
+}
+
+</script>
+
+<!-- END PHP TEMPLATE objectline_create.tpl.php -->
+</table></div></form>
