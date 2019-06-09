@@ -1878,12 +1878,29 @@ public function LibStatut($status, $mode=0)
 	// cmde, livraison, factures...
 	if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT){
 		print '<td class="linecolcmde">';
-		$total=$this->getTotalWeightVolume();
-		if (!empty($total['weight'])) $totalWeighttoshow=showDimensionInBestUnit($total['weight'], 0, "weight", $outputlangs);
-		if (!empty($total['volume'])) $totalVolumetoshow=showDimensionInBestUnit($total['volume'], 0, "volume", $outputlangs);
+		print '<table>';
+		print '<tr><td>'.$langs->trans('Order').'</td><td>'. $langs->trans('Sending') . '</td><td>' . $langs->trans('Invoice') .'</td></tr>';
+		$totalCmde=$this->getTotalWeightVolume("commande");
+		$totalExp=$this->getTotalWeightVolume("shipping");
+		$totalFact=$this->getTotalWeightVolume("facture");
+		print '<tr><td>';
+		if (!empty($totalCmde['weight'])) print showDimensionInBestUnit($totalCmde['weight'], 0, "weight", $outputlangs) . '<br>';
+		if (!empty($totalCmde['volume'])) print showDimensionInBestUnit($totalCmde['volume'], 0, "volume", $outputlangs);
+		print '</td><td>';
+		if (!empty($totalExp['weight'])) print showDimensionInBestUnit($totalExp['weight'], 0, "weight", $outputlangs) . '<br>';
+		if (!empty($totalExp['volume'])) print showDimensionInBestUnit($totalExp['volume'], 0, "volume", $outputlangs);
+		print '</td><td>';
+		if (!empty($totalFact['weight'])) print showDimensionInBestUnit($totalFact['weight'], 0, "weight", $outputlangs) . '<br>';
+		if (!empty($totalFact['volume'])) print showDimensionInBestUnit($totalFact['volume'], 0, "volume", $outputlangs);
+		print '</td></tr>';
+		print '<tr><td>';
 
+		print '</td><td>';
 
-		print $totalWeighttoshow.'<br>'.$totalVolumetoshow.'<br>';
+		print '</td><td>';
+
+		print '</td></tr>';
+		print '</table>';
 
 		print '</td>';
 	}

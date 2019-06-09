@@ -217,13 +217,13 @@ class TourneeUnique extends TourneeGeneric
 		return $line->update($user);
 	}
 
-	public function getTotalWeightVolume(){
+	public function getTotalWeightVolume($type="shipping"){
 		$totalWeight=0;
 		$totalVolume=0;
 		$totalOrdered=0;
 		$totalToShip=0;
 		foreach ($this->lines as $line) {
-			$ret=$line->getTotalWeightVolume();
+			$ret=$line->getTotalWeightVolume($type);
 			$totalWeight += $ret['weight'];
 			$totalVolume += $ret['volume'];
 			$totalOrdered += $ret['ordered'];

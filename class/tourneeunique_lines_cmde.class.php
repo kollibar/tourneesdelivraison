@@ -333,12 +333,12 @@ class TourneeUnique_lines_cmde extends TourneeObject
 			$this->labelstatus[self::AUTRE_AFFECTATION] = $langs->trans('AutreAffectation');
 			$this->labelstatus[self::INUTILE] = $langs->trans('Disabled');
 
-			$this->labelpicto[self::NON_AFFECTE] = 'statut1';
-			$this->labelpicto[self::NON_AFFECTE_DATE_OK] = 'statut1';
-			$this->labelpicto[self::DATE_OK] = 'statut4';
-			$this->labelpicto[self::DATE_NON_OK] = 'statut4';
-			$this->labelpicto[self::AUTRE_AFFECTATION] = 'statut6';
-			$this->labelpicto[self::INUTILE] = 'statut5';
+			$this->labelpicto[self::NON_AFFECTE] = 'check_box_uncheck.png@tourneesdelivraison';
+			$this->labelpicto[self::NON_AFFECTE_DATE_OK] = 'check_box_uncheck.png@tourneesdelivraison';
+			$this->labelpicto[self::DATE_OK] = 'check_box.png@tourneesdelivraison';
+			$this->labelpicto[self::DATE_NON_OK] = 'check_box.png@tourneesdelivraison';
+			$this->labelpicto[self::AUTRE_AFFECTATION] = 'check_box_cross.png@tourneesdelivraison';
+			$this->labelpicto[self::INUTILE] = 'cross.png@tourneesdelivraison';
 		}
 
 		if ($mode == 0)
@@ -782,7 +782,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $nb;
 	}
 
-	function getTotalWeightVolume(){
+	function getTotalWeightVolume($type="shipping"){
 		if( $this->statut != self::DATE_OK && $this->statut != self::DATE_NON_OK){
 			return array('weight'=>0, 'volume'=>0, 'ordered'=>0, 'toship'=>0);
 		}
@@ -790,12 +790,22 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		$totalVolume=0;
 		$totalOrdered=0;
 		$totalToShip=0;
-		foreach ($this->lines as $line) {
-			$ret=$line->getTotalWeightVolume();
-			$totalWeight += $ret['weight'];
-			$totalVolume += $ret['volume'];
-			$totalOrdered += $ret['ordered'];
-			$totalToShip += $ret['toship'];
+		if($type == "shipping" || $type=="facture"){
+			foreach ($this->lines as $line) {
+				$ret=$line->getTotalWeightVolume($type);
+				$totalWeight += $ret['weight'];
+				$totalVolume += $ret['volume'];
+				$totalOrdered += $ret['ordered'];
+				$totalToShip += $ret['toship'];
+			}
+		} else if($type == "commande"){
+			$this->loadElt();
+
+			$ret=$this->elt->getTotalWeightVolume($type);
+			$totalWeight = $ret['weight'];
+			$totalVolume = $ret['volume'];
+			$totalOrdered = $ret['ordered'];
+			$totalToShip = $ret['toship'];
 		}
 		return array('weight'=>$totalWeight, 'volume'=>$totalVolume, 'ordered'=>$totalOrdered, 'toship'=>$totalToShip);
 	}

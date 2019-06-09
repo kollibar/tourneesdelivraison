@@ -169,12 +169,12 @@ public function LibStatut($status, $mode=0)
 		$this->labelstatus[self::AUTRE_AFFECTATION] = $langs->trans('AutreAffectation');
 		$this->labelstatus[self::INUTILE] = $langs->trans('Disabled');
 
-		$this->labelpicto[self::NON_AFFECTE] = 'statut1';
-		$this->labelpicto[self::NON_AFFECTE_DATE_OK] = 'statut1';
-		$this->labelpicto[self::DATE_OK] = 'statut4';
-		$this->labelpicto[self::DATE_NON_OK] = 'statut4';
-		$this->labelpicto[self::AUTRE_AFFECTATION] = 'statut6';
-		$this->labelpicto[self::INUTILE] = 'statut5';
+		$this->labelpicto[self::NON_AFFECTE] = 'check_box_uncheck.png@tourneesdelivraison';
+		$this->labelpicto[self::NON_AFFECTE_DATE_OK] = 'check_box_uncheck.png@tourneesdelivraison';
+		$this->labelpicto[self::DATE_OK] = 'check_box.png@tourneesdelivraison';
+		$this->labelpicto[self::DATE_NON_OK] = 'check_box.png@tourneesdelivraison';
+		$this->labelpicto[self::AUTRE_AFFECTATION] = 'check_box_cross.png@tourneesdelivraison';
+		$this->labelpicto[self::INUTILE] = 'cross.png@tourneesdelivraison';
 	}
 
 	if ($mode == 0)
@@ -330,17 +330,16 @@ public function LibStatut($status, $mode=0)
 		return 0;
 	}
 
-	function getTotalWeightVolume(){
+	function getTotalWeightVolume($type="shipping"){
 		$totalWeight=0;
 		$totalVolume=0;
 		$totalOrdered=0;
 		$totalToShip=0;
 
-		if( $this->type_element == 'shipping'){
-			$exp=new Expedition($this->db);
-			$exp->fetch($this->fk_elt);
+		if( $this->type_element == $type ){
+			$this->loadElt();
 
-			$ret=$exp->getTotalWeightVolume();
+			$ret=$this->elt->getTotalWeightVolume();
 			$totalWeight += $ret['weight'];
 			$totalVolume += $ret['volume'];
 			$totalOrdered += $ret['ordered'];
