@@ -150,7 +150,7 @@ class TourneeUnique extends TourneeGeneric
 	 * Constructor
 	 *
 	 * @param DoliDb $db Database handler
-	 */
+	 *//*
 	public function __construct(DoliDB $db)
 	{
 		global $conf, $langs, $user;
@@ -180,7 +180,7 @@ class TourneeUnique extends TourneeGeneric
 				}
 			}
 		}
-	}
+	}*/
 
 	public function getNewLine(){
 		$line=new TourneeUnique_lines($this->db);
@@ -243,6 +243,8 @@ class TourneeUnique extends TourneeGeneric
 		if($line==null) return -1;
 		return $line->changeStatutElt($user, $elt_type,$elt_lineid, $statut, $changeDate);
 	}
+
+
 
 }
 

@@ -24,7 +24,7 @@ CREATE TABLE llx_tourneeunique_lines_cmde_elt(
 	fk_user_creat integer NOT NULL,
 	fk_user_modif integer,
 	import_key varchar(14),
-	fk_elt integer NOT NULL,
+	fk_element integer NOT NULL,
 	type_element varchar(128),
 	fk_tournee_lines_cmde integer NOT NULL,
 	rang integer NOT NULL,

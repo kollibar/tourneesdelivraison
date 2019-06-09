@@ -115,7 +115,9 @@ $domData .= ' data-id="'.$line->id.'"';
 					echo $lcmde->getMenuStatut(false,$morehtml); ?>
 				</td>
 				<td>
-					<?php if( $numshipping!=0){
+					<?php
+					if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK) continue;
+					if( $numshipping!=0){
 						echo '<table>';
 						foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'shipping'){
@@ -210,7 +212,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	<?php if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $action=='edit_note_elt' && $line->id==$selected  && !empty($object_rights->note)){ ?>
 		<td align="right" class="linecolnote nowrap" colspan="2"><?php $coldisplay++; $coldisplay++; ?>
-			<form name="edit_note_elt" id="edit_note_elt" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=setnote_elt&lineid=' . GETPOST('lineid'); ?>" method="POST">
+			<form name="edit_note_elt" id="edit_note_elt" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=setnote_elt&lineid=' . GETPOST('lineid').'#row-'.GETPOST('lineid'); ?>" method="POST">
 			<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
 			<input type="hidden" name="action" value="setnote_elt">
 			<input type="hidden" name="mode" value="">
@@ -264,7 +266,7 @@ $domData .= ' data-id="'.$line->id.'"';
 	<td align="right" class="linecolnote nowrap" colspan="2"><?php $coldisplay+=2; ?>
 		<?php
 		if($object->statut==TourneeGeneric::STATUS_VALIDATED && !empty($object_rights->note)){
-			print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_note_elt&id='.$parent->id.'&lineid='.$line->id.'">';
+			print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_note_elt&id='.$parent->id.'&lineid='.$line->id.'#row-'.$line->id.'">';
 			print img_edit($langs->trans($val['edit note']), 1);
 			print '</a>';
 		}

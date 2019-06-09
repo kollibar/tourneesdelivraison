@@ -38,70 +38,7 @@ class TourneeGeneric extends TourneeObject
 
 
 
-	/**
-	 * Clone and object into another one
-	 *
-	 * @param  	User 	$user      	User that creates
-	 * @param  	int 	$fromid     Id of object to clone
-	 * @return 	mixed 				New object created, <0 if KO
-	 */
-	public function createFromClone(User $user, $fromid)
-	{
-		global $langs, $hookmanager, $extrafields;
-	    $error = 0;
 
-	    dol_syslog(__METHOD__, LOG_DEBUG);
-
-	    $object = new self($this->db);
-
-	    $this->db->begin();
-
-	    // Load source object
-	    $object->fetchCommon($fromid);
-	    // Reset some properties
-	    unset($object->id);
-	    unset($object->fk_user_creat);
-	    unset($object->import_key);
-
-	    // Clear fields
-	    $object->ref = "copy_of_".$object->ref;
-	    $object->title = $langs->trans("CopyOf")." ".$object->title;
-	    // ...
-	    // Clear extrafields that are unique
-	    if (is_array($object->array_options) && count($object->array_options) > 0)
-	    {
-	    	$extrafields->fetch_name_optionals_label($this->element);
-	    	foreach($object->array_options as $key => $option)
-	    	{
-	    		$shortkey = preg_replace('/options_/', '', $key);
-	    		if (! empty($extrafields->attributes[$this->element]['unique'][$shortkey]))
-	    		{
-	    			//var_dump($key); var_dump($clonedObj->array_options[$key]); exit;
-	    			unset($object->array_options[$key]);
-	    		}
-	    	}
-	    }
-
-	    // Create clone
-		$object->context['createfromclone'] = 'createfromclone';
-	    $result = $object->createCommon($user);
-	    if ($result < 0) {
-	        $error++;
-	        $this->error = $object->error;
-	        $this->errors = $object->errors;
-	    }
-
-	    unset($object->context['createfromclone']);
-
-	    // End
-	    if (!$error) {
-	        $this->db->commit();
-	        return $object;
-	    } else {
-	        $this->db->rollback();
-	        return -1;
-	    }
-	}
 
 
 	/**
@@ -221,59 +158,6 @@ class TourneeGeneric extends TourneeObject
 		}
 	}
 
-	/**
-	* Delete all lines
-	*
-	*	@return int >0 if OK, <0 if KO
-	*/
-	public function deletelines($user=null)
-	{
-		$sql = 'SELECT l.rowid, l.rang, l.'.$this->fk_element.'  FROM '.MAIN_DB_PREFIX.$this->table_element_line.' as l';
-		$sql.= ' WHERE l.'.$this->fk_element.' = '.$this->id;
-		$sql .= ' ORDER BY l.rang, l.rowid';
-
-		dol_syslog(get_class($this)."::fetch_lines", LOG_DEBUG);
-		$result = $this->db->query($sql);
-		$error=0;
-		if ($result)
-		{
-			$num = $this->db->num_rows($result);
-
-			$i = 0;
-			while ($i < $num)
-			{
-				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewLine();
-				$line->fetch($objp->rowid);
-
-				if ( $line->delete($user) > 0)	// si suppression ok
-				{
-					$this->db->commit();
-					return 1;
-				}
-				else
-				{
-					$this->db->rollback();
-					$this->error=$line->error;
-					$error-=1;
-				}
-			}
-			$this->db->free($result);
-			if ($error<0)
-			{
-				return $error;
-			}
-			else
-			{
-				return 1;
-			}
-		}
-		else
-		{
-			$this->error=$this->db->error();
-			return -3;
-		}
-	}
 
 	/**
 	 *  Add a line in database
@@ -730,20 +614,6 @@ class TourneeGeneric extends TourneeObject
 
 
 	/**
-	 * Delete object in database
-	 *
-	 * @param User $user       User that deletes
-	 * @param bool $notrigger  false=launch triggers after, true=disable triggers
-	 * @return int             <0 if KO, >0 if OK
-	 */
-	public function delete(User $user, $notrigger = false)
-	{
-		$this->deletelines($user);
-		return $this->deleteCommon($user, $notrigger);
-		//return $this->deleteCommon($user, $notrigger, 1);
-	}
-
-	/**
 	 *  Return a link to the object card (with optionaly the picto)
 	 *
 	 *	@param	int		$withpicto					Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
@@ -993,8 +863,7 @@ public function LibStatut($status, $mode=0)
 
 			// infoLivraison
 			// print '<td class="linecolinfolivraison">'.$langs->trans('InfoLivraison').'</td>';
-			print '<td class="linecolnote_public">'.$langs->trans('NotePublic').'</td>';
-			print '<td class="linecolnote_private">'.$langs->trans('NotePrivate').'</td>';
+			print '<td class="linecolnote">'.$langs->trans('NotePublic').' // '.$langs->trans('NotePrivate').'</td>';
 
 			// infoLivraison
 			print '<td class="linecoladresselivraison">'.$langs->trans('AdresseLivraison').'</td>';
@@ -1984,6 +1853,72 @@ public function LibStatut($status, $mode=0)
 	public function deleteAllDocuments(){
 		// A FAIRE
 		return;
+	}
+
+
+	public function printRecap(){
+		global $conf, $hookmanager, $langs, $user;
+
+		print "<tr>\n";
+
+	// colone select
+	print '<td class="linecolselect" align="center" width="5">&nbsp;</td>';
+
+	// Adds a line numbering column
+	print '<td class="linecolnum" align="center" width="5">&nbsp;</td>';
+
+	// Client
+	print '<td class="linecolclient">'.$langs->trans('Total').'</td>';
+
+
+	// BL, facture, etiquettes
+	if( $this->element != 'tourneeunique' || $this->statut == TourneeGeneric::STATUS_DRAFT){
+		print '<td class="linecoldocs">&nbsp;</td>';
+	}
+	// cmde, livraison, factures...
+	if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT){
+		print '<td class="linecolcmde">';
+		$total=$this->getTotalWeightVolume();
+		if (!empty($total['weight'])) $totalWeighttoshow=showDimensionInBestUnit($total['weight'], 0, "weight", $outputlangs);
+		if (!empty($total['volume'])) $totalVolumetoshow=showDimensionInBestUnit($total['volume'], 0, "volume", $outputlangs);
+
+
+		print $totalWeighttoshow.'<br>'.$totalVolumetoshow.'<br>';
+
+		print '</td>';
+	}
+
+	/*
+	// BL
+	print '<td class="linecolbl">'.$langs->trans('BL').'</td>';
+
+	// facture
+	print '<td class="linecolfacture">'.$langs->trans('Facture').'</td>';
+
+	// facture
+	print '<td class="linecoletiquettes">'.$langs->trans('Etiquettes').'</td>';*/
+
+	// tpsTheorique
+	print '<td class="linecoltpstheo">&nbsp;</td>';
+
+	// infoLivraison
+	// print '<td class="linecolinfolivraison">'.$langs->trans('InfoLivraison').'</td>';
+	print '<td class="linecolnote">&nbsp;</td>';
+
+	// infoLivraison
+	print '<td class="linecoladresselivraison">&nbsp;</td>';
+
+	// contact
+	print '<td class="linecolcontact">&nbsp;</td>';
+
+
+	print '<td class="linecoledit"></td>';  // No width to allow autodim
+
+	print '<td class="linecoldelete" width="10"></td>';
+
+	print '<td class="linecolmove" width="10"></td>';
+
+	print "</tr>\n";
 	}
 
 

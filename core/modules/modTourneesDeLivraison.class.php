@@ -169,6 +169,33 @@ class modTourneesDeLivraison extends DolibarrModules
 		$this->const[$r][4] = 0;
 		$r++;
 
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_DELETE","ouinon","0","Validation avant de supprimer une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CANCEL","ouinon","0","Validation avant d'annuler' une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CLONE","ouinon","0","Validation avant de cloner une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CLOSE","ouinon","0","Validation avant de clore une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_VALIDATE","ouinon","0","Validation avant de valider une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_GENERERDOCS","ouinon","0","Validation avant de générer TOUS les docs d'une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_UNVALIDATE","ouinon","0","Validation avant de repasser une Tournée à l'état brouillon",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_AFFECTATIONAUTO","ouinon","0","Validation avant de faire les affectations automatique des éléments d'une tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_REOPEN","ouinon","0","Validation avant de réouvrir une Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CHANGESTATUTELT","ouinon","0","Validation avant de changer le statut d'un élément",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CHANGEDATEELT","ouinon","0","Validation avant de changer la date d'un élément",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_DELETELINE","ouinon","0","Validation avant de supprimer une ligne de Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_DELETECONTACT","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+
 
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DRAFT_WATERMARK', 'chaine', 'brouillon', 'Watermark brouillon sur les tournées de livraison', 1, 'allentities', 1);
 		$r++;

@@ -153,7 +153,7 @@ class TourneeDeLivraison extends TourneeGeneric
 	 * Constructor
 	 *
 	 * @param DoliDb $db Database handler
-	 */
+	 *//*
 	public function __construct(DoliDB $db)
 	{
 		global $conf, $langs, $user;
@@ -183,7 +183,7 @@ class TourneeDeLivraison extends TourneeGeneric
 				}
 			}
 		}
-	}
+	}*/
 
 	public function getNewLine(){
 		$line=new TourneeDeLivraison_lines($this->db);
@@ -286,6 +286,87 @@ class TourneeDeLivraison extends TourneeGeneric
 		echo 'ok';
 		return $tabFait;
 	}
+
+
+	public function showLinkedTourneeUnique(){
+		/*
+		print '<!-- showLinkedTourneeUnique -->';
+		print load_fiche_titre($langs->trans('RelatedObjects'), $morehtmlright, '', 0, 0, 'showlinkedobjectblock');
+
+
+		print '<div class="div-table-responsive-no-min">';
+		print '<table class="noborder allwidth" data-block="showLinkedObject" data-element="'.$object->element.'"  data-elementid="'.$object->id.'"   >';
+
+		print '<tr class="liste_titre">';
+		print '<td>'.$langs->trans("Type").'</td>';
+		print '<td>'.$langs->trans("Ref").'</td>';
+		print '<td align="center"></td>';
+		print '<td align="center">'.$langs->trans("Date").'</td>';
+		print '<td align="right">'.$langs->trans("AmountHTShort").'</td>';
+		print '<td align="right">'.$langs->trans("Status").'</td>';
+		print '<td></td>';
+		print '</tr>';
+
+		$tu=new TourneeUnique($this->db);
+
+		$sql = 'SELECT t.rowid, t.'.$this->fk_element;
+		$sql .= ' FROM '.MAIN_DB_PREFIX.$tu->table_element.' as t';
+		$sql .= ' WHERE t.'.$this->fk_element.' = '.$this->id;
+
+		dol_syslog(get_class($this)."::fetch_lines", LOG_DEBUG);
+		$result = $this->db->query($sql);
+		if ($result) {
+			$num = $this->db->num_rows($result);
+
+			$i = 0;
+			while ($i < $num) {
+				$objp = $this->db->fetch_object($result);
+				$tu->fetch($objp->rowid);
+				$tu->fetch_optionals();
+				$i++;
+
+
+				global $linkedObjectBlock;
+								$linkedObjectBlock = $objects;
+
+
+								// Output template part (modules that overwrite templates must declare this into descriptor)
+								$dirtpls=array_merge($conf->modules_parts['tpl'],array('/'.$tplpath.'/tpl'));
+								foreach($dirtpls as $reldir)
+								{
+									if ($nboftypesoutput == ($nbofdifferenttypes - 1))    // No more type to show after
+									{
+										global $noMoreLinkedObjectBlockAfter;
+										$noMoreLinkedObjectBlockAfter=1;
+									}
+
+									$res=@include dol_buildpath($reldir.'/'.$tplname.'.tpl.php');
+									if ($res)
+									{
+										$nboftypesoutput++;
+										break;
+									}
+								}
+
+
+			}
+
+			$this->db->free($result);
+
+			$r=1;
+			$this->error=$this->db->error();
+		} else {
+			$r=-3;
+		}
+		print "</table>
+		</div>";
+		return $r;
+		*/
+	}
+
+
+
+
 }
 
 ?>

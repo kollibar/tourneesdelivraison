@@ -200,6 +200,12 @@ if (empty($reshook)) {
 	$upload_dir = $conf->tourneesdelivraison->dir_output . $type;
 	include DOL_DOCUMENT_ROOT.'/core/actions_builddoc.inc.php';
 
+// (éventuelles) Annulation des avertissements éventuels
+if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb_strtoupper(substr($action,4))}){
+	$action='confirm_'.substr($action,4);
+	$confirm='yes';
+}
+
 	// Affectation Automatique
 	if( $typetournee=='tourneeunique' && $action == 'confirm_affectationauto' && $confirm == 'yes' && $object->statut == TourneeGeneric::STATUS_VALIDATED && $user->rights->tourneesdelivraison->tourneeunique->ecrire){
 		if (! ($object->id > 0)) {
@@ -1503,6 +1509,9 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 			$reshook = $hookmanager->executeHooks('formAddTourneLine', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
 		}
 	}
+
+	$object->printRecap();
+
 	print '</table>';
 	print '</div>';
 	if( $object->statut != TourneeGeneric::STATUS_VALIDATED) print '</form>';

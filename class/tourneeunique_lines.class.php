@@ -157,7 +157,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	 * Constructor
 	 *
 	 * @param DoliDb $db Database handler
-	 */
+	 *//*
 	public function __construct(DoliDB $db)
 	{
 		global $conf, $langs, $user;
@@ -187,7 +187,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 				}
 			}
 		}
-	}
+	}*/
 
 
 	/**
@@ -213,12 +213,11 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewContactLine();
+				$line = $this->getNewLine();
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 
 				$this->lines[$i] = $line;
-
 				$i++;
 			}
 
@@ -255,8 +254,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			$num = $this->db->num_rows($result);
 
 			$i = 0;
-			while ($i < $num)
-			{
+			while ($i < $num) {
 				$objp = $this->db->fetch_object($result);
 				$line = new TourneeUnique_lines_cmde($this->db);
 				$line->fetch($objp->rowid);
@@ -265,26 +263,56 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 					// $line->delete();  // suppression impossible si absence de $user
 					$num--;
 				} else {
-					$i++;
 					$this->lines_cmde[$i] = $line;
+					$i++;
 				}
-
 
 			}
 
 			$this->db->free($result);
 
 			return 1;
-		}
-		else
-		{
+		} else {
 			$this->error=$this->db->error();
 			return -3;
 		}
 	}
 
+	/**
+	 * Delete object in database
+	 *
+	 * @param User $user       User that deletes
+	 * @param bool $notrigger  false=launch triggers after, true=disable triggers
+	 * @return int             <0 if KO, >0 if OK
+	 */
+	public function delete(User $user, $notrigger = false)
+	{
+		dol_syslog(get_class($this)."::delete($this->id)", LOG_DEBUG);
+		//if (! empty($this->table_element_line)) $this->deletelines($user);
+		$this->deletelines($user);
+		$this->deletelinescmde($user);
+		return $this->deleteCommon($user, $notrigger);
+		//return $this->deleteCommon($user, $notrigger, 1);
+	}
 
-	public function getNewContactLine(){
+	/**
+	* Delete all lines
+	*
+	*	@return int >0 if OK, <0 if KO
+	*/
+	public function deletelinescmde(User $user,$notrigger = false)
+	{
+		dol_syslog(get_class($this)."::deletelinescmde", LOG_DEBUG);
+		$num=count($this->lines_cmde);
+		for($i=0;$i<$num;$i++){
+			//if( !empty($this->lines_cmde[$i]))
+			$this->lines_cmde[$i]->delete($user,$notrigger);
+			unset($this->lines_cmde[$i]);
+		}
+	}
+
+
+	public function getNewLine(){
 		$line=new TourneeUnique_lines_contacts($this->db);
 		return $line;
 	}
@@ -326,13 +354,13 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 
 						if( $objp->date_livraison == date("Y-m-d",$parent->date_tournee)){	// date en correspondance
 							// si statut sur INUTILE -> on met non affecté
-							if( $tulc->statut == TourneeUnique_lines_cmde::INUTILE ) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
+							//if( $tulc->statut == TourneeUnique_lines_cmde::INUTILE ) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
 							// si statut actuel avec NON date ok -> on le change
 							if($tulc->statut == TourneeUnique_lines_cmde::NON_AFFECTE) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
 							elseif($tulc->statut == TourneeUnique_lines_cmde::DATE_NON_OK) $tulc->statut=TourneeUnique_lines_cmde::DATE_OK;
 						} else {	// date diférente
 							// si statut sur INUTILE -> on met non affecté
-							if( $tulc->statut == TourneeUnique_lines_cmde::INUTILE ) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE;
+							//if( $tulc->statut == TourneeUnique_lines_cmde::INUTILE ) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE;
 							// si statut actuel avec date ok -> on le change
 							if($tulc->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE;
 							elseif($tulc->statut == TourneeUnique_lines_cmde::DATE_OK) $tulc->statut=TourneeUnique_lines_cmde::DATE_NON_OK;
@@ -353,7 +381,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 
 					$tulc->create($user);
 
-					$tihs->lines_cmde[]=$tulc;
+					$this->lines_cmde[]=$tulc;
 				} else {
 
 
@@ -361,20 +389,32 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 				$i++;
 			}
 
-			// parcours de toues les TourneeUnique_lines_cmde et toutes celle n'ayant pas été pointé âr une commande sont mise à l'état INUTLE
-			foreach ($this->lines_cmde as $line_cmde) {
-				if( $line_cmde->fait != 1 ){ // la commanbde a été supprimé ou est passé à un état inadéquat
-					$line_cmde->statut=TourneeUnique_lines_cmde::INUTILE;
-					unset($line_cmde->fait);
-					$line_cmde->update($user);
-				} else{
-					unset($line_cmde->fait);
-					$line_cmde->checkElt($user);
+			// parcours de toues les TourneeUnique_lines_cmde et suppression de toutes celles pointant vers une commande introuvable (donc commande supprimée)
+			$i=0; $num=count($this->lines_cmde);
+			while( $i <= $num){
+				$sql = 'SELECT t.rowid';
+				$sql .= ' FROM ' . MAIN_DB_PREFIX . 'commande as t';
+				$sql .= ' WHERE t.rowid = '.$this->lines_cmde[$i]->fk_commande;
+
+				dol_syslog(get_class($this)."::checkCommande", LOG_DEBUG);
+				$result = $this->db->query($sql);
+				$error=0;
+				if ($result) { // query sql succés
+					$nb = $this->db->num_rows($result);
+					if($nb == 0){	// aucune commande correspondant à cet id. Elle donc été supprimé. on supprime la ligne
+						$this->lines_cmde[$i]->delete($user);
+						$num--;
+						unset($this->lines_cmde[$i]);
+					}
 				}
+				$i++;
 			}
 
-
 			$this->db->free($result);
+
+			$this->checkElt($user);
+
+
 			if ($error<0) {
 				return $error;
 			} else {
@@ -385,6 +425,16 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			return -3;
 		}
 
+
+	}
+
+	public function checkElt(User $user){
+		// parcours de toutes les ligne cmde
+		foreach ($this->lines_cmde as $lcmde) {
+			if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK){
+				$lcmde->checkElt($user);
+			}
+		}
 	}
 
 
@@ -429,6 +479,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 				$lcmde->affectationAuto($user, $date, $AE_dateOK, $AE_1cmdeFuture, $AE_1eltParCmde, $AE_changeAutoDate);
 			}
 		}
+
+		$this->checkElt($user);
 
 		return 1;
 	}
@@ -504,5 +556,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		}
 		return $nb;
 	}
+
+
+
 
 }

@@ -47,7 +47,7 @@ dol_include_once('/tourneesdelivraison/class/tourneesdelivraison.class.php');
 /**
  *	Class to manage PDF invoice template Crabe
  */
-class pdf_palette21 extends ModelePDFTourneesdelivraison
+class pdf_palette40 extends ModelePDFTourneesdelivraison
 {
      /**
      * @var DoliDb Database handler
@@ -151,8 +151,8 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
 		$langs->loadLangs(array("main", "tourneesdelivraison@tourneesdelivraison","products"));
 
 		$this->db = $db;
-		$this->name = "palette21";
-		$this->description = $langs->trans('PDFPalette21Description');
+		$this->name = "palette40";
+		$this->description = $langs->trans('PDFPalette40Description');
 		$this->update_main_doc_field = 1;		// Save the name of generated file as the main doc when generating a doc with this template
 
 		// Dimensiont page
@@ -184,13 +184,13 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
 		// Define position of columns
     $largeur=$this->page_largeur - $this->marge_gauche - $this->marge_droite;
 
-    $this->nb_colonne=3;
-    $this->nb_ligne=7;
+    $this->nb_colonne=4;
+    $this->nb_ligne=10;
     $this->nb_case=$this->nb_colonne*$this->nb_ligne;
     $this->marge_g=0; // marge à gauche de la planche
     $this->marge_d=0; // marge à droite de la planche
-    $this->marge_h=1; // marge en haut de la planche
-    $this->marge_b=2; // marge en bas de la planche
+    $this->marge_h=0; // marge en haut de la planche
+    $this->marge_b=0; // marge en bas de la planche
     $this->marge_v=0; // marge verticale entre les étiquettes
     $this->marge_h=0; // marge horizontale entre les étiquettes
 

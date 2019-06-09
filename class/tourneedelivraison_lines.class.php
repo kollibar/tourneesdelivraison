@@ -148,7 +148,7 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 	 * Constructor
 	 *
 	 * @param DoliDb $db Database handler
-	 */
+	 *//*
 	public function __construct(DoliDB $db)
 	{
 		global $conf, $langs, $user;
@@ -178,9 +178,9 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 				}
 			}
 		}
-	}
+	}*/
 
-	public function getNewContactLine(){
+	public function getNewLine(){
 		$line=new TourneeDeLivraison_lines_contacts($this->db);
 		return $line;
 	}
@@ -252,4 +252,6 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 
 		}
 	}
+
+
 }

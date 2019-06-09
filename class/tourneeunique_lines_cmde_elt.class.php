@@ -241,9 +241,11 @@ public function LibStatut($status, $mode=0)
 
 		$this->loadElt();
 
-		if( $this->type_element == 'shipping' && $this->elt->statut != Expedition::STATUS_VALIDATED
+		if( ($affectation == self::DATE_OK || $affectation== self::DATE_NON_OK)
+			&& ($this->type_element == 'shipping' && $this->elt->statut != Expedition::STATUS_VALIDATED
 			|| $this->type_element == 'facture' && $this->elt->statut != Facture::STATUS_VALIDATED
 			|| $this->type_element == 'commande' && $this->elt->statut != Commande::STATUS_VALIDATED
+			)
 		) {
 			return -5;	// on ne peux pas affecter un élément non validé*
 		}

@@ -4,6 +4,43 @@ require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
 
 class TourneeObject extends CommonObject
 {
+
+	/**
+	 * Constructor
+	 *
+	 * @param DoliDb $db Database handler
+	 */
+	public function __construct(DoliDB $db)
+	{
+		global $conf, $langs, $user;
+
+		$this->db = $db;
+
+		if (empty($conf->global->MAIN_SHOW_TECHNICAL_ID) && isset($this->fields['rowid'])) $this->fields['rowid']['visible']=0;
+		if (empty($conf->multicompany->enabled) && isset($this->fields['entity'])) $this->fields['entity']['enabled']=0;
+
+		// Unset fields that are disabled
+		foreach($this->fields as $key => $val)
+		{
+			if (isset($val['enabled']) && empty($val['enabled']))
+			{
+				unset($this->fields[$key]);
+			}
+		}
+
+		// Translate some data of arrayofkeyval
+		foreach($this->fields as $key => $val)
+		{
+			if (is_array($this->fields['status']['arrayofkeyval']))
+			{
+				foreach($this->fields['status']['arrayofkeyval'] as $key2 => $val2)
+				{
+					$this->fields['status']['arrayofkeyval'][$key2]=$langs->trans($val2);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Load object in memory from the database
 	 *
@@ -152,10 +189,32 @@ class TourneeObject extends CommonObject
 	 */
 	public function delete(User $user, $notrigger = false)
 	{
-		if (! empty($this->table_element_line)) $this->deletelines($user);;
+		dol_syslog(get_class($this)."::delete()", LOG_DEBUG);
+		//if (! empty($this->table_element_line)) $this->deletelines($user);
+		$this->deletelines($user);
 		return $this->deleteCommon($user, $notrigger);
 		//return $this->deleteCommon($user, $notrigger, 1);
 	}
+
+
+	/**
+	* Delete all lines
+	*
+	*	@return int >0 if OK, <0 if KO
+	*/
+	public function deletelines(User $user, $notrigger = false)
+	{
+		dol_syslog(get_class($this)."::deletelines", LOG_DEBUG);
+		if (! empty($this->table_element_line)) {
+			$num=count($this->lines);
+			for($i=0;$i<$num;$i++){
+				$this->lines[$i]->delete($user,$notrigger);
+				unset($this->lines[$i]);
+			}
+		}
+	}
+
+
 
 	/**
 	 * Create object into database
@@ -513,5 +572,121 @@ public function getCategories()
 
 	return $existing;
 }
+
+
+/**
+ * Clone and object into another one
+ *
+ * @param  	User 	$user      	User that creates
+ * @param  	int 	$fromid     Id of object to clone
+ * @return 	mixed 				New object created, <0 if KO
+ */
+	public function createFromClone(User $user, $fromid, $fk_parent=null, $parentid=0){
+		global $langs, $hookmanager, $extrafields;
+		$error = 0;
+
+		dol_syslog(__METHOD__, LOG_DEBUG);
+
+		//$object = new {$this->nomelement}($this->db);
+		if( $this->nomelement=="TourneeDeLivraison") $object = new TourneeDeLivraison($this->db);
+		else if( $this->nomelement=="TourneeDeLivraison_lines") $object = new TourneeDeLivraison_lines($this->db);
+		else if( $this->nomelement=="TourneeDeLivraison_lines_contacts") $object = new TourneeDeLivraison_lines_contacts($this->db);
+		else if( $this->nomelement=="TourneeUnique") $object = new Tourneeunique($this->db);
+		else if( $this->nomelement=="TourneeUnique_lines") $object = new Tourneeunique_lines($this->db);
+		else if( $this->nomelement=="TourneeUnique_lines_contacts") $object = new Tourneeunique_lines_contacts($this->db);
+
+		$this->db->begin();
+
+		// Load source object
+		$object->fetchCommon($fromid);
+
+		// Reset some properties
+		unset($object->lines);
+		unset($object->id);
+		unset($object->fk_user_creat);
+		unset($object->import_key);
+
+		// ajout du parent
+		if( !empty($fk_parent)  && !empty($parentid)){
+			$object->{$fk_parent}=$parentid;
+		}
+
+		// Clear fields
+		$object->ref = "copy_of_".$object->ref;
+		$object->title = $langs->trans("CopyOf")." ".$object->title;
+		if( !empty($object->date_tournee)){
+			$object->date_tournee="";
+		}
+		// Clear extrafields that are unique
+		if (is_array($object->array_options) && count($object->array_options) > 0)
+		{
+			$extrafields->fetch_name_optionals_label($this->element);
+			foreach($object->array_options as $key => $option)
+			{
+				$shortkey = preg_replace('/options_/', '', $key);
+				if (! empty($extrafields->attributes[$this->element]['unique'][$shortkey]))
+				{
+					//var_dump($key); var_dump($clonedObj->array_options[$key]); exit;
+					unset($object->array_options[$key]);
+				}
+			}
+		}
+
+		// Create clone
+		$object->context['createfromclone'] = 'createfromclone';
+		$result = $object->createCommon($user);
+		if ($result < 0) {
+				$error++;
+				$this->error = $object->error;
+				$this->errors = $object->errors;
+		}
+
+		unset($object->context['createfromclone']);
+
+		// copie des lignes
+		if( !empty($this->table_element_line) ){
+			$sql = 'SELECT t.rowid, t.rang, t.'.$this->fk_element;
+			$sql .= ' FROM '.MAIN_DB_PREFIX.$this->table_element_line . ' as t';
+			$sql .= ' WHERE t.'.$this->fk_element.' = '.$this->id;
+			$sql .= ' ORDER BY t.rang';
+
+			dol_syslog(get_class($this)."::createFromClone", LOG_DEBUG);
+			$result = $this->db->query($sql);
+			if ($result)
+			{
+				$num = $this->db->num_rows($result);
+
+				$i = 0;
+				while ($i < $num) {
+					$objp = $this->db->fetch_object($result);
+					$line = $this->getNewLine();
+
+					$line->fetch($objp->rowid);
+					$line->fetch_optionals();
+
+					$new_line=$line->createFromClone($user, $objp->rowid, $object->fk_element, $object->id);
+
+					if (is_object($new_line)) {
+						$object->lines[]=$new_line;
+					}
+
+					$i++;
+				}
+				$this->db->free($result);
+			} else {
+				$this->error=$this->db->error();
+				$error++;
+			}
+		}
+
+		// End
+		if (!$error) {
+				$this->db->commit();
+				return $object;
+		} else {
+				$this->db->rollback();
+				return -1;
+		}
+	}
 
 }

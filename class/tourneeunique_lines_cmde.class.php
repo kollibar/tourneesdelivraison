@@ -251,7 +251,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 	 * @param  	User 	$user      	User that creates
 	 * @param  	int 	$fromid     Id of object to clone
 	 * @return 	mixed 				New object created, <0 if KO
-	 */
+	 *//*
 	public function createFromClone(User $user, $fromid)
 	{
 		global $langs, $hookmanager, $extrafields;
@@ -308,7 +308,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 	        $this->db->rollback();
 	        return -1;
 	    }
-	}
+	}*/
 
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
@@ -601,7 +601,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 
 			// parcours de toues les TourneeUnique_lines_cmde_elt et toutes celle n'ayant pas été pointé âr une commande sont mise à l'état INUTLE
 			foreach ($this->lines as $line_elt) {
-				if( $line_elt->fait != 1 ){ // la commanbde a été supprimé ou est passé à un état inadéquat
+				if( empty($line_elt->fait) ){ // la commanbde a été supprimé ou est passé à un état inadéquat
 					$line_elt->statut=TourneeUnique_lines_cmde_elt::INUTILE;
 				} else{
 					unset($line_elt->fait);
@@ -648,7 +648,10 @@ class TourneeUnique_lines_cmde extends TourneeObject
 
 	public function changeAffectation(User $user, $affectation, $dateTournee=null, $changeDate=false){
 		$this->loadElt();
-		if( $this->elt->statut != Commande::STATUS_VALIDATED) {
+		if( ($affectation == self::DATE_OK || $affectation== self::DATE_NON_OK)
+		 	&& $this->elt->statut != Commande::STATUS_VALIDATED
+			&& $this->elt->statut != Commande::STATUS_SHIPMENTONPROCESS
+			&& $this->elt->statut != Commande::STATUS_CLOSED) {
 			return -5;	// on ne peux pas affecter un élément non validé
 		}
 
@@ -780,6 +783,9 @@ class TourneeUnique_lines_cmde extends TourneeObject
 	}
 
 	function getTotalWeightVolume(){
+		if( $this->statut != self::DATE_OK && $this->statut != self::DATE_NON_OK){
+			return array('weight'=>0, 'volume'=>0, 'ordered'=>0, 'toship'=>0);
+		}
 		$totalWeight=0;
 		$totalVolume=0;
 		$totalOrdered=0;

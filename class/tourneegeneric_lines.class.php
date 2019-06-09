@@ -25,72 +25,6 @@ class TourneeGeneric_lines extends TourneeObject
 
 
 	/**
-	 * Clone and object into another one
-	 *
-	 * @param  	User 	$user      	User that creates
-	 * @param  	int 	$fromid     Id of object to clone
-	 * @return 	mixed 				New object created, <0 if KO
-	 */
-	public function createFromClone(User $user, $fromid)
-	{
-		global $langs, $hookmanager, $extrafields;
-	    $error = 0;
-
-	    dol_syslog(__METHOD__, LOG_DEBUG);
-
-	    $object = new self($this->db);
-
-	    $this->db->begin();
-
-	    // Load source object
-	    $object->fetchCommon($fromid);
-	    // Reset some properties
-	    unset($object->id);
-	    unset($object->fk_user_creat);
-	    unset($object->import_key);
-
-	    // Clear fields
-	    $object->ref = "copy_of_".$object->ref;
-	    $object->title = $langs->trans("CopyOf")." ".$object->title;
-	    // ...
-	    // Clear extrafields that are unique
-	    if (is_array($object->array_options) && count($object->array_options) > 0)
-	    {
-	    	$extrafields->fetch_name_optionals_label($this->element);
-	    	foreach($object->array_options as $key => $option)
-	    	{
-	    		$shortkey = preg_replace('/options_/', '', $key);
-	    		if (! empty($extrafields->attributes[$this->element]['unique'][$shortkey]))
-	    		{
-	    			//var_dump($key); var_dump($clonedObj->array_options[$key]); exit;
-	    			unset($object->array_options[$key]);
-	    		}
-	    	}
-	    }
-
-	    // Create clone
-		$object->context['createfromclone'] = 'createfromclone';
-	    $result = $object->createCommon($user);
-	    if ($result < 0) {
-	        $error++;
-	        $this->error = $object->error;
-	        $this->errors = $object->errors;
-	    }
-
-	    unset($object->context['createfromclone']);
-
-	    // End
-	    if (!$error) {
-	        $this->db->commit();
-	        return $object;
-	    } else {
-	        $this->db->rollback();
-	        return -1;
-	    }
-	}
-
-
-	/**
 	* Load object line in memory from the database
 	*
 	*	@return		int						<0 if KO, >0 if OK
@@ -113,7 +47,7 @@ class TourneeGeneric_lines extends TourneeObject
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewContactLine();
+				$line = $this->getNewLine();
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 
@@ -154,7 +88,7 @@ class TourneeGeneric_lines extends TourneeObject
 
 			if ($obj) {
 				// Delete line
-				$line = $this->getNewContactLine();
+				$line = $this->getNewLine();
 
 				// For triggers
 				$line->fetch($lineid);
@@ -189,7 +123,7 @@ class TourneeGeneric_lines extends TourneeObject
 	* Delete all lines
 	*
 	*	@return int >0 if OK, <0 if KO
-	*/
+	*//*
 	public function deletelines($user=null)
 	{
 		$sql = 'SELECT l.rowid, l.rang, l.'.$this->fk_element.'  FROM '.MAIN_DB_PREFIX.$this->table_element_line.' as l';
@@ -207,7 +141,7 @@ class TourneeGeneric_lines extends TourneeObject
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewContactLine();
+				$line = $this->getNewLine();
 				$line->fetch($objp->rowid);
 
 				if ( $line->delete($user) > 0)	// si suppression ok
@@ -237,7 +171,7 @@ class TourneeGeneric_lines extends TourneeObject
 			$this->error=$this->db->error();
 			return -3;
 		}
-	}
+	}*/
 
 	/**
 	 *  Add a line in database
@@ -271,7 +205,7 @@ class TourneeGeneric_lines extends TourneeObject
 
 
 		// Insert line
-		$this->line=$this->getNewContactLine($this->db);
+		$this->line=$this->getNewLine();
 
 		$this->line->context = $this->context;
 
@@ -336,7 +270,7 @@ class TourneeGeneric_lines extends TourneeObject
 			if( empty($note_private)) $note_private='';
 
 			//Fetch current line from the database and then clone the object and set it in $oldline property
-			$line = $this->getNewContactLine();
+			$line = $this->getNewLine();
 			$line->fetch($rowid);
 
 			$staticline = clone $line;

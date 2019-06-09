@@ -164,6 +164,22 @@ TourneeModelModule = Modèles des documents de tournées
 CacheSurBL = Caché sur les BL
 CodeCarton = Code carton
 Colisage = Colisage
+ParametresDesAvertissements = Paramètres des avertissements
+DemandeConfirmationAvantDe = Demande une confirmation avant de
+AvertissementAvantDelete = supprimer une  tournée
+AvertissementAvantCancel = annuler une  tournée
+AvertissementAvantClone = cloner une  tournée
+AvertissementAvantClose = clore une  tournée
+AvertissementAvantValidate = valider une  tournée
+AvertissementAvantGenererDocs = générer tous les docs d'une  tournée
+AvertissementAvantUnvalidate = repasser une tournée à brouillons
+AvertissementAvantAffectationAuto = lancer les affectations automatiques sur une  tournée
+AvertissementAvantReopen = ré-ouvrir une  tournée
+AvertissementAvantChangeStatutElt = changer le statut d'un élément de tournée
+AvertissementAvantChangeDateElt = changer la date d'un élément de tournée
+AvertissementAvantDeleteLine = supprimer une ligne de tournée
+AvertissementAvantDeleteContact = supprimer le contact d'une ligne de tournée
+
 
 #
 # Autres

@@ -147,6 +147,21 @@ else if ($action == 'setdoc')
 	}
 }
 
+if( $action == 'setavertissement'){
+	$avertissement = GETPOST('avertissement','aZ09');
+	$value = GETPOST('value','int');
+
+	$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_ASK_".mb_strtoupper($avertissement), $value,'yesno',0,'',$conf->entity);
+	if (! $res > 0) $error++;
+	if (! $error)
+	{
+			setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+	}
+	else
+	{
+			setEventMessages($langs->trans("Error"), null, 'errors');
+	}
+}
 
 //Activate "Affectation Auto si date de livraison OK"
 if( $action == 'setpoidsbl'){
@@ -597,6 +612,59 @@ print '</tr>';
 
 print '</table>';
 print '</div>';
+
+
+print load_fiche_titre($langs->trans("ParametresDesAvertissements"),'','');
+
+print '<div class="div-table-responsive-no-min" id="divav">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print "<td>".$langs->trans("DemandeConfirmationAvantDe")."</td>\n";
+print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
+print '<td width="80">&nbsp;</td></tr>'."\n";
+
+
+$avertissements = array('Delete' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETE,
+												'Cancel' => $conf->global->TOURNEESDELIVRAISON_ASK_CANCEL,
+												'Clone' => $conf->global->TOURNEESDELIVRAISON_ASK_CLONE,
+												'Close' => $conf->global->TOURNEESDELIVRAISON_ASK_CLOSE,
+												'Validate' => $conf->global->TOURNEESDELIVRAISON_ASK_VALIDATE,
+												'GenererDocs' => $conf->global->TOURNEESDELIVRAISON_ASK_GENERERDOCS,
+												'Unvalidate' => $conf->global->TOURNEESDELIVRAISON_ASK_UNVALIDATE,
+												'AffectationAuto' => $conf->global->TOURNEESDELIVRAISON_ASK_AFFECTATIONAUTO,
+												'Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_REOPEN,
+												'ChangeStatutElt' => $conf->global->TOURNEESDELIVRAISON_ASK_CHANGESTATUTELT,
+												'ChangeDateElt' => $conf->global->TOURNEESDELIVRAISON_ASK_CHANGEDATEELT,
+												'DeleteLine' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETELINE,
+												'DeleteContact' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETECONTACT,
+											);
+
+foreach ($avertissements as $key => $value) {
+
+	print '<tr class="oddeven">';
+	print '<td width="80%">'.$langs->trans("AvertissementAvant".$key).'</td>';
+	print '<td>&nbsp</td>';
+	print '<td align="center">';
+	if (!empty($value))
+	{
+		print '<a href="'.$_SERVER['PHP_SELF'].'?action=setavertissement&avertissement='.mb_strtolower($key).'&value=0#divav">';
+		print img_picto($langs->trans("Disabled"),'switch_off');
+	}
+	else
+	{
+		print '<a href="'.$_SERVER['PHP_SELF'].'?action=setavertissement&avertissement='.mb_strtolower($key).'&value=1#divav">';
+		print img_picto($langs->trans("Activated"),'switch_on');
+	}
+	print '</a></td>';
+	print '</tr>';
+}
+
+
+
+
+print '</table></div>';
+
+
 
 
 

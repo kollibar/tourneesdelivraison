@@ -61,3 +61,15 @@ abstract class ModelePDFTourneesdelivraison extends CommonDocGenerator
 		return $liste;
 	}
 }
+
+function pdf_reduceStringTo(&$pdf, $str, $longeur){
+  if( $pdf->GetStringWidth($str) > $longeur){
+    $str=substr($str,0,round(($longeur/$pdf->GetStringWidth($str))*strlen($str),0,PHP_ROUND_HALF_DOWN));
+  }
+  return $str;
+
+  while( $pdf->GetStringWidth($str) > $longeur){
+    $str=substr($str,0,-1);
+  }
+  return $str;
+}
