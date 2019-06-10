@@ -267,9 +267,31 @@ public function LibStatut($status, $mode=0)
 			if( $result === true ) return -4; //impossible d'affecter: déjà affecté!
 		}
 
+		$old_affectation=$this->statut;
 		$this->statut=$affectation;
+		
 		$result = $this->update($user);
 		if( $result <0 ) return -1;
+
+		$this->getParent();
+
+		$this->elt->fetchObjectLinked();
+		var_dump($this->elt->linkedObjectsIds);
+
+		if(!empty($this->elt->linkedObjectsIds['tourneesdelivraison'])
+			&& in_array($this->parent->id,$this->elt->linkedObjectsIds['tourneesdelivraison'])) {
+				$liaison=1;
+		}
+
+		if(($affectation == self::DATE_OK || $affectation == self::DATE_NON_OK) && empty($liaison)){	// si affectation à cette tournée et pas de liaison
+			$this->elt->add_object_linked('tourneesdelivraison',$this->parent->id); // on crée une liaison
+		}
+
+		if($affectation != self::DATE_OK && $affectation != self::DATE_NON_OK && !empty($liaison)){ // si plus affecté à cet objet et liaison
+			// on supprime la liaison
+			$this->elt->deleteObjectLinked($this->parent->id, 'tourneesdelivraison');
+		}
+
 
 		if( $changeDate ){
 			return $this->changeDateLivraison($user,$dateTournee);

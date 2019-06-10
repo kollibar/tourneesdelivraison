@@ -198,9 +198,9 @@ $domData .= ' data-id="'.$line->id.'"';
 
 						print '</td></tr>';
 						if( empty($line->aucune_cmde)){
-							//print '<tr><td><div class="inline-block divButAction tourneeBoutons"><a class="butAction" href="'.DOL_URL_ROOT.'/commande/card.php?socid='.$line->fk_soc.'&amp;action=create&amp;origin=tourneesdelivraison&originid='.$line->id.'">'.$langs->trans("AddOrder").'</a></div>
-							print '<tr><td><div class="inline-block divButAction tourneeBoutons"><a class="butAction" href="'.DOL_URL_ROOT.'/commande/card.php?socid='.$line->fk_soc.'&amp;action=create">'.$langs->trans("AddOrder").'</a></div>
-								</td></tr>';
+							//print '<tr><td><div class="inline-block divButAction tourneeBoutons"><a class="butAction" href="'.DOL_URL_ROOT.'/commande/card.php?socid='.$line->fk_soc.'&amp;action=create">'.$langs->trans("AddOrder").'</a></div>';
+							print '<tr><td><div class="inline-block divButAction tourneeBoutons"><a class="butAction" href="'.DOL_URL_ROOT.'/commande/card.php?socid='.$line->fk_soc.'&amp;action=create&amp;origin=tourneesdelivraison&originid='.$line->id.'">'.$langs->trans("AddOrder").'</a></div>';
+							print '</td></tr>';
 						}
 			} ?>
 			</table>

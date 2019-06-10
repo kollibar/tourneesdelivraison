@@ -153,7 +153,17 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 		    // Customer orders
 		    //case 'ORDER_CREATE':
 		    //case 'ORDER_MODIFY':
-		    //case 'ORDER_VALIDATE':
+		    case 'ORDER_VALIDATE':
+					$object->fetchObjectLinked();
+
+					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
+						foreach ($object->linkedObjectsIds['tourneesdelivraison'] as $rowid => $id) {
+							$tul=new TourneeUnique_lines($object->db);
+							$tul->fetch($id);
+							$tul->affecteElt($user, $object, 1);
+						}
+					}
+					break;
 		    //case 'ORDER_DELETE':
 		    //case 'ORDER_CANCEL':
 		    //case 'ORDER_SENTBYMAIL':
@@ -214,9 +224,21 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 		    //case 'LINECONTRACT_DELETE':
 
 		    // Bills
-		    //case 'BILL_CREATE':
+		    case 'BILL_CREATE':
+
+					break;
 		    //case 'BILL_MODIFY':
-		    //case 'BILL_VALIDATE':
+		    case 'BILL_VALIDATE':
+					$object->fetchObjectLinked();
+
+					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
+						foreach ($object->linkedObjectsIds['tourneesdelivraison'] as $rowid => $id) {
+							$tul=new TourneeUnique_lines($object->db);
+							$tul->fetch($id);
+							$tul->affecteElt($user, $object, 1);
+						}
+					}
+					break;
 		    //case 'BILL_UNVALIDATE':
 		    //case 'BILL_SENTBYMAIL':
 		    //case 'BILL_CANCEL':
@@ -294,9 +316,21 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 		    //case 'TASK_TIMESPENT_DELETE':
 
 		    // Shipping
-		    //case 'SHIPPING_CREATE':
+		    case 'SHIPPING_CREATE':
+
+					break;
 		    //case 'SHIPPING_MODIFY':
-		    //case 'SHIPPING_VALIDATE':
+		    case 'SHIPPING_VALIDATE':
+					$object->fetchObjectLinked();
+
+					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
+						foreach ($object->linkedObjectsIds['tourneesdelivraison'] as $rowid => $id) {
+							$tul=new TourneeUnique_lines($object->db);
+							$tul->fetch($id);
+							$tul->affecteElt($user, $object, 1);
+						}
+					}
+					break;
 		    //case 'SHIPPING_SENTBYMAIL':
 		    //case 'SHIPPING_BILLED':
 		    //case 'SHIPPING_CLOSED':

@@ -522,6 +522,28 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		return $elt->changeAffectation($user, $statut, $tournee->date_tournee, $changeDate);
 	}
 
+	public function affecteElt(User $user, $elt, $notrigger = 0){
+		$this->getTournee();
+		if( $elt->element == 'commande'){
+			$lcmde=$this->getCmdelineByFk_cmde($elt->id);
+			if( empty($lcmde)){	// pas de ligne correspondant à cette commande, on l'ajoute
+				$tulc=new TourneeUnique_lines_cmde($this->db);
+				$tulc->fk_commande=$elt->id;
+				$tulc->fk_tournee_lines=$this->id;
+				if( $elt->date_livraison == $parent->date_tournee) $tulc->statut=TourneeUnique_lines_cmde::DATE_OK;
+				else $tulc->statut=TourneeUnique_lines_cmde::DATE_NON_OK;
+
+				$tulc->create($user);
+
+				$this->lines_cmde[]=$tulc;
+			} else {
+				if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK){
+					$lcmde->changeAffectation($user, TourneeUnique_lines_cmde::DATE_NON_OK, $this->parent->date_tournee, false, $notrigger);
+				}
+			}
+		}
+	}
+
 	public function getNbCmdeParStatut(){
 		$nb=array(TourneeUnique_lines_cmde::DATE_NON_OK=>0, TourneeUnique_lines_cmde::DATE_OK=>0,
 			TourneeUnique_lines_cmde::INUTILE=>0,
