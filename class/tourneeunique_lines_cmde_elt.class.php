@@ -269,14 +269,13 @@ public function LibStatut($status, $mode=0)
 
 		$old_affectation=$this->statut;
 		$this->statut=$affectation;
-		
+
 		$result = $this->update($user);
 		if( $result <0 ) return -1;
 
 		$this->getParent();
 
 		$this->elt->fetchObjectLinked();
-		var_dump($this->elt->linkedObjectsIds);
 
 		if(!empty($this->elt->linkedObjectsIds['tourneesdelivraison'])
 			&& in_array($this->parent->id,$this->elt->linkedObjectsIds['tourneesdelivraison'])) {
