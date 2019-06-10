@@ -62,6 +62,56 @@ $domData .= ' data-id="'.$line->id.'"';
 	?>
 			<td align="left" class="linecolclient nowrap"><?php $coldisplay++; ?>
 				<?php echo $line->getBannerAddressSociete('bannerSociete_'.$line->id); ?>
+
+				<?php if( !empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
+
+
+					<table>
+					<?php
+						$liste=array();
+						if( count($line->lines) >0 || $this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
+							echo '<tr><td style="font-weight:bold;">'.$langs->trans('Contact').':</td></tr>';
+						}
+						if( count($line->lines) >0 ){
+							foreach($line->lines as $contactline){
+								$liste[]=$contactline->fk_socpeople;
+								print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
+								print $contactline->getBannerContact();
+								print '</td><td>';
+								if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
+									print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . '">';
+									print img_delete();
+									print '</a>';
+								}
+								print '</td></tr>';
+							}
+						}
+
+						if ($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){ ?>
+							<tr>
+								<td>
+									<?php $ret=$form->select_contacts($line->fk_soc, '', 'addcontactid_'.$line->id, 1, $liste, '',0,'', 0,0,array(), false,'',''); ?>
+								</td><?php if($ret-count($liste)>0){ ?>
+								<td>
+									<input type="submit" class="button" value="<?php echo $langs->Trans("AjouterContact"); ?>" name="addcontact_<?php echo $line->id; ?>" id="addcontact_<?php echo $line->id; ?>" <?php  echo (($ret-count($liste)<=0)?'disabled':'')?>>
+								</td><?php } ?>
+							</tr>
+						<?php
+						}
+					?>
+					</table>
+
+				<?php } ?>
+
+
+
+
+
+
+
+
+
+
 			</td>
 	<?php
 		}
@@ -312,42 +362,45 @@ $domData .= ' data-id="'.$line->id.'"';
 		<?php echo $line->getBannerAddresseLivraison('bannerAdresseLivraison_'.$line->id); ?>
 	</td>
 
-	<td align="right" class="linecolcontact nowrap"><?php $coldisplay++; ?>
-		<style type="text/css">
 
-		</style>
-		<table>
-		<?php
-			$liste=array();
-			if( count($line->lines) >0 ){
-				foreach($line->lines as $contactline){
-					$liste[]=$contactline->fk_socpeople;
-					print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
-					print $contactline->getBannerContact();
-					print '</td><td>';
-					if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
-						print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . '">';
-						print img_delete();
-						print '</a>';
-					}
-					print '</td></tr>';
-				}
-			}
+	<?php if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
+		<td align="right" class="linecolcontact nowrap"><?php $coldisplay++; ?>
+			<style type="text/css">
 
-			if ($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){ ?>
-				<tr>
-					<td>
-						<?php $ret=$form->select_contacts($line->fk_soc, '', 'addcontactid_'.$line->id, 1, $liste, '',0,'', 0,0,array(), false,'',''); ?>
-					</td><?php if($ret-count($liste)>0){ ?>
-					<td>
-						<input type="submit" class="button" value="<?php echo $langs->Trans("AjouterContact"); ?>" name="addcontact_<?php echo $line->id; ?>" id="addcontact_<?php echo $line->id; ?>" <?php  echo (($ret-count($liste)<=0)?'disabled':'')?>>
-					</td><?php } ?>
-				</tr>
+			</style>
+			<table>
 			<?php
-			}
-		?>
-		</table>
-	</td>
+				$liste=array();
+				if( count($line->lines) >0 ){
+					foreach($line->lines as $contactline){
+						$liste[]=$contactline->fk_socpeople;
+						print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
+						print $contactline->getBannerContact();
+						print '</td><td>';
+						if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
+							print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . '">';
+							print img_delete();
+							print '</a>';
+						}
+						print '</td></tr>';
+					}
+				}
+
+				if ($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){ ?>
+					<tr>
+						<td>
+							<?php $ret=$form->select_contacts($line->fk_soc, '', 'addcontactid_'.$line->id, 1, $liste, '',0,'', 0,0,array(), false,'',''); ?>
+						</td><?php if($ret-count($liste)>0){ ?>
+						<td>
+							<input type="submit" class="button" value="<?php echo $langs->Trans("AjouterContact"); ?>" name="addcontact_<?php echo $line->id; ?>" id="addcontact_<?php echo $line->id; ?>" <?php  echo (($ret-count($liste)<=0)?'disabled':'')?>>
+						</td><?php } ?>
+					</tr>
+				<?php
+				}
+			?>
+			</table>
+		</td>
+	<?php } ?>
 
 
 	<?php

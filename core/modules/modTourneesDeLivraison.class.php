@@ -169,6 +169,13 @@ class modTourneesDeLivraison extends DolibarrModules
 		$this->const[$r][4] = 0;
 		$r++;
 
+		$this->const[$r][0] = "TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE";
+		$this->const[$r][1] = "ouinon";
+		$this->const[$r][2] = "1";
+		$this->const[$r][3] = "Affiche les contacts en dessous du nom du magasin (au lieu de la colonne tout à droite)";
+		$this->const[$r][4] = 0;
+		$r++;
+
 		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_DELETE","ouinon","0","Validation avant de supprimer une Tournée",0);
 		$r++;
 		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CANCEL","ouinon","0","Validation avant d'annuler' une Tournée",0);

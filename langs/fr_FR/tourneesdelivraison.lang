@@ -179,7 +179,8 @@ AvertissementAvantChangeStatutElt = changer le statut d'un élément de tournée
 AvertissementAvantChangeDateElt = changer la date d'un élément de tournée
 AvertissementAvantDeleteLine = supprimer une ligne de tournée
 AvertissementAvantDeleteContact = supprimer le contact d'une ligne de tournée
-
+ParametresDAffichage = Paramètres d'affichage
+AffichageContactIntegre = Affichage des contacts intégrés sous le nom du magasin (plutôt que dans une colonne a droite)
 
 #
 # Autres

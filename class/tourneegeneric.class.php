@@ -869,7 +869,9 @@ public function LibStatut($status, $mode=0)
 			print '<td class="linecoladresselivraison">'.$langs->trans('AdresseLivraison').'</td>';
 
 			// contact
-			print '<td class="linecolcontact">'.$langs->trans('Contact').'</td>';
+			if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){
+				print '<td class="linecolcontact">'.$langs->trans('Contact').'</td>';
+			}
 
 
 			print '<td class="linecoledit"></td>';  // No width to allow autodim

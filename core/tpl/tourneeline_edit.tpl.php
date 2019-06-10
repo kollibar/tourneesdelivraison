@@ -175,16 +175,18 @@ $domData .= ' data-id="'.$line->id.'"';
 		//$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'',''); ?>
 	</td>
 
-	<td align="right" class="linecolcontact nowrap"><?php $coldisplay++; ?>
-		<?php
-			if( count($line->lines) >0 ){
-				foreach($line->lines as $contact){
-					echo $contact->getFullAddress();
-					echo '<br />';
+	<?php if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
+		<td align="right" class="linecolcontact nowrap"><?php $coldisplay++; ?>
+			<?php
+				if( count($line->lines) >0 ){
+					foreach($line->lines as $contact){
+						echo $contact->getFullAddress();
+						echo '<br />';
+					}
 				}
-			}
-		?>
-	</td>
+			?>
+		</td>
+	<?php } ?>
 
 
 	<td class="nobottom linecoledit" align="center" valign="middle" colspan="4">
