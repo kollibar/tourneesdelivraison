@@ -38,6 +38,12 @@ dol_include_once('/tourneesdelivraison/class/tourneeunique_lines_contacts.class.
  */
 class TourneeUnique extends TourneeGeneric
 {
+
+	const AUCUN_MASQUE			= 0;
+	const MASQUE_PASDECMDE	= 1;
+	const MASQUE_SANSCMDE		=	2;
+	const MASQUE_SANSCMDEAFF_OU_INC = 3;
+	const MASQUE_SANSCMDEAFFECTE = 4;
 	/**
 	 * @var string ID to identify managed object
 	 */
@@ -116,9 +122,10 @@ class TourneeUnique extends TourneeGeneric
 		'date_tournee' => array('type'=>'date', 'label'=>'DateTournee', 'enabled'=>1, 'visible'=>1, 'position'=>70, 'notnull'=>1,),
 		'date_prochaine' => array('type'=>'date', 'label'=>'DateProchaineTournee', 'enabled'=>1, 'visible'=>1, 'position'=>71, 'notnull'=>-1,),
 		'ae_datelivraisonidentique' => array('type'=>'integer', 'label'=>'AffecteAutoDateLivraisonOK', 'enabled'=>1, 'visible'=>1, 'position'=>80, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'ae_1ere_future_cmde' => array('type'=>'integer', 'label'=>'AffecteAuto1ereFutureCmde', 'enabled'=>1, 'visible'=>1, 'position'=>81, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'ae_1elt_par_cmde' => array('type'=>'integer', 'label'=>'AffectationAutoSi1EltParCmde', 'enabled'=>1, 'visible'=>1, 'position'=>82, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'change_date_affectation' => array('type'=>'integer', 'label'=>'ChangeAutoDateLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>83, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Manuelle seulement', '4'=>'manuelle et automatique',)),
+		'ae_1ere_future_cmde' => array('type'=>'integer', 'label'=>'AffecteAuto1ereFutureCmde', 'enabled'=>1, 'visible'=>1, 'position'=>81, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
+		'ae_1elt_par_cmde' => array('type'=>'integer', 'label'=>'AffectationAutoSi1EltParCmde', 'enabled'=>1, 'visible'=>1, 'position'=>82, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
+		'change_date_affectation' => array('type'=>'integer', 'label'=>'ChangeAutoDateLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>83, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Manuelle seulement', '4'=>'manuelle et automatique',)),
+		'masque_ligne' => array('type'=>'integer', 'label'=>'MasquerLesLignes', 'enabled'=>1, 'visible'=>1, 'position'=>85, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'AucunMasquage','1'=>'MarqueSansCommande', '2'=>'SansCmde', '3' => 'SansCmdeAffOuInc','4'=>'SansCmdeAffecte',)),
 	);
 	public $rowid;
 	public $ref;
@@ -140,6 +147,7 @@ class TourneeUnique extends TourneeGeneric
 	public $ae_1elt_par_cmde;
 	public $change_date_affectation;
 	public $model_pdf;
+	public $masque_ligne;
 	// END MODULEBUILDER PROPERTIES
 
 

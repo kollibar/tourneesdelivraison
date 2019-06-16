@@ -898,8 +898,28 @@ public function LibStatut($status, $mode=0)
 		print "<tbody>\n";
 		foreach ($this->lines as $line)
 		{
+			if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+			 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
+						|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
+						)){
+				continue;
+			}
+			if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+				&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
+				$ok=1;
+				foreach ($line->lines_cmde as $lcmde) {
+					if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
+							|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
+						){
+						$ok=0;
+						break;
+					}
+				}
+				if(!empty($ok)) continue;
+			}
 			//Line extrafield
 			$line->fetch_optionals();
+
 
 			if (is_object($hookmanager))   // Old code is commented on preceding line.
 			{

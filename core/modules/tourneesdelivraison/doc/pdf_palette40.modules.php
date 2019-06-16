@@ -195,10 +195,10 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
     $this->marge_h=0; // marge horizontale entre les étiquettes
 
     // marge d'impression
-    $this->marge_haute=5;
-    $this->marge_basse=5;
-    $this->marge_droite=5;
-    $this->marge_gauche=5;
+    $this->marge_haute=4;
+    $this->marge_basse=4;
+    $this->marge_droite=4;
+    $this->marge_gauche=4;
 
     $this->marge_case=2;
 
@@ -233,14 +233,14 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
     $curX=$XYP['X'];
     $curY=$XYP['Y'];
     $curP=$XYP['page'];
-    $this->printRect($pdf,$curX, $curY, $this->largeur, $this->hauteur, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
+    //$this->printRect($pdf,$curX, $curY, $this->largeur, $this->hauteur, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
     if( $pdf->getPage() < $XYP['page'] ) {
       $this->addPage($pdf);
     }
     $style = array(
       'border' => 0,
-      'vpadding' => 'auto',
-      'hpadding' => 'auto',
+      'vpadding' => 1,
+      'hpadding' => 0,
       'fgcolor' => array(0,0,0),
       'bgcolor' => false, //array(255,255,255)
       'module_width' => 1, // width of a single module in points
@@ -251,29 +251,29 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
       $url=str_replace($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN, $conf->global->TOURNEESDELIVRAISON_URL_REPLACE, $url);
     }
 
-    $pdf->write2DBarcode($url, 'QRCODE,L', $curX, $curY, 20, 20, $style, 'N');
+    $pdf->write2DBarcode($url, 'QRCODE,L', $curX, $curY, 18, 18, $style, 'N');
 
     $carac_client_name = pdfBuildThirdpartyName($thirdparty, $outputlangs);
-    $pdf->SetXY($curX+20,$curY);
-    $pdf->SetFont('','B', $default_font_size);
+    $pdf->SetXY($curX+18,$curY);
+    $pdf->SetFont('','B', $default_font_size*0.9);
 
-    $pdf->MultiCell($this->largeur-20, 2, pdf_reduceStringTo($pdf,$carac_client_name,round(($this->largeur-23)*1.6,0)), 0, 'L');
+    $pdf->MultiCell($this->largeur-18, 2, pdf_reduceStringTo($pdf,$carac_client_name,round(($this->largeur-23)*1.6,0)), 0, 'L');
 
-    $pdf->SetXY($curX+20,$curY+11);
+    $pdf->SetXY($curX+18,$curY+11);
     $pdf->SetFont('','B', $default_font_size*2);
-    $pdf->MultiCell($this->largeur-20, 3, $num, 0, 'L');
+    $pdf->MultiCell($this->largeur-18, 3, $num, 0, 'L');
 
 
     $X=20+$pdf->GetStringWidth($num);
 
-    $pdf->setXY($curX+1+$X,$curY+14);
-    $pdf->SetFont('','', $default_font_size);
+    $pdf->setXY($curX+1+$X,$curY+14.5);
+    $pdf->SetFont('','', $default_font_size*0.9);
     $pdf->MultiCell($this->largeur-$X-1, 3, '/'.$tot, 0, 'L');
 
-    $pdf->SetXY($curX+20,$curY+8);
-    $pdf->SetFont('','', $default_font_size);
+    $pdf->SetXY($curX+18,$curY+8);
+    $pdf->SetFont('','', $default_font_size*0.9);
     //$pdf->MultiCell($this->largeur-22, 3, $qty.'x '.(!empty($product->array_options['options_codecarton'])?$product->array_options['options_codecarton']:$product->ref), 0, 'L');
-    $pdf->MultiCell($this->largeur-22, 3, $qty.'x '.$product->ref, 0, 'L');
+    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product->ref, 0, 'L');
 
   }
 
@@ -388,6 +388,8 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
 				$pagenb++;
 
 
+        $url=str_replace("tourneeunique_card","livraison.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
+
 				// Loop on each lines
 				for ($i = 0; $i < $nblignes; $i++)
 				{
@@ -432,17 +434,15 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
 
               if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
 
-              $url=str_replace("tourneeunique_card","l",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
-
               if( ! empty($product->array_options['options_colisage'])){
                 for($j=0;$j<$lexp->qty_shipped;$j+=$product->array_options['options_colisage']){
-                  $url.="?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
-                  $this->_add_case($pdf, $url, $thirdparty, $num, $nbColis, min($product->array_options['options_colisage'],$lexp->qty_shipped-$j), $product, $outputlangs, $default_font_size);
+                  $param = "?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
+                  $this->_add_case($pdf, $url . $param, $thirdparty, $num, $nbColis, min($product->array_options['options_colisage'],$lexp->qty_shipped-$j), $product, $outputlangs, $default_font_size);
                   $num++;
                 }
               } else {
-                $url.="?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
-                $this->_add_case($pdf, $url, $thirdparty, $num, $nbColis, $lexp->qty_shipped, $product, $outputlangs, $default_font_size);
+                $param = "?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
+                $this->_add_case($pdf, $url . $param, $thirdparty, $num, $nbColis, $lexp->qty_shipped, $product, $outputlangs, $default_font_size);
                 $num++;
               }
             }

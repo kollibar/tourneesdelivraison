@@ -289,11 +289,9 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
 				$result = $object->generateAllDocuments($modellist, $outputlangs, $hidedetails, $hidedesc, $hideref, $moreparams);
 
      if ($result <= 0){
-			 echo '<<<<';
        setEventMessages($object->error, $object->errors, 'errors');
        $action='';
      } else {
-			 echo 'OK';
      	if (empty($donotredirect))	// This is set when include is done by bulk action "Bill Orders"
      	{
         setEventMessages($langs->trans("FileGenerated"), null);
@@ -425,14 +423,30 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
 		}
 	}
 
-	else if( ($action == 'set_ae_datelivraisonidentique' || $action == 'set_ae_1ere_future_cmde' || $action == 'set_ae_1elt_par_cmde' ||$action == 'set_change_date_affectation' || $action == 'set_date_tournee' || $action == 'set_label' || $action=='set_description') && $object->statut==TourneeGeneric::STATUS_DRAFT && !empty($permissiontoadd)){ // modification d'un paramètre
+	else if( (($action == 'set_ae_datelivraisonidentique'
+						|| $action == 'set_ae_1ere_future_cmde'
+						|| $action == 'set_ae_1elt_par_cmde'
+						||$action == 'set_change_date_affectation'
+						|| $action == 'set_date_tournee'
+						|| $action == 'set_label'
+						|| $action=='set_description')
+					&& $object->statut==TourneeGeneric::STATUS_DRAFT && !empty($permissiontoadd)
+					) || (
+						$action == 'set_masque_ligne'
+						&& $typetournee == 'tourneeunique'
+						)
+				){ // modification d'un paramètre
 
 		if( $action == 'set_date_tournee'){
 			$key=substr($action,4);
-			$value=GETPOST($key.'year').'-'.GETPOST($key.'month').'-'.GETPOST($key.'day');
-		} else{
+			$value=GETPOST($key.'year','int').'-'.GETPOST($key.'month','int').'-'.GETPOST($key.'day','int');
+		} else {
 			$key=substr($action,4);
-			$value=GETPOST($key);
+			if( GETPOSTISSET($key)){
+				$value=GETPOST($key,'aZ09');
+			} else {
+				$value=GETPOST('label', 'int');
+			}
 		}
 
 		$object->{$key}=$value;
@@ -1164,6 +1178,8 @@ if ($action == 'create')
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';
 
+	print '<input type="hidden" name="masque_ligne" value="0">';
+
 	print '</table>'."\n";
 
 	dol_fiche_end();
@@ -1250,6 +1266,8 @@ if (($id || $ref) && $action == 'edit')
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
+
+	print '<input type="hidden" name="masque_ligne" value="'.$object->masque_ligne.'">';
 
 	print '</table>';
 
@@ -1453,6 +1471,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
+
+	if( $typetournee == 'tourneeunique' && $object->statut!=TourneeGeneric::STATUS_DRAFT){
+		$act=$action;
+		$action="edit_masque_ligne";
+		$object->field_view('masque_ligne', true);
+		$action=$act;
+	}
 
 	print '</table>';
 	print '</div>';

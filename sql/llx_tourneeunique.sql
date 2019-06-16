@@ -36,5 +36,6 @@ CREATE TABLE llx_tourneeunique(
 	ae_1ere_future_cmde integer,
 	ae_1elt_par_cmde integer,
 	change_date_affectation integer,
-	model_pdf varchar(255)
+	model_pdf varchar(255),
+	masque_ligne integer
 ) ENGINE=innodb;

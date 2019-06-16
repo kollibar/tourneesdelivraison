@@ -67,6 +67,13 @@ TourneeUniqueCategoriesShort = tags tournée
 TourneeDeLivraisonCategoriesShort = tags tournée
 TourneeUnique_linesCategoriesShort = tags
 TourneeDeLivraison_linesCategoriesShort = tags
+MasquerLesLignes = Masquer les lignes
+MarqueSansCommande = Marquées sans Commandes
+AucunMasquage = Aucun masquage
+SansCmdeAffecte = Sans commandes affectées
+SansCmde = Sans commandes
+SansCmdeAffOuInc = Sans commandes affectés ou non attribuées
+
 
 #
 # Commandes
