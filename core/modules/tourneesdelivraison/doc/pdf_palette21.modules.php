@@ -432,7 +432,7 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
 
               if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
 
-              $url=str_replace("tourneeunique_card","l",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
+              $url=str_replace("tourneeunique_card.php","livraison_card.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
 
               if( ! empty($product->array_options['options_colisage'])){
                 for($j=0;$j<$lexp->qty_shipped;$j+=$product->array_options['options_colisage']){

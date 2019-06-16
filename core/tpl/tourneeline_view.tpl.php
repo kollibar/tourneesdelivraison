@@ -52,9 +52,29 @@ $domData .= ' data-id="'.$line->id.'"';
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
 <tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
 
-	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?></td>
+	<td class="linecolselect" align="center"><?php $coldisplay++; ?>
+	</td>
 
-	<td class="linecolselect" align="center"><?php $coldisplay++; ?>    </td>
+	<?php
+	if ($num > 1 && $conf->browser->layout != 'phone' && ($this->situation_counter == 1 || !$this->situation_cycle_ref) && empty($disablemove)) { ?>
+	<td align="center" class="linecolmove tdlineupdown"><?php $coldisplay++; ?>
+		<?php if ($i > 0) { ?>
+		<a class="lineupdown" href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=up&amp;rowid='.$line->id; ?>">
+		<?php echo img_up('default',0,'imgupforline'); ?>
+		</a>
+		<?php } ?>
+		<?php if ($i < $num-1) { ?>
+		<a class="lineupdown" href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=down&amp;rowid='.$line->id; ?>">
+		<?php echo img_down('default',0,'imgdownforline'); ?>
+		</a>
+		<?php } ?>
+	</td>
+    <?php } else { ?>
+    <td align="center"<?php echo (($conf->browser->layout != 'phone' && empty($disablemove)) ?' class="linecolmove tdlineupdown"':' class="linecolmove"'); ?>><?php $coldisplay++; ?></td>
+	<?php } ?>
+
+	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?>
+	</td><!--linecolnum-->
 
 	<?php
 
@@ -66,7 +86,7 @@ $domData .= ' data-id="'.$line->id.'"';
 				<?php if( !empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
 
 
-					<table>
+					<table class="noborderbottom">
 					<?php
 						$liste=array();
 						if( count($line->lines) >0 || $this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
@@ -128,7 +148,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	if( $line->element != 'tourneeunique_lines' || $parent->statut == STATUS_DRAFT){ ?>
 	<td align="right" class="linecoldocs nowrap"><?php $coldisplay++; ?>
-		<table>
+		<table class="noborderbottom">
 			<tr><td>
 				<label for="BL1_<?php echo $line->id; ?>"><?php echo $langs->trans('BL'); ?></label>
 				<input id="BL1_<?php echo $line->id; ?>" name="BL1_<?php echo $line->id; ?>" type="checkbox" disabled <?php echo ($line->BL>0)?'checked':'' ?> >
@@ -152,7 +172,7 @@ $domData .= ' data-id="'.$line->id.'"';
 	if( $line->element=='tourneeunique_lines' && $parent->statut != STATUS_DRAFT){ ?>
 	  <td class="linecolcmde">
 
-			<table>
+			<table class="noborderbottom">
 				<?php foreach ($line->lines_cmde as $lcmde) {
 					$cmde=new Commande($this->db);
 					$cmde->fetch($lcmde->fk_commande);
@@ -168,7 +188,7 @@ $domData .= ' data-id="'.$line->id.'"';
 					<?php
 					if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK) continue;
 					if( $numshipping!=0){
-						echo '<table>';
+						echo '<table class="noborderbottom">';
 						foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'shipping'){
 								//$elt=$lelt->loadElt();
@@ -196,7 +216,7 @@ $domData .= ' data-id="'.$line->id.'"';
 					} ?>
 				</td>
 				<td>
-					<table>
+					<table class="noborderbottom">
 						<?php foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'facture'){
 								//$elt=$lelt->loadElt();
@@ -262,14 +282,14 @@ $domData .= ' data-id="'.$line->id.'"';
 
 
 	<?php if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $action=='edit_note_elt' && $line->id==$selected  && !empty($object_rights->note)){ ?>
-		<td align="right" class="linecolnote nowrap" colspan="2"><?php $coldisplay++; $coldisplay++; ?>
+		<td align="right" class="linecolnote nowrap"><?php $coldisplay++; ?>
 			<form name="edit_note_elt" id="edit_note_elt" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=setnote_elt&lineid=' . GETPOST('lineid').'#row-'.GETPOST('lineid'); ?>" method="POST">
 			<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
 			<input type="hidden" name="action" value="setnote_elt">
 			<input type="hidden" name="mode" value="">
 			<input type="hidden" name="lineid" value="<?php echo $line->id; ?>" >
 			<input type="hidden" name="id" value="<?php echo $object->id; ?>">
-			<table>
+			<table class="noborderbottom">
 				<tr><td colspan="2">
 			<?php
 			// Categories
@@ -314,7 +334,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 
 	<?php } else { ?>
-	<td align="right" class="linecolnote nowrap" colspan="2"><?php $coldisplay+=2; ?>
+	<td align="right" class="linecolnote nowrap"><?php $coldisplay+=2; ?>
 		<?php
 		if($object->statut==TourneeGeneric::STATUS_VALIDATED && !empty($object_rights->note)){
 			print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_note_elt&id='.$parent->id.'&lineid='.$line->id.'#row-'.$line->id.'">';
@@ -322,7 +342,7 @@ $domData .= ' data-id="'.$line->id.'"';
 			print '</a>';
 		}
 	 ?>
-		<table>
+		<table class="noborderbottom">
 			<tr><td colspan="2"><?php
 			// Catégories
 			if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
@@ -368,7 +388,7 @@ $domData .= ' data-id="'.$line->id.'"';
 			<style type="text/css">
 
 			</style>
-			<table>
+			<table class="noborderbottom">
 			<?php
 				$liste=array();
 				if( count($line->lines) >0 ){
@@ -402,47 +422,33 @@ $domData .= ' data-id="'.$line->id.'"';
 		</td>
 	<?php } ?>
 
+	<?php if ($this->statut == 0  && ($object_rights->ecrire) && $action != 'selectlines' ) { ?>
+	<td class="linecoldelete_edit" align="center"><?php $coldisplay++; ?>
 
-	<?php
-	if ($this->statut == 0  && ($object_rights->ecrire) && $action != 'selectlines' ) { ?>
-	<td class="linecoledit" align="center"><?php $coldisplay++; ?>
-		<?php if (($line->info_bits & 2) == 2 || ! empty($disableedit)) { ?>
-		<?php } else { ?>
-		<a href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=editline&amp;lineid='.$line->id.'#line_'.$line->id; ?>">
-		<?php echo img_edit(); ?>
-		</a>
-		<?php } ?>
+			<table class="noborderbottom">
+			<tr><td class="linecoledit" align="center"><?php // $coldisplay++; ?>
+				<?php if (($line->info_bits & 2) == 2 || ! empty($disableedit)) { ?>
+				<?php } else { ?>
+				<a href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=editline&amp;lineid='.$line->id.'#line_'.$line->id; ?>">
+				<?php echo img_edit(); ?>
+				</a>
+				<?php } ?>
+			</td></tr>
+
+			<tr><td class="linecoldelete" align="center"><?php // $coldisplay++; ?>
+				<?php
+				if (($line->fk_prev_id == null ) && empty($disableremove)) { //La suppression n'est autorisée que si il n'y a pas de ligne dans une précédente situation
+					print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deleteline&amp;lineid=' . $line->id . '">';
+					print img_delete();
+					print '</a>';
+				}
+				?>
+			</td></tr>
+		</table>
 	</td>
 
-	<td class="linecoldelete" align="center"><?php $coldisplay++; ?>
-		<?php
-		if (($line->fk_prev_id == null ) && empty($disableremove)) { //La suppression n'est autorisée que si il n'y a pas de ligne dans une précédente situation
-			print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deleteline&amp;lineid=' . $line->id . '">';
-			print img_delete();
-			print '</a>';
-		}
-		?>
-	</td>
-
-	<?php
-	if ($num > 1 && $conf->browser->layout != 'phone' && ($this->situation_counter == 1 || !$this->situation_cycle_ref) && empty($disablemove)) { ?>
-	<td align="center" class="linecolmove tdlineupdown"><?php $coldisplay++; ?>
-		<?php if ($i > 0) { ?>
-		<a class="lineupdown" href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=up&amp;rowid='.$line->id; ?>">
-		<?php echo img_up('default',0,'imgupforline'); ?>
-		</a>
-		<?php } ?>
-		<?php if ($i < $num-1) { ?>
-		<a class="lineupdown" href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=down&amp;rowid='.$line->id; ?>">
-		<?php echo img_down('default',0,'imgdownforline'); ?>
-		</a>
-		<?php } ?>
-	</td>
-    <?php } else { ?>
-    <td align="center"<?php echo (($conf->browser->layout != 'phone' && empty($disablemove)) ?' class="linecolmove tdlineupdown"':' class="linecolmove"'); ?>><?php $coldisplay++; ?></td>
-	<?php } ?>
 <?php } else { ?>
-	<td colspan="3"><?php $coldisplay=$coldisplay+3; ?></td>
+	<td colspan="2"><?php $coldisplay=$coldisplay+3; ?></td>
 <?php } ?>
 	<?php  if($action == 'selectlines'){ ?>
 	<td class="linecolcheck" align="center"><input type="checkbox" class="linecheckbox" name="line_checkbox[<?php echo $i+1; ?>]" value="<?php echo $line->id; ?>" ></td>

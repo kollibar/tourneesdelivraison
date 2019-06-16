@@ -388,7 +388,7 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
 				$pagenb++;
 
 
-        $url=str_replace("tourneeunique_card","livraison.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
+        $url=str_replace("tourneeunique_card.php","livraison_card.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
 
 				// Loop on each lines
 				for ($i = 0; $i < $nblignes; $i++)

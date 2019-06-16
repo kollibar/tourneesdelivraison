@@ -163,52 +163,20 @@ if( $action == 'setavertissement'){
 	}
 }
 
-//Activate "Affectation Auto si date de livraison OK"
-if( $action == 'setcontactintegre'){
-    $setcontactintegre = GETPOST('value','int');
-    $res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE", $setcontactintegre,'yesno',0,'',$conf->entity);
-    if (! $res > 0) $error++;
-    if (! $error)
-    {
-        setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
-    }
-    else
-    {
-        setEventMessages($langs->trans("Error"), null, 'errors');
-    }
-}
-//Activate "Affectation Auto si date de livraison OK"
-if( $action == 'setpoidsbl'){
-    $setaffectautodateok = GETPOST('value','int');
-    $res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_POIDS_BL", $setaffectautodateok,'yesno',0,'',$conf->entity);
-    if (! $res > 0) $error++;
-    if (! $error)
-    {
-        setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
-    }
-    else
-    {
-        setEventMessages($langs->trans("Error"), null, 'errors');
-    }
-}
-//Activate "Affectation Auto si date de livraison OK"
-if( $action == 'setaffectautosidateok'){
-    $setaffectautodateok = GETPOST('value','int');
-    $res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK", $setaffectautodateok,'yesno',0,'',$conf->entity);
-    if (! $res > 0) $error++;
-    if (! $error)
-    {
-        setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
-    }
-    else
-    {
-        setEventMessages($langs->trans("Error"), null, 'errors');
-    }
-}
-//Activate "Affectation Auto elt si 1elt/cmde"
-if( $action == 'setaffectautosi1eltparcmde'){
-    $setaffectautosi1eltparcmde = GETPOST('value','int');
-    $res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE", $setaffectautosi1eltparcmde,'yesno',0,'',$conf->entity);
+$actions=array(
+	'setpdfautodelete' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE',
+	'setpdfautoupdate' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE',
+	'setcontactintegre' => "TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE",
+	'setpoidsbl' => "TOURNEESDELIVRAISON_POIDS_BL",
+	'setaffectautodateok' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK",
+	'setaffectautosi1eltparcmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE",
+	'setaffectauto1erecmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE",
+);
+
+
+if( array_key_exists($action, $actions) && GETPOSTISSET('value')){
+    $value = GETPOST('value','int');
+    $res = dolibarr_set_const($db, $actions[$action], $value,'yesno',0,'',$conf->entity);
     if (! $res > 0) $error++;
     if (! $error)
     {
@@ -220,24 +188,60 @@ if( $action == 'setaffectautosi1eltparcmde'){
     }
 }
 
-//Activate "Affectation Auto 1ere cmde future si client lié à tournée"
-if( $action == 'setaffectauto1erecmde'){
-		$setaffectauto1erecmde = GETPOST('value','int');
-		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE", $setaffectauto1erecmde,'yesno',0,'',$conf->entity);
-		if (! $res > 0) $error++;
-		if (! $error)
-		{
-				setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+
+if( $action == 'setup_reduc_qrcode' && GETPOSTISSET('value')){
+	if( !empty(GETPOST('value','int'))){
+		if( strpos($_SERVER['PHP_SELF'], '/custom/') === FALSE){
+			$url_origin = '/tourneesdelivraison/livraison_card.php';
+			$url_replace = 'tdl.php';
+		} else {
+			$url_origin = '/custom/tourneesdelivraison/livraison_card.php';
+			$url_replace = 'tdl.php';
 		}
-		else
-		{
+		$res=copy(substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'setup.php')).'tdl.php', DOL_DOCUMENT_ROOT.'/tdl.php');
+		if( $res ){
+			$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_ORIGIN", $url_origin,'chaine',0,'',$conf->entity);
+			if (! $res > 0) $error++;
+			$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_REPLACE", $url_replace,'chaine',0,'',$conf->entity);
+			if (! $res > 0) $error++;
+			if (! $error)
+			{
+					setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+			}
+			else
+			{
+					setEventMessages($langs->trans("Error"), null, 'errors');
+			}
+		} else {
+			setEventMessages($langs->trans("Error"), null, 'errors');
+		}
+	} else {	// suppression
+		if (file_exists(DOL_DOCUMENT_ROOT.'/tdl.php')){
+			$url_origin = '';
+			$url_replace = '';
+			$res=unlink(DOL_DOCUMENT_ROOT.'/tdl.php');
+			if( $res ){
+				$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_ORIGIN", $url_origin,'chaine',0,'',$conf->entity);
+				if (! $res > 0) $error++;
+				$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_REPLACE", $url_replace,'chaine',0,'',$conf->entity);
+				if (! $res > 0) $error++;
+				if (! $error)
+				{
+						setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+				}
+				else
+				{
+						setEventMessages($langs->trans("Error"), null, 'errors');
+				}
+			} else {
 				setEventMessages($langs->trans("Error"), null, 'errors');
+			}
 		}
+	}
 }
 
 if ($action == 'updateoptions') {
-	if (GETPOST('TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE'))
-	{
+	if (GETPOSTISSET('TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE')) {
 		$changeautodate = GETPOST('activate_TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE','alpha');
 		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE", $changeautodate,'chaine',0,'',$conf->entity);
 		if (! $res > 0) $error++;
@@ -248,6 +252,23 @@ if ($action == 'updateoptions') {
 	    else
 	    {
 		    setEventMessages($langs->trans("Error"), null, 'errors');
+		}
+	}
+
+	if (GETPOSTISSET("URL_QRCODE")){
+		$url_origin=GETPOST('url_origin','aZ09');
+		$url_replace=GETPOST('url_replace','aZ09');
+		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_ORIGIN", $url_origin,'chaine',0,'',$conf->entity);
+		if (! $res > 0) $error++;
+		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_REPLACE", $url_replace,'chaine',0,'',$conf->entity);
+		if (! $res > 0) $error++;
+		if (! $error)
+		{
+				setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+		}
+		else
+		{
+				setEventMessages($langs->trans("Error"), null, 'errors');
 		}
 	}
 }
@@ -620,12 +641,98 @@ else
 print '</a></td>';
 print '</tr>';
 
+print '</table>';
+print '</div>';
+
+
+
+
+print '<div id="gestiondocs" class="div-table-responsive-no-min">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print "<td>".$langs->trans("GestionDocs")."</td>\n";
+print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
+print '<td width="80">&nbsp;</td></tr>'."\n";
+
+
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("GenerationAutoDocs").'</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautoupdate&value=0#gestiondocs">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautoupdate&value=1#gestiondocs">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+print '</a></td>';
 print '</tr>';
 
-
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("SuppressionAutoDocs").'</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautodelete&value=0#gestiondocs">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautodelete&value=1#gestiondocs">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+print '</a></td>';
+print '</tr>';
 
 print '</table>';
 print '</div>';
+
+
+
+print '<div id="urlqrcode" class="div-table-responsive-no-min">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print '<td colspan="3" align="left">'.$langs->trans("SimplificationURLQrCode")."</td>\n";
+//print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
+print '<td width="80">&nbsp;</td></tr>'."\n";
+
+
+print '<tr class="oddeven">';
+//print '<td width="80%">'.$langs->trans("GenerationAutoDocs").'</td>';
+
+print '<td width="35%"><input name="url_origin"  class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_ORIGIN . '"></td>';
+print '<td> => </td>';
+print '<td width="35%"><input name="url_replace"  class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_REPLACE . '"></td>';
+
+print '<td><input class="button" type="submit" name="URL_QRCODE" value="'.$langs->trans("Modify").'"></td>';
+
+print '</tr>';
+
+print '<tr class="oddeven">';
+print '<td width="80%" colspan="2">'.$langs->trans("MettreEnPlaceReducQRCode").'</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (! file_exists(DOL_DOCUMENT_ROOT.'/tdl.php'))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setup_reduc_qrcode&value=1#urlqrcode">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setup_reduc_qrcode&value=0#urlqrcode">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+print '</a></td>';
+print '</tr>';
+print '</table>';
+
+
+
 
 
 print load_fiche_titre($langs->trans("ParametresDesAvertissements"),'','');

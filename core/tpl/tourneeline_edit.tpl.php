@@ -53,9 +53,11 @@ $domData .= ' data-id="'.$line->id.'"';
 <tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
 	<input type="hidden" name="lineid" id="lineid" value="<?php echo $line->id?>">
 
-	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?></td>
 
-	<td class="linecolselect" align="center"><?php $coldisplay++; ?>    </td> <!-- A FAIRE Ajouter case à cocher-->
+
+	<td class="linecolselect" align="center" colspan="2"><?php $coldisplay++;$coldisplay++; ?>    </td> <!-- A FAIRE Ajouter case à cocher-->
+
+	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?></td>
 
 	<td class="nobottom linecolclient" align="left" width="5">
 		<span class="tournee_line_type_thirdparty">
@@ -135,7 +137,7 @@ $domData .= ' data-id="'.$line->id.'"';
 		<textarea id="infolivraison" name="infolivraison" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
 	</td>-->
 
-	<td align="right" class="linecolnote nowrap" colspan="2"><?php $coldisplay++; $coldisplay++; ?>
+	<td align="right" class="linecolnote nowrap"><?php $coldisplay++; $coldisplay++; ?>
 		<table>
 			<tr><td colspan="2">
 		<?php
@@ -189,7 +191,7 @@ $domData .= ' data-id="'.$line->id.'"';
 	<?php } ?>
 
 
-	<td class="nobottom linecoledit" align="center" valign="middle" colspan="4">
+	<td class="nobottom linecoledit" align="center" valign="middle">
 		<input type="submit" class="button" value="<?php echo $langs->Trans("Update"); ?>" name="updateline" id="updateline">
 		<input type="submit" class="button" value="<?php echo $langs->Trans("Cancel"); ?>" name="" id="">
 	</td>

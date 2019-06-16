@@ -38,9 +38,6 @@ class TourneeGeneric extends TourneeObject
 
 
 
-
-
-
 	/**
 	* Actualise les info générales de la tournée
 	*
@@ -832,6 +829,8 @@ public function LibStatut($status, $mode=0)
 			// colone select
 			print '<td class="linecolselect" align="center" width="5">&nbsp;</td>';
 
+			print '<td class="linecolmove" width="10"></td>';
+
 			// Adds a line numbering column
 			print '<td class="linecolnum" align="center" width="5">&nbsp;</td>';
 
@@ -874,11 +873,10 @@ public function LibStatut($status, $mode=0)
 			}
 
 
-			print '<td class="linecoledit"></td>';  // No width to allow autodim
+			/*print '<td class="linecoledit"></td>';  // No width to allow autodim
 
-			print '<td class="linecoldelete" width="10"></td>';
-
-			print '<td class="linecolmove" width="10"></td>';
+			print '<td class="linecoldelete" width="10"></td>';*/
+			print '<td class="linecoldelete_edit" width="10"></td>';
 
 			if($action == 'selectlines')
 			{
@@ -1126,6 +1124,7 @@ public function LibStatut($status, $mode=0)
 
 		if ($action != 'edit_'.$key && $this->statut == TourneeGeneric::STATUS_DRAFT && $editable)
 			print '<td align="right"><a href="' . $_SERVER["PHP_SELF"] . '?action=edit_'.$key.'&amp;id=' . $this->id . '">' . img_edit($langs->trans($val['label']), 1) . '</a></td>';
+
 		print '</tr></table>';
 		print '</td><td>';
 		if ($action == 'edit_' . $key) {
@@ -1881,10 +1880,12 @@ public function LibStatut($status, $mode=0)
 	public function printRecap(){
 		global $conf, $hookmanager, $langs, $user;
 
-		print "<tr>\n";
+		print "<tr class=\"oddeven\">\n";
 
 	// colone select
 	print '<td class="linecolselect" align="center" width="5">&nbsp;</td>';
+
+	print '<td class="linecolmove" width="10"></td>';
 
 	// Adds a line numbering column
 	print '<td class="linecolnum" align="center" width="5">&nbsp;</td>';
@@ -1948,14 +1949,14 @@ public function LibStatut($status, $mode=0)
 	print '<td class="linecoladresselivraison">&nbsp;</td>';
 
 	// contact
-	print '<td class="linecolcontact">&nbsp;</td>';
+	//print '<td class="linecolcontact">&nbsp;</td>';
 
 
-	print '<td class="linecoledit"></td>';  // No width to allow autodim
+	/*print '<td class="linecoledit"></td>';  // No width to allow autodim
 
-	print '<td class="linecoldelete" width="10"></td>';
+	print '<td class="linecoldelete" width="10"></td>';*/
+	print '<td class="linecoldelete_edit" width="10"></td>';
 
-	print '<td class="linecolmove" width="10"></td>';
 
 	print "</tr>\n";
 	}

@@ -56,7 +56,7 @@ $coldisplay=2;
 -->
 
 <tbody>
-<td class="nobottom linecolselect" align="center" width="5"></td>
+<td class="nobottom linecolselect" align="center" width="5" colspan="2"></td>
 <td class="nobottom linecolnum" align="center" width="5"></td>
 
 <td class="nobottom linecolclient" align="left" width="5">
@@ -136,7 +136,7 @@ $coldisplay=2;
 	<textarea id="infolivraison" name="infolivraison" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
 </td>-->
 
-  <td class="nobottom linecolnote" align="right" colspan="2">
+  <td class="nobottom linecolnote" align="right">
     <table>
       <tr><td colspan="2">
   <?php // Categories
@@ -168,7 +168,7 @@ $coldisplay=2;
 		//$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'',''); ?>
 	</td>
 
-	<td class="nobottom linecoledit" align="center" valign="middle" colspan="4">
+	<td class="nobottom linecoledit" align="center" valign="middle">
 	<input type="submit" class="button" value="<?php echo $langs->Trans("Add"); ?>" name="addline" id="addline">
 	</td>
 

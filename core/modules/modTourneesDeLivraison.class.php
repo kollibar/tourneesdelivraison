@@ -210,13 +210,13 @@ class modTourneesDeLivraison extends DolibarrModules
 		$this->const[$r]=array('TOURNEESDELIVRAISON_FREE_TEXT', 'chaine', '', 'Texte libre sur les bordereau de tournées de livraison', 1, 'allentities', 1);
 		$r++;
 
-		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_REPLACE', 'chaine', '', 'à remplacer par:', 1, 'allentities', 1);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_REPLACE', 'chaine', '', 'à remplacer par:', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_ORIGIN', 'chaine', '', 'élément de l\'url à remplacer', 1, 'allentities', 1);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_ORIGIN', 'chaine', '', 'élément de l\'url à remplacer', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'chaine', '1', 'désactive l\'autoupdate des documents', 1, 'allentities', 1);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'chaine', '1', 'désactive l\'autoupdate des documents', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE', 'chaine', '0', 'désactive l\'autoupdate des documents', 1, 'allentities', 1);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE', 'chaine', '0', 'désactive l\'autoupdate des documents', 0);
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_OPENROUTESERVICE_APIKEY', 'chaine', '', 'Openrouteservice.org API KEY', 1, 'allentities', 1);
 		$r++;

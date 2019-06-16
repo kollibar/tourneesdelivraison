@@ -1112,7 +1112,6 @@ print '<script type="text/javascript" language="javascript">
 </style>
 ';
 
-
 // Part to create
 if ($action == 'create')
 {
@@ -1504,7 +1503,8 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	}
 
 
-	if (! empty($conf->use_javascript_ajax) && $object->statut == TourneeGeneric::STATUS_DRAFT) {
+	//if (! empty($conf->use_javascript_ajax) && $object->statut == TourneeGeneric::STATUS_DRAFT) {
+	if (! empty($conf->use_javascript_ajax)) {
 		include DOL_DOCUMENT_ROOT . '/core/tpl/ajaxrow.tpl.php';
 	}
 

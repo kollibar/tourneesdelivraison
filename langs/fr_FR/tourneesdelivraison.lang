@@ -188,6 +188,11 @@ AvertissementAvantDeleteLine = supprimer une ligne de tournée
 AvertissementAvantDeleteContact = supprimer le contact d'une ligne de tournée
 ParametresDAffichage = Paramètres d'affichage
 AffichageContactIntegre = Affichage des contacts intégrés sous le nom du magasin (plutôt que dans une colonne a droite)
+GestionDocs = Gestion des documents
+GenerationAutoDocs = Génération automatique des documents à chaque modification de la tournée
+SuppressionAutoDocs = Génération automatique des documents à chaque modification de la tournée
+SimplificationURLQrCode = Simplification des urls des QR-code
+MettreEnPlaceReducQRCode = Mettre en place une réduction des QR-code
 
 #
 # Autres
