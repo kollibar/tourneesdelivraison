@@ -758,6 +758,12 @@ $avertissements = array('Delete' => $conf->global->TOURNEESDELIVRAISON_ASK_DELET
 												'ChangeDateElt' => $conf->global->TOURNEESDELIVRAISON_ASK_CHANGEDATEELT,
 												'DeleteLine' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETELINE,
 												'DeleteContact' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETECONTACT,
+												'Cmde_ClassifyBilled' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYBILLED,
+												'Cmde_ClassifyUnBilled' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYUNBILLED,
+												'Cmde_Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_REOPEN,
+												'Cmde_Shipped' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_SHIPPED,
+												'Exp_Shipped' => $conf->global->TOURNEESDELIVRAISON_ASK_EXP_SHIPPED,
+												'Exp_Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_EXP_REOPEN,
 											);
 
 foreach ($avertissements as $key => $value) {

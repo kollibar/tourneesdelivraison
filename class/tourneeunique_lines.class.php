@@ -120,7 +120,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		'etiquettes' => array('type'=>'integer', 'label'=>'etiquettes', 'enabled'=>1, 'visible'=>1, 'position'=>53, 'default'=>1, 'notnull'=>1, 'arrayofkeyval'=>array('0'=>'0', '1'=>'1')),
 		'fk_adresselivraison' => array('type'=>'integer:Contact:contact/class/contact.class.php', 'label'=>'Contact', 'enabled'=>1, 'visible'=>1, 'position'=>55, 'notnull'=>-1,),
 		'rang' => array('type'=>'integer', 'label'=>'Position', 'enabled'=>1, 'visible'=>-1, 'position'=>400, 'notnull'=>1,),
-		'fk_tournee' => array('type'=>'integer:Unique:tourneesdelivraison/class/tourneeunique.class.php', 'label'=>'TourneeUnique', 'enabled'=>1, 'visible'=>1, 'position'=>30, 'notnull'=>1,),
+		'fk_tournee' => array('type'=>'integer:TourneeUnique:tourneesdelivraison/class/tourneeunique.class.php', 'label'=>'TourneeUnique', 'enabled'=>1, 'visible'=>1, 'position'=>30, 'notnull'=>1,),
 		'fk_tournee_incluse' => array('type'=>'integer:TourneeUnique:tourneesunique/class/tourneeunique.class.php', 'label'=>'TourneeDeLivraisonIncluse', 'enabled'=>1, 'visible'=>1, 'position'=>41, 'notnull'=>-1,),
 		'fk_soc' => array('type'=>'integer:Societe:societe/class/societe.class.php', 'label'=>'ThirdParty', 'enabled'=>1, 'visible'=>1, 'position'=>40, 'notnull'=>-1, 'index'=>1, 'help'=>"LinkToThirparty",),
 		'type' => array('type'=>'integer', 'label'=>'Type', 'enabled'=>1, 'visible'=>1, 'position'=>39, 'notnull'=>1, 'arrayofkeyval'=>array('0'=>'ThirdParty', '1'=>'TourneeDeLivraison')),
@@ -213,7 +213,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewLine();
+				$line = $this->getNewLine($this);
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 
@@ -256,7 +256,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			$i = 0;
 			while ($i < $num) {
 				$objp = $this->db->fetch_object($result);
-				$line = new TourneeUnique_lines_cmde($this->db);
+				$line = new TourneeUnique_lines_cmde($this->db, $this);
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 				if( ! $line->checkStatut()) {
@@ -312,8 +312,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	}
 
 
-	public function getNewLine(){
-		$line=new TourneeUnique_lines_contacts($this->db);
+	public function getNewLine($parent=null){
+		$line=new TourneeUnique_lines_contacts($this->db, $parent);
 		return $line;
 	}
 	public function getNewTournee(){
@@ -556,7 +556,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		return $nb;
 	}
 
-	function getTotalWeightVolume($type="shipping"){
+	public function getTotalWeightVolume($type="shipping"){
 		$totalWeight=0;
 		$totalVolume=0;
 		$totalOrdered=0;
@@ -571,7 +571,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		return array('weight'=>$totalWeight, 'volume'=>$totalVolume, 'ordered'=>$totalOrdered, 'toship'=>$totalToShip);
 	}
 
-	function getNbColis(){
+	public function getNbColis(){
 		$nb=0;
 		foreach ($this->lines_cmde as $line) {
 			$nb+=$line->getNbColis();
@@ -579,7 +579,59 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		return $nb;
 	}
 
+	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+ 	/**
+ 	 *      Load properties id_previous and id_next by comparing $fieldid with $this->ref
+ 	 *
+ 	 *      @param	string	$filter		Optional filter. Example: " AND (t.field1 = 'aa' OR t.field2 = 'bb')"
+ 	 *	 	@param  string	$fieldid   	Name of field to use for the select MAX and MIN
+ 	 *		@param	int		$nodbprefix	Do not include DB prefix to forge table name
+ 	 *      @return int         		<0 if KO, >0 if OK
+ 	 */
+	public function load_previous_next_ref($filter, $fieldid, $nodbprefix = 0 ){
+		global $langs, $conf;
 
+		$this->getParent();
+		$this->ref_previous=-1;
+		$this->ref_next=0;
 
+		$preced=0;
+		$num=1;
+		foreach ($this->parent->lines as $line) {
+			if( !empty($line->aucune_cmde )) continue;	// si marqué comme pas de cmde -> on zappe
+			if( count($line->lines_cmde)==0) continue; // si aucune cmde -> on zappe
+			// calcul du nb d'expedition affectée
+			$n=0;
+			foreach ($line->lines_cmde as $lcmde) {
+				$n+=$lcmde->getNbEltParStatut('shipping')[TourneeUnique_lines_cmde::DATE_OK];
+				$n+=$lcmde->getNbEltParStatut('shipping')[TourneeUnique_lines_cmde::DATE_NON_OK];
+			}
+			if( $n == 0 ) continue; // si aucune expedition affecté -> on zappe
+
+			if( $this->ref_previous != -1 ) {
+				$this->ref_next = $line->id;
+				break;
+			}
+			if($line->id == $this->id) {
+				$this->ref_previous=$preced;
+				$this->num=$num;
+			}
+			$preced=$line->id;
+			$num++;
+		}
+		$this->ref_arret = $langs->trans('TourneeDeLivraisonArret',$this->getTournee()->ref) . ' '. $this->num;
+
+		return 1;
+
+	}
+
+	public function getThirdParty(){
+		if(empty($this->thirdparty)){
+			$this->thirdparty=new Societe($this->db);
+			$this->thirdparty->fetch($this->fk_soc);
+			$this->thirdparty->fetch_optionals();
+		}
+		return $this->thirdparty;
+	}
 
 }

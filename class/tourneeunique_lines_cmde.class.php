@@ -209,7 +209,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewLine();
+				$line = $this->getNewLine($this);
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 
@@ -632,8 +632,8 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $this->timestamp;
 	}
 
-	public function getNewLine(){
-		return new TourneeUnique_lines_cmde_elt($this->db);
+	public function getNewLine($parent=null){
+		return new TourneeUnique_lines_cmde_elt($this->db, $parent);
 	}
 
 	public function loadElt(){
@@ -802,7 +802,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $nb;
 	}
 
-	function getTotalWeightVolume($type="shipping"){
+	public function getTotalWeightVolume($type="shipping"){
 		if( $this->statut != self::DATE_OK && $this->statut != self::DATE_NON_OK){
 			return array('weight'=>0, 'volume'=>0, 'ordered'=>0, 'toship'=>0);
 		}
@@ -830,7 +830,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return array('weight'=>$totalWeight, 'volume'=>$totalVolume, 'ordered'=>$totalOrdered, 'toship'=>$totalToShip);
 	}
 
-	function getNbColis(){
+	public function getNbColis(){
 		$nb=0;
 		foreach ($this->lines as $line) {
 			$nb+=$line->getNbColis();
@@ -838,7 +838,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $nb;
 	}
 
-	function checkStatut(){
+	public function checkStatut(){
 		$cmde=new Commande($this->db);
 
 		$sql = 'SELECT t.rowid';
@@ -868,7 +868,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 
 	// retourne le chemin vers le pdf de l'objet si il a été généré sinon retourne ''
 
-	function getPDF(){
+	public function getPDF(){
 		$elt=$this->loadElt();
 		if($elt == null) return '';
 
@@ -886,4 +886,11 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return '';
 	}
 
+	public function nbFacture(){
+		$n=0;
+		foreach ($this->lines as $lelt) {
+			if( $lelt->type_element=="facture" && ($lelt->statut==TourneeUnique_lines_cmde_elt::DATE_OK ||  $lelt->statut==TourneeUnique_lines_cmde_elt::DATE_OK)) $n++;
+		}
+		return $n;
+	}
 }

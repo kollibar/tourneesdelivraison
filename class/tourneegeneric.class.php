@@ -1878,9 +1878,9 @@ public function LibStatut($status, $mode=0)
 
 
 	public function printRecap(){
-		global $conf, $hookmanager, $langs, $user;
+		global $conf, $hookmanager, $langs, $user, $form;
 
-		print "<tr class=\"oddeven\">\n";
+		print "<tr id=\"row-recap\" class=\"oddeven\">\n";
 
 	// colone select
 	print '<td class="linecolselect" align="center" width="5">&nbsp;</td>';
@@ -1943,7 +1943,22 @@ public function LibStatut($status, $mode=0)
 
 	// infoLivraison
 	// print '<td class="linecolinfolivraison">'.$langs->trans('InfoLivraison').'</td>';
-	print '<td class="linecolnote">&nbsp;</td>';
+	print '<td class="linecolnote">';
+	// Categories
+	if ($this->element == 'tourneeunique' && $this->statut!=TourneeGeneric::STATUS_DRAFT && count($this->lines) > 0 && ! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+		$langs->load('categories');
+		print '<form name="supprimerTags" action="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '" method="post">';
+		print '<input type="hidden" name="token" value="' . $_SESSION ['newtoken'] . '">';
+		print '<input type="hidden" name="action" value="supprimerTags">';
+
+		print '<input type="submit" class="button" value="' . $langs->trans('SupprimerTousLesTags') . '">';
+
+
+		$cate_arbo = $form->select_all_categories($this->lines[0]->element, null, null, null, null, 1);
+		print $form->multiselectarray('cats_suppr', $cate_arbo, array(), '', 0, '', 0, '90%');
+		print '</form>';
+	}
+	print '</td>';
 
 	// infoLivraison
 	print '<td class="linecoladresselivraison">&nbsp;</td>';
@@ -1959,6 +1974,14 @@ public function LibStatut($status, $mode=0)
 
 
 	print "</tr>\n";
+	}
+
+	public function supprimerCategoriesLines($categories){
+		$err=0;
+		foreach ($this->lines as $line) {
+			if( $line->supprimerCategories($categories) <0 ) $err++;
+		}
+		return $err;
 	}
 
 

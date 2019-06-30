@@ -180,8 +180,8 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 		}
 	}*/
 
-	public function getNewLine(){
-		$line=new TourneeDeLivraison_lines_contacts($this->db);
+	public function getNewLine($parent=null){
+		$line=new TourneeDeLivraison_lines_contacts($this->db, $parent);
 		return $line;
 	}
 

@@ -185,9 +185,13 @@ class TourneeDeLivraison extends TourneeGeneric
 		}
 	}*/
 
-	public function getNewLine(){
-		$line=new TourneeDeLivraison_lines($this->db);
+	public function getNewLine($parent=null){
+		$line=new TourneeDeLivraison_lines($this->db, $parent);
 		return $line;
+	}
+
+	public function getNumeroTourneeUniqueSuivante(){
+		return $this->nb_tourneeunique++;
 	}
 
 	public function createTourneeUnique(User $user){
@@ -202,7 +206,7 @@ class TourneeDeLivraison extends TourneeGeneric
 			$this->db->begin();
 
 			// Copie des champs
-			$object->ref = $this->ref.$this->nb_tourneeunique;
+			$object->ref = $this->ref . $this->getNumeroTourneeUniqueSuivante();
 			$object->label = $object->label;
 			$object->fk_tourneedelivraison=$this->id;
 
@@ -221,7 +225,7 @@ class TourneeDeLivraison extends TourneeGeneric
 			$object->ae_datelivraisonidentique=$this->ae_datelivraisonidentique;
 			$object->change_date_affectation=$this->change_date_affectation;
 
-			$this->nb_tourneeunique++;
+
 			$this->update($user, $notrigger);
 
 			// Rang to use

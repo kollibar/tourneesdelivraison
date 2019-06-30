@@ -3,9 +3,25 @@
 require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
 require_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 require_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
+require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 require_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
 require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 dol_include_once('/tourneesdelivraison/class/tourneeobject.class.php');
+
+
+class Carton{
+	public $qty;
+	public $product_id;
+	public $product_name;
+	public $colisage;
+
+	public function __construct($qty, $product_id, $product_name, $colisage=0){
+		$this->qty=$qty;
+		$this->product_id=$product_id;
+		$this->product_name=$product_name;
+		$this->colisage=$colisage;
+	}
+}
 
 /**
  * Class for TourneeUnique_clients_commandes
@@ -475,34 +491,99 @@ public function LibStatut($status, $mode=0)
 		return $this->parent;
 	}
 
-	function getNbColis(){
-		if( $this->type_element=='shipping'){
-
-			$exp=new Expedition($this->db);
-			$exp->fetch($this->fk_elt);
-			$exp->fetch_optionals();
-
-			$nb=0;
-			foreach ($exp->lines as $lexp) {
-				$product = new Product($this->db);
-				$product->fetch($lexp->fk_product);
-				$product->fetch_optionals();
-
-				if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
-
-				if( ! empty($product->array_options['options_colisage'])){
-					$nb+=floor($lexp->qty_shipped/$product->array_options['options_colisage'])+
-						($lexp->qty_shipped % $product->array_options['options_colisage']!=0?1:0);
-				} else {
-					$nb++;
-				}
-			}
-			return $nb;
-
-		} else return 0;
+	public function getNbColis(){
+		$this->makeListeCartons();
+		return count($this->cartons);
 	}
 
-	function getHash(){
+	public function getCartonNum($num){
+		$this->makeListeCartons();
+		if( $this->type_element=='shipping'){
+			if($num<=count($this->cartons) && $num>0) return $this->cartons[$num];	// $num > $nb de cartons => erreur
+			else return -1;
+		} else return -1;
+	}
+
+	function makeListeCartons(){
+		if( empty($this->cartons)) {
+			$this->cartons=array();
+
+			if( $this->type_element=='shipping'){
+
+				$exp=new Expedition($this->db);
+				$exp->fetch($this->fk_elt);
+				$exp->fetch_optionals();
+
+				$nb=0;
+				foreach ($exp->lines as $lexp) {
+					$product = new Product($this->db);
+					$product->fetch($lexp->fk_product);
+					$product->fetch_optionals();
+
+					if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
+
+					if( ! empty($product->array_options['options_colisage'])){
+						$qty=floor($lexp->qty_shipped/$product->array_options['options_colisage'])+
+							($lexp->qty_shipped % $product->array_options['options_colisage']!=0?1:0);
+
+						for ($i=1; $i <= $qty; $i++) {
+							$nb++;
+							if( $i == $qty && ($lexp->qty_shipped % $product->array_options['options_colisage'])!=0 )
+								$this->cartons[$nb] = new Carton($lexp->qty_shipped % $product->array_options['options_colisage'],
+																								$product->id,
+																								$product->ref,
+																								$product->array_options['options_colisage']
+																							);
+								/* $this->cartons[$nb]=array('product'=>$product->ref,
+										'qty'=>$lexp->qty_shipped % $product->array_options['options_colisage']); */
+							else
+								$this->cartons[$nb] = new Carton($product->array_options['options_colisage'],
+																							$product->id,
+																							$product->ref,
+																							$product->array_options['options_colisage']
+																						);
+								//$this->cartons[$nb]=array('product'=>$product->ref, 'qty'=>$product->array_options['options_colisage']);
+						}
+
+					} else {
+						$nb++;
+						$this->cartons[$nb]= new Carton($lexp->qty_shipped, $product->id, $product->ref, 0);
+						//$this->cartons[$nb]=array('product'=>$product->ref, 'qty'=>$lexp->qty_shipped);
+					}
+				}
+			}
+		}
+	}
+
+	public function printListeCarton($select=-1){
+		$this->makeListeCartons();
+
+		for($i=1;$i<=count($this->cartons);$i++) {
+			$n=0;
+			$r=0;
+			while($i<count($this->cartons) && $this->cartons[$i]->product_id == $this->cartons[$i+1]->product_id){
+				if( $this->cartons[$i]->qty == $this->cartons[$i]->colisage ) $n++;
+				else $r=$r+$this->cartons[$i]->qty;
+
+				$i++;
+			}
+			if( $this->cartons[$i]->qty == $this->cartons[$i]->colisage ) $n++;
+			else $r=$r+$this->cartons[$i]->qty
+			;
+
+			if( !empty($this->cartons[$i]->colisage )){
+				$n=$n+floor($r/$this->cartons[$i]->colisage);
+				$r=$r%$this->cartons[$i]->colisage;
+			}
+
+			$product=new Product($this->db);
+			$product->fetch($this->cartons[$i]->product_id);
+
+			print "<tr class=\"oddeven\"><td>".($r!=0?$r ." + ":"").$n." x ". $this->cartons[$i]->colisage . " " . $product->getNomUrl() . "</td></tr>";
+		}
+	}
+
+	public function getHash(){
 		if( $this->type_element=='shipping'){
 
 			$exp=new Expedition($this->db);

@@ -30,6 +30,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/functions.lib.php';
 
 
 dol_include_once('/tourneesdelivraison/class/tourneegeneric.class.php');
+dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique_lines.class.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique_lines_contacts.class.php');
 
@@ -190,8 +191,8 @@ class TourneeUnique extends TourneeGeneric
 		}
 	}*/
 
-	public function getNewLine(){
-		$line=new TourneeUnique_lines($this->db);
+	public function getNewLine($parent=null){
+		$line=new TourneeUnique_lines($this->db, $parent);
 		return $line;
 	}// phpcs:enable
 
@@ -223,6 +224,15 @@ class TourneeUnique extends TourneeGeneric
 		$line->aucune_cmde=($aucune_cmde)?1:0;
 
 		return $line->update($user);
+	}
+
+	public function getTourneeDeLivraison(){
+		if( empty($this->fk_tourneedelivraison)) return null;
+		if( empty($this->tourneedelivraison)) {
+			$this->tourneedelivraison = new TourneeDeLivraison($this->db);
+			$this->tourneedelivraison->fetch($this->fk_tourneedelivraison);
+		}
+		return $this->tourneedelivraison;
 	}
 
 	public function getTotalWeightVolume($type="shipping"){

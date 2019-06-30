@@ -73,6 +73,7 @@ AucunMasquage = Aucun masquage
 SansCmdeAffecte = Sans commandes affectées
 SansCmde = Sans commandes
 SansCmdeAffOuInc = Sans commandes affectés ou non attribuées
+Livraison = Livraison
 
 
 #
@@ -126,6 +127,7 @@ ConfirmAffectationAutoTourneeUnique = Êtes-vous sûr de vouloir affecter automa
 ConfirmChangeStatutElt = Êtes-vous sur de vouloir changer le statut de le/la %s ?
 ConfirmChangeDateEltToDateTournee = Êtes-vous sur de vouloir changer la date de le/la %s et de la fixer à la date de la tournée ?
 ConfirmGenererDocs = Êtes-vous sur de vouloir générer tous les documents de la %s ?
+SupprimerTousLesTags = Supprimer tous les tags
 
 #
 # Erreurs
@@ -186,6 +188,12 @@ AvertissementAvantChangeStatutElt = changer le statut d'un élément de tournée
 AvertissementAvantChangeDateElt = changer la date d'un élément de tournée
 AvertissementAvantDeleteLine = supprimer une ligne de tournée
 AvertissementAvantDeleteContact = supprimer le contact d'une ligne de tournée
+AvertissementAvantCmde_ClassifyBilled = classifier une commande facturée
+AvertissementAvantCmde_ClassifyUnBilled = classifié une commande non facturée
+AvertissementAvantCmde_Reopen = réouvrir une commande
+AvertissementAvantCmde_Shipped = marquer une commande comme expédiée
+AvertissementAvantExp_Shipped = marquer une expédition comme expédiée
+AvertissementAvantExp_Reopen = réouvrir une expédition
 ParametresDAffichage = Paramètres d'affichage
 AffichageContactIntegre = Affichage des contacts intégrés sous le nom du magasin (plutôt que dans une colonne a droite)
 GestionDocs = Gestion des documents
@@ -198,6 +206,7 @@ MettreEnPlaceReducQRCode = Mettre en place une réduction des QR-code
 # Autres
 #
 default = Defaut
+TourneeDeLivraisonArret = Tournée de livraison %s / Arrêt
 
 #
 # modèles Pdf

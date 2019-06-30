@@ -202,6 +202,18 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_DELETECONTACT","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
 		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_EXP_SHIPPED","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_EXP_REOPEN","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CMDE_REOPEN","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CMDE_SHIPPED","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYBILLED","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYUNBILLED","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
+		$r++;
 
 
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DRAFT_WATERMARK', 'chaine', 'brouillon', 'Watermark brouillon sur les tournées de livraison', 1, 'allentities', 1);

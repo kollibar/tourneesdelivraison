@@ -10,9 +10,13 @@ class TourneeObject extends CommonObject
 	 *
 	 * @param DoliDb $db Database handler
 	 */
-	public function __construct(DoliDB $db)
+	public function __construct(DoliDB $db, $parent=null)
 	{
 		global $conf, $langs, $user;
+
+		if( $parent != null){
+			$this->parent=$parent;
+		}
 
 		$this->db = $db;
 
@@ -80,7 +84,7 @@ class TourneeObject extends CommonObject
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewLine();
+				$line = $this->getNewLine($this);
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 
@@ -573,6 +577,17 @@ public function getCategories()
 	return $existing;
 }
 
+public function supprimerCategories($categories){
+	$c=$this->getCategories();
+	$nc=array();
+	foreach ($c as $tag) {
+		if( ! in_array($tag,$categories)){
+			$nc[]=$tag;
+		}
+	}
+	return $this->setCategories($nc);
+}
+
 
 /**
  * Clone and object into another one
@@ -599,6 +614,8 @@ public function getCategories()
 
 		// Load source object
 		$object->fetchCommon($fromid);
+		// récupération des tags
+		$c=$object->getCategories();
 
 		// Reset some properties
 		unset($object->lines);
@@ -606,14 +623,26 @@ public function getCategories()
 		unset($object->fk_user_creat);
 		unset($object->import_key);
 
+		if( $this->nomelement == "TourneeUnique"){
+			unset($object->masque_ligne);
+		}
+		if( $this->nomelement == "TourneeUnique_lines"){
+			unset($object->aucune_cmde);
+		}
+
 		// ajout du parent
 		if( !empty($fk_parent)  && !empty($parentid)){
 			$object->{$fk_parent}=$parentid;
 		}
 
 		// Clear fields
-		$object->ref = "copy_of_".$object->ref;
-		$object->title = $langs->trans("CopyOf")." ".$object->title;
+		if( $this->nomelement == "TourneeUnique" && !empty($object->fk_tourneedelivraison)){
+			$object->ref=$object->getTourneeDeLivraison()->ref . $object->getTourneeDeLivraison()->getNumeroTourneeUniqueSuivante();
+		} else  $object->ref = "copy_of_".$object->ref;
+
+		if( ! empty($this->title)) $object->title = $langs->trans("CopyOf")." ".$object->title;
+		if( ! empty($this->label)) $object->label = $langs->trans("CopyOf")." ".$object->label;
+
 		if( !empty($object->date_tournee)){
 			$object->date_tournee="";
 		}
@@ -642,6 +671,9 @@ public function getCategories()
 		}
 
 		unset($object->context['createfromclone']);
+
+		// copie des tags
+		$object->setCategories($c);
 
 		// copie des lignes
 		if( !empty($this->table_element_line) ){
@@ -688,5 +720,99 @@ public function getCategories()
 				return -1;
 		}
 	}
+
+	public function field_view($key, $editable=false){
+		global $langs,$form, $_SERVER, $action, $conf;
+		$val=$this->fields[$key];
+		$value=$this->$key;
+
+
+		if( $key=='ae_1elt_par_cmde') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE + 1] .')';
+		if( $key=='ae_1ere_future_cmde') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE + 1] .')';
+		if( $key=='ae_datelivraisonidentique') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK + 1] .')';
+		if( $key=='change_date_affectation') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE + 1] .')';
+
+		print '<tr><td>';
+		print '<table class="nobordernopadding" width="100%"><tr><td>';
+		print $langs->trans($val['label']);
+		print '</td>';
+
+		if ($action != 'edit_'.$key && $editable)
+			print '<td align="right"><a href="' . $_SERVER["PHP_SELF"] . '?action=edit_'.$key.'&amp;id=' . $this->id . '">' . img_edit($langs->trans($val['label']), 1) . '</a></td>';
+
+		print '</tr></table>';
+		print '</td><td>';
+		if ($action == 'edit_' . $key) {
+			print '<form name="set_'.$key.'" action="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '" method="post">';
+			print '<input type="hidden" name="token" value="' . $_SESSION ['newtoken'] . '">';
+			print '<input type="hidden" name="action" value="set_'.$key.'">';
+
+			if( $val['type']=='date') {
+				if( empty($value)) print $form->selectDate('', $key, '', '', '', "set_".$key,1,1);
+				else print $form->selectDate($value, $key, '', '', '', "set_".$key);
+			}
+			else print $this->showInputField($val, 'label', $value, '', '', '', 0);
+
+			print '<input type="submit" class="button" value="' . $langs->trans('Modify') . '">';
+			print '</form>';
+		} else {
+			if( $val['type']=='date') print $value ? dol_print_date($value, 'day') : '&nbsp;';
+			else print $this->showOutputField($val, $key, $value, '', '', '', 0);
+		}
+		print '</td>';
+		print '</tr>';
+	}
+
+
+
+	public function field_create($key, $mode='create', $width=''){
+		global $langs,$form, $_SERVER, $action,$conf;
+		$val=$this->fields[$key];
+
+		if (abs($val['visible']) != 1) return;
+
+		if (array_key_exists('enabled', $val) && isset($val['enabled']) && ! verifCond($val['enabled'])) return;	// We don't want this field
+
+		if( array_key_exists('default',$val) && $val['visible']==-1){
+			print '<input type="hidden" value="'.$val['default'].'">';
+			return;
+		}
+
+		if( $key=='ae_1elt_par_cmde') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE + 1] .')';
+		if( $key=='ae_1ere_future_cmde') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE + 1] .')';
+		if( $key=='ae_datelivraisonidentique') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK + 1] .')';
+		if( $key=='change_date_affectation') $val['arrayofkeyval'][0] .= ' ('. $val['arrayofkeyval'][$conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_CHANGEAUTODATE + 1] .')';
+
+
+		print '<tr id="field_'.$key.'">';
+		print '<td';
+		print ' class="titlefieldcreate';
+		if ($val['notnull'] > 0) print ' fieldrequired';
+		if ($val['type'] == 'text' || $val['type'] == 'html') print ' tdtop';
+		print '"';
+		if( ! empty($width)) print ' style="width:'.$width.';"';
+		print '>';
+		print $langs->trans($val['label']);
+			if(!empty($val['help'])){
+					print $form->textwithpicto('',$langs->trans($val['help']));
+			}
+		print '</td>';
+		print '<td>';
+		if( $mode == 'create'){
+			if (in_array($val['type'], array('int', 'integer'))) $value = GETPOST($key, 'int');
+			elseif ($val['type'] == 'text' || $val['type'] == 'html') $value = GETPOST($key, 'none');
+			else $value = GETPOST($key, 'alpha');
+		} else {
+			if (in_array($val['type'], array('int', 'integer'))) $value = GETPOSTISSET($key)?GETPOST($key, 'int'):$this->$key;
+			elseif ($val['type'] == 'text' || $val['type'] == 'html') $value = GETPOSTISSET($key)?GETPOST($key,'none'):$this->$key;
+			else $value = GETPOSTISSET($key)?GETPOST($key, 'alpha'):$this->$key;
+		}
+
+		print $this->showInputField($val, $key, $value, '', '', '', 0);
+		print '</td>';
+		print '</tr>';
+	}
+
+
 
 }

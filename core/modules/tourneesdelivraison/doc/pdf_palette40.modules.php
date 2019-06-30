@@ -226,7 +226,7 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
   }
 
 
-  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product, $outputlangs, $default_font_size){
+  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
     global $user,$conf,$langs,$hookmanager;
 
     $XYP=$this->getXYP($pos);
@@ -273,12 +273,12 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
     $pdf->SetXY($curX+18,$curY+8);
     $pdf->SetFont('','', $default_font_size*0.9);
     //$pdf->MultiCell($this->largeur-22, 3, $qty.'x '.(!empty($product->array_options['options_codecarton'])?$product->array_options['options_codecarton']:$product->ref), 0, 'L');
-    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product->ref, 0, 'L');
+    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product_name, 0, 'L');
 
   }
 
-  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product, $outputlangs, $default_font_size){
-    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product, $outputlangs, $default_font_size);
+  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
+    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size);
     $this->pos++;
   }
 
@@ -391,12 +391,13 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
         $url=str_replace("tourneeunique_card.php","livraison_card.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
 
 				// Loop on each lines
-				for ($i = 0; $i < $nblignes; $i++)
-				{
+				for ($i = 0; $i < $nblignes; $i++) {
 
           $thirdparty = new Societe($this->db);
           $thirdparty->fetch($object->lines[$i]->fk_soc);
           $thirdparty->fetch_optionals();
+
+          dol_syslog("_write_file()->thirdparty:$thirdparty->name i:$i nbLignes:$nblignes");
 
           if(empty($object->lines[$i]->etiquettes) || $object->lines[$i]->etiquettes ==0 ) continue;
 
@@ -420,31 +421,16 @@ class pdf_palette40 extends ModelePDFTourneesdelivraison
             }
           }
 
-          $nbColis=$object->lines[$i]->getNbColis();
-          $num=1;
-
           foreach ($expedition as $leltid => $exp) {
             $lelt=new TourneeUnique_lines_cmde_elt($this->db);
             $lelt->fetch($leltid);
 
-            foreach ($exp->lines as $lexp) {
-              $product = new Product($this->db);
-              $product->fetch($lexp->fk_product);
-              $product->fetch_optionals();
-
-              if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
-
-              if( ! empty($product->array_options['options_colisage'])){
-                for($j=0;$j<$lexp->qty_shipped;$j+=$product->array_options['options_colisage']){
-                  $param = "?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
-                  $this->_add_case($pdf, $url . $param, $thirdparty, $num, $nbColis, min($product->array_options['options_colisage'],$lexp->qty_shipped-$j), $product, $outputlangs, $default_font_size);
-                  $num++;
-                }
-              } else {
-                $param = "?h=".$lelt->getHash()."&le=".$leltid."&c=".$num;
-                $this->_add_case($pdf, $url . $param, $thirdparty, $num, $nbColis, $lexp->qty_shipped, $product, $outputlangs, $default_font_size);
-                $num++;
-              }
+            $hash=$lelt->getHash();
+            $nbColis=$lelt->getNbColis();
+            for ($j=1; $j <= $nbColis ; $j++) {
+              $param="?h=".$hash."&le=".$leltid."&c=".$j;
+              $carton=$lelt->getCartonNum($j);
+              $this->_add_case($pdf, $url . $param, $thirdparty, $j, $nbColis, $carton->qty, $carton->product_name, $outputlangs, $default_font_size);
             }
           }
 				}

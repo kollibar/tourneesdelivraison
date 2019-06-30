@@ -47,7 +47,7 @@ class TourneeGeneric_lines extends TourneeObject
 			while ($i < $num)
 			{
 				$objp = $this->db->fetch_object($result);
-				$line = $this->getNewLine();
+				$line = $this->getNewLine($this);
 				$line->fetch($objp->rowid);
 				$line->fetch_optionals();
 

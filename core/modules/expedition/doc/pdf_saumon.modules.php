@@ -135,6 +135,8 @@ class pdf_saumon extends ModelePdfExpedition
 		$outputlangs->load("deliveries");
         $outputlangs->load("sendings");
 		$outputlangs->load("productbatch");
+		$outputlangs->load("tourneesdelivraison@tourneesdelivraison");
+
 
 		$nblignes = count($object->lines);
 
@@ -531,9 +533,11 @@ class pdf_saumon extends ModelePdfExpedition
 						//else $code=" ";
 						$code="     ".$objLine->ref;
 						if( intval($object->lines[$i]->qty_shipped) % intval($objLine->array_options['options_colisage']) != 0 ){
-							$pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3, strval(intval(intval($object->lines[$i]->qty_shipped)/intval($objLine->array_options['options_colisage']))+1)."*".$code,'','C');
+							$pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3,
+								strval(intval($object->lines[$i]->qty_shipped) % intval($objLine->array_options['options_colisage'])).($object->lines[$i]->qty_shipped>$objLine->array_options['options_colisage']?" + ".strval(intval(intval($object->lines[$i]->qty_shipped)/intval($objLine->array_options['options_colisage'])))."x".intval($objLine->array_options['options_colisage']):"").$code,
+								'','C');
 							//	$pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3, intval($object->lines[$i]->qty_shipped)/intval($objLine->array_options['options_colisage']),'','C');
-						} else  $pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3, intval($object->lines[$i]->qty_shipped)/intval($objLine->array_options['options_colisage']).$code,'','C');
+						} else  $pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3, intval($object->lines[$i]->qty_shipped)/intval($objLine->array_options['options_colisage'])."x".intval($objLine->array_options['options_colisage']).$code,'','C');
 					}
 
 					else $pdf->MultiCell(($this->posxpuht- $this->posxcolis), 3, "?",'','C');
@@ -841,7 +845,7 @@ class pdf_saumon extends ModelePdfExpedition
 		if (empty($hidetop))
 		{
 			$pdf->SetXY($this->posxcolis, $tab_top+1);
-			$pdf->MultiCell(($this->posxpuht - $this->posxcolis), 2, $outputlangs->transnoentities("NbColis"),'','C');
+			$pdf->MultiCell(($this->posxpuht - $this->posxcolis), 2, $outputlangs->transnoentities("Colisage"),'','C');
 		}
 
 		if(!empty($conf->global->MAIN_PDF_SHIPPING_DISPLAY_AMOUNT_HT)) {

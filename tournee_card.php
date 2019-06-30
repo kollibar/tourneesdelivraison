@@ -68,6 +68,7 @@ if($typetournee == 'tourneedelivraison'){
 
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 
 dol_include_once('/tourneesdelivraison/class/html.formtourneesdelivraison.class.php');
 dol_include_once('/tourneesdelivraison/class/'.$typetournee.'.class.php');
@@ -169,7 +170,10 @@ if (empty($reshook)) {
 	$triggermodname = 'TOURNEESDELIVRAISON_'.strtoupper($typetournee).'_MODIFY';	// Name of trigger action code to execute when we modify record
 
 
-	if( $typetournee == 'tourneeunique' && $object->statut==TourneeGeneric::STATUS_VALIDATED) $object->checkCommande($user);
+	if( $typetournee == 'tourneeunique' && $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee > time()) {
+		$object->checkCommande($user);
+	}
+
 
 
 	// récupération de la liste de model pdf
@@ -261,6 +265,7 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
 		$action='';
 	}
 
+
 	else if( $typetournee == 'tourneeunique' && $confirm == 'yes' &&  $action == 'confirm_genererdocs' && $permissioncreate){
 
 		// Reload to get all modified line records and be ready for hooks
@@ -348,6 +353,31 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
 			$line->update($user);
 		}
 		$action='view';
+	}
+
+	else if($typetournee == 'tourneeunique' && $action=='supprimerTags' && $permissiontonote){
+		//Catégories
+		if (!empty($user->rights->categorie->lire))
+		{
+			// Categories association
+			$categories = GETPOST( 'cats_suppr', 'array' );
+
+			foreach ($categories as $c) {
+				$cat=new Categorie($db);
+				$cat->fetch($c);
+				$f=$cat->get_filles();
+				foreach ($f as $fc) {
+					if( ! in_array($fc->id, $categories)) $categories[]=$fc->id;
+				}
+			}
+			var_dump($categories);
+
+			$object->supprimerCategoriesLines($categories);
+
+			// A FAIRE
+			$action='view';
+
+		}
 	}
 
 	else if ($action == 'setnote_elt' && ! empty($permissiontonote) && ! GETPOST('cancel','alpha')) {
@@ -676,7 +706,7 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
 					$newid = 0;
 					if (is_object($result)) $newid = $result->id;
 					else $newid = $result;
-					header("Location: ".$_SERVER['PHP_SELF'].'?id='.$newid);	// Open record of new object
+					header("Location: ".$_SERVER['PHP_SELF'].'?id='.$newid."&action=edit");	// Open record of new object
 					exit;
 				}
 				else
