@@ -189,6 +189,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	if( $line->element=='tourneeunique_lines' && $parent->statut != STATUS_DRAFT){ ?>
 	  <td class="linecolcmde">
+			<?php if( $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) { ?>
 
 			<table class="noborderbottom">
 				<?php foreach ($line->lines_cmde as $lcmde) {
@@ -292,6 +293,7 @@ $domData .= ' data-id="'.$line->id.'"';
 						}
 			} ?>
 			</table>
+		<?php } ?>
 		</td>
 
 	<?php } ?>
