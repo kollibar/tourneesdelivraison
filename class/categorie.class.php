@@ -14,6 +14,8 @@ class Categorie extends CommonObject{
     const TYPE_TOURNEEUNIQUE_LINES = 'tourneeunique_lines';
     const TYPE_TOURNEEDELIVRAISON = 'tourneedelivraison';
     const TYPE_TOURNEEDELIVRAISON_LINES = 'tourneedelivraison_lines';
+    const TYPE_TOURNEE = 'tournee';
+    const TYPE_TOURNEE_LINES = 'tournee_lines';
 
 
   	/**
@@ -1858,6 +1860,63 @@ class Categorie extends CommonObject{
 
   return CommonObject::commonReplaceThirdparty($db, $origin_id, $dest_id, $tables, 1);
   }
+
+
+  public function cloneToAnotherObject(User $user, $new_type){
+    if( !empty($this->fk_parent)){
+      $parent=new Categorie($this->db);
+      $parent->fetch($this->fk_parent);
+      $parent->fetch_optionals();
+      $new_fk_parent = $parent->cloneToAnotherObject($user, $new_type);
+      if( $new_fk_parent <0 ) return $new_fk_parent;  // erreur
+    } else $new_fk_parent = 0;
+
+    // recherche si déjà existant
+    $sql = "SELECT c.rowid";
+		$sql.= " FROM ".MAIN_DB_PREFIX."categorie as c ";
+		$sql.= " WHERE c.entity IN (".getEntity('category').")";
+		$sql.= " AND c.type = ".$new_type;
+		$sql.= " AND c.fk_parent = ".$new_fk_parent;
+		$sql.= " AND c.label = '".$this->db->escape($this->label)."'";
+
+
+    dol_syslog(get_class($this)."::cloneToAnotherObject", LOG_DEBUG);
+		$resql = $this->db->query($sql);
+		if ($resql)
+		{
+			if ($this->db->num_rows($resql) > 0)						// Checking for empty resql
+			{
+				$obj = $this->db->fetch_array($resql);
+
+				if($obj[0] > 0 )
+				{
+          // cette catégorie existe déjà, on retourne son id
+					return $obj[0];
+				}
+			}
+		}
+		else
+		{
+			$this->error=$this->db->error();
+			return -1;
+		}
+
+    // cette catégorie n'existe pas, on la crée
+
+    $newCat=new Categorie($this->db);
+    $newCat->fetchCommon($this->id);
+    $newCat->fetch_optionals();
+
+    unset($newCat->id);
+    $newCat->type=$new_type;
+    $newCat->fk_parent = $new_fk_parent;
+
+    return $newCat->create($user);
+
+  }
+
+
+
 }
 
 

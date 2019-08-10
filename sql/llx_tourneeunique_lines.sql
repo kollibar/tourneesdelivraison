@@ -36,6 +36,8 @@ CREATE TABLE llx_tourneeunique_lines(
 	tpstheorique integer,
 	infolivraison text,
 	fk_parent_line integer,
-	aucune_cmde integer
+	aucune_cmde integer,
+	force_email_soc integer,
+	fk_tourneedelivraison_origine integer
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

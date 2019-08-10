@@ -15,11 +15,14 @@ class TourneeGeneric_lines extends TourneeObject
 	 * Type de ligne thirdparty
 	 */
 	const TYPE_THIRDPARTY = 0;
+	const TYPE_THIRDPARTY_CLIENT = 0;
 
 	/**
 	 * Type de ligne tournée incluse
 	 */
 	const TYPE_TOURNEE = 1;
+
+	const TYPE_THIRDPARTY_FOURNISSEUR = 2;
 
 
 
@@ -185,7 +188,7 @@ class TourneeGeneric_lines extends TourneeObject
 	 * 	@param		int				$notrigger			disable line update trigger
 	 *  @return   	int              					< 0 if KO, > 0 if OK
 	 */
-	function addline($fk_soc=0, $fk_people=0, $note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
+	function addline($fk_soc=0, $fk_people=0, $no_email=0, $sms=0, $note_public='', $note_private='',  $fk_parent_line=0, $notrigger=0)
 	{
 		global $mysoc, $conf, $langs, $user;
 
@@ -200,6 +203,9 @@ class TourneeGeneric_lines extends TourneeObject
 		if( empty($note_public)) $note_public='';
 		if( empty($note_private)) $note_private='';
 
+		if(empty($no_email)) $no_email=0;
+		if(empty($sms)) $sms=0;
+
 
 		$this->db->begin();
 
@@ -212,6 +218,8 @@ class TourneeGeneric_lines extends TourneeObject
 		$this->line->fk_tournee_lines=$this->id;
 		$this->line->fk_soc=$fk_soc;
 		$this->line->fk_socpeople=$fk_people;
+		$this->line->no_email=$no_email;
+		$this->line->sms=$sms;
 		$this->line->note_public=$note_public;
 		$this->line->note_private=$note_private;
 		$this->line->fk_parent_line=$fk_parent_line;
@@ -250,7 +258,7 @@ class TourneeGeneric_lines extends TourneeObject
 	 * 	@param		int				$notrigger			disable line update trigger
 	 *  @return   	int              					< 0 if KO, > 0 if OK
 	 */
-	function updateline($rowid, $fk_soc=0,$fk_people=0, $note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
+	function updateline($rowid, $fk_soc=0,$fk_people=0, $no_email=0, $sms=0,$note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
 	{
 		global $conf, $mysoc, $langs, $user;
 
@@ -268,6 +276,9 @@ class TourneeGeneric_lines extends TourneeObject
 
 			if( empty($note_public)) $note_public='';
 			if( empty($note_private)) $note_private='';
+
+			if(empty($no_email)) $no_email=0;
+			if(empty($sms)) $sms=0;
 
 			//Fetch current line from the database and then clone the object and set it in $oldline property
 			$line = $this->getNewLine();
@@ -289,6 +300,8 @@ class TourneeGeneric_lines extends TourneeObject
 			$this->line->fk_rowid = $fk_rowid;
 			$this->line->fk_soc=$fk_soc;
 			$this->line->fk_people=$fk_people;
+			$this->line->no_email=$no_email;
+			$this->line->sms=$sms;
 			$this->line->note_public=$note_public;
 			$this->line->note_private=$note_private;
 			$this->line->fk_parent_line = $fk_parent_line;
@@ -706,7 +719,7 @@ class TourneeGeneric_lines extends TourneeObject
 
 	public function getListeSoc($listeSoc=[], $params=[]) {
 
-		if( $this->type == self::TYPE_THIRDPARTY){
+		if( $this->type == self::TYPE_THIRDPARTY_CLIENT || $this->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
 			$listeSoc['soclineid'][]=$this->rowid;
 
 			if( ! in_array($this->fk_soc,$listeSoc['soc'])) {
@@ -716,21 +729,28 @@ class TourneeGeneric_lines extends TourneeObject
 
 			if( ! array_key_exists($fk_soc, $listeSoc['soc_contact']) )$listeSoc['soc_contact'][$fk_soc]=[];	// ajout à la liste des c
 
-			if( count($this->lines)==0){
-				$soc=new Societe($this->db);
-				$soc->fetch($this->fk_soc);
-				if( isValidEmail($soc->email) && ! in_array($soc->email, $listeSoc['mail']))  $listeSoc['mail'][]=$soc->email;
-			} else {
-				foreach ($this->lines as $line) {
-					if( ! in_array($this->fk_people,$listeSoc['contact'])) $listeSoc['contact'][]= $this->fk_people;
+			$soc=new Societe($this->db);
+			$soc->fetch($this->fk_soc);
 
-					$contact=new Contact($this->db);
-					$contact->fetch($line->fk_socpeople);
+			$nb=0;
 
-					if(! in_array($listeSoc['soc_contact'][$fk_soc], $line->fk_people)) $listeSoc['soc_contact'][$fk_soc][]= $line->fk_people;
+			foreach ($this->lines as $line) {
+				if( ! in_array($this->fk_people,$listeSoc['contact'])) $listeSoc['contact'][]= $this->fk_people;
 
-					if( isValidEmail($contact->email) && ! in_array($contact->email, $listeSoc['mail'])) $listeSoc['mail'][]=$contact->email;
+				$contact=new Contact($this->db);
+				$contact->fetch($line->fk_socpeople);
+
+				if(! in_array($listeSoc['soc_contact'][$fk_soc], $line->fk_people)) $listeSoc['soc_contact'][$fk_soc][]= $line->fk_people;
+
+				if( empty($line->no_email) && isValidEmail($contact->email)){
+					if( ! in_array($contact->email, $listeSoc['mail'])) $listeSoc['mail'][]=$contact->email;
+					$nb++;
 				}
+			}
+
+			// si aucun mail ajouté et que client OU force mail (à la societe)
+			if( $nb==0 && $this->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || !empty($this->force_email_soc)){
+				if( isValidEmail($soc->email) && ! in_array($soc->email, $listeSoc['mail']))  $listeSoc['mail'][]=$soc->email;
 			}
 			return $listeSoc;
 
@@ -765,7 +785,7 @@ class TourneeGeneric_lines extends TourneeObject
 		$this->fk_tournee_incluse=0;
 		$this->fk_soc=0;
 		$this->fk_adresselivraison=0;
-		$this->type=self::TYPE_THIRDPARTY;
+		$this->type=self::TYPE_THIRDPARTY_CLIENT;
 		$this->tpstheorique=rand(0,50);
 		$this->infolivraison='info livraison';
 		$this->aucune_cmde=0;

@@ -120,6 +120,7 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 		'tpstheorique' => array('type'=>'integer', 'label'=>'TempsTheorique', 'enabled'=>1, 'visible'=>1, 'position'=>55, 'notnull'=>-1,),
 		'infolivraison' => array('type'=>'html', 'label'=>'InfoLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>56, 'notnull'=>-1,),
 		'fk_parent_line' => array('type'=>'integer', 'label'=>'ParentLine', 'enabled'=>1, 'visible'=>-1, 'position'=>80, 'notnull'=>-1,),
+		'force_email_soc' => array('type'=> 'integer','label'=>'forceEmailSoc','enabled'=>1, 'visible'=>1, 'position'=>55, ),
 	);
 	public $rowid;
 	public $note_public;
@@ -141,6 +142,7 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 	public $tpstheorique;
 	public $infolivraison;
 	public $fk_parent_line;
+	public $force_email_soc;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -191,13 +193,13 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 	}
 
 
-	public function createLineTourneeUnique(User $user,$fk_tourneeunique, $fk_parent_line=0){
+	public function createLineTourneeUnique(User $user,$fk_tourneeunique,$fk_parent_line=0){
 		global $langs, $hookmanager, $extrafields;
 		$error = 0;
 
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
-		if( $this->type==TourneeGeneric_lines::TYPE_THIRDPARTY){
+		if( $this->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $this->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
 
 			$object = new TourneeUnique_lines($this->db);
 
@@ -217,9 +219,11 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 			$object->fk_parent_line=$fk_parent_line;
 			$object->fk_tournee=$fk_tourneeunique;
 
-			$object->type=TourneeGeneric_lines::TYPE_THIRDPARTY;
+			$object->type=$this->type;
 			$object->fk_tournee_incluse=0;
 			$object->aucune_cmde=0;
+			$object->force_email_soc=$this->force_email_soc;
+			$object->fk_tourneedelivraison_origine = $this->fk_tournee;
 
 			// Rang to use
 			$object->rang = $object->line_max($fk_parent_line)+1;

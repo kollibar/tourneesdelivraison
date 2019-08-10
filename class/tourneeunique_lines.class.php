@@ -128,6 +128,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		'infolivraison' => array('type'=>'html', 'label'=>'InfoLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>57, 'notnull'=>-1,),
 		'fk_parent_line' => array('type'=>'integer', 'label'=>'ParentLine', 'enabled'=>1, 'visible'=>-1, 'position'=>80, 'notnull'=>-1,),
 		'aucune_cmde' => array('type'=> 'integer','label'=>'AucuneCmde','enabled'=>1, 'visible'=>1, 'position'=>54, ),
+		'force_email_soc' => array('type'=> 'integer','label'=>'forceEmailSoc','enabled'=>1, 'visible'=>1, 'position'=>55, ),
+		'fk_tourneedelivraison_origine' => array('type'=>'integer:TourneeDeLivraison:tourneesdelivraison/class/tourneedelivraison.class.php', 'label'=>'TourneeDeLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>60, 'notnull'=>-1,),
 	);
 	public $rowid;
 	public $note_public;
@@ -150,6 +152,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	public $infolivraison;
 	public $fk_parent_line;
 	public $aucune_cmde;
+	public $force_email_soc;
+	public $fk_tourneedelivraison_origine;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -325,6 +329,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	public function checkCommande(User $user, $date){
 		global $user;
 
+		if( $this->type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) return;
+
 		$parent=$this->getParent();
 
 		// requète de parcours de toutes les commandes concernant la societe indiquée dans la ligne, avec un statut =1 (validé) ou =2(en cours d'expédition)
@@ -430,6 +436,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 
 	public function checkElt(User $user){
 		// parcours de toutes les ligne cmde
+		if( $this->type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) return;
+		
 		foreach ($this->lines_cmde as $lcmde) {
 			if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK){
 				$lcmde->checkElt($user);

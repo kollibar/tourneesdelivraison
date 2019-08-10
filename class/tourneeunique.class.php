@@ -149,6 +149,7 @@ class TourneeUnique extends TourneeGeneric
 	public $change_date_affectation;
 	public $model_pdf;
 	public $masque_ligne;
+	public $date_prochaine;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -204,6 +205,16 @@ class TourneeUnique extends TourneeGeneric
 			$line=new TourneeUnique_lines($this->db);
 			$line->fetch($fk_lineid);
 			$line->checkCommande($user, $this->date_tournee);
+		}
+	}
+
+	public function checkElt(User $user){
+		$listeSoc=$this->getListeSoc();
+
+		foreach ($listeSoc['soclineid'] as $fk_lineid) {
+			$line=new TourneeUnique_lines($this->db);
+			$line->fetch($fk_lineid);
+			$line->checkElt($user, $this->date_tournee);
 		}
 	}
 

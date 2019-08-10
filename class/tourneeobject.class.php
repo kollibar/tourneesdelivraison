@@ -1,6 +1,8 @@
 <?php
 
 require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
+require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
+dol_include_once('/tourneesdelivraison/class/categorie.class.php');
 
 class TourneeObject extends CommonObject
 {
@@ -588,6 +590,47 @@ public function supprimerCategories($categories){
 	return $this->setCategories($nc);
 }
 
+public function copyCategorieFromObject(User $user, $object){
+
+	if( $this->element == $object->element ){
+		return $this->setCategories($object->getCategories());
+	}
+
+	$new_type=-1;
+	$nc = new Categorie($this->db);
+	foreach ($nc->MAP_ID_TO_CODE as $key => $value) {
+		if( $value == $this->element ) {
+			$new_type = $key;
+			break;
+		}
+	}
+	if( $new_type <0 ){	// object ne supportant pas une catégorie
+		return $new_type;
+	}
+
+	$categories=$object->getCategories();
+	$err=0;
+
+	$new_categories=array();
+
+	foreach ($categories as $c) {
+		$cat=new Categorie($this->db);
+		$cat->fetch($c);
+		$cat->fetch_optionals();
+
+		$nc=$cat->cloneToAnotherObject($user, $new_type);
+		if( $nc>0){
+			$new_categories[]=$nc;
+		}
+		else  $err++;
+	}
+	$this->setCategories($new_categories);
+
+	if( $err > 0) return -1;
+	return 1;
+
+}
+
 
 /**
  * Clone and object into another one
@@ -637,7 +680,7 @@ public function supprimerCategories($categories){
 
 		// Clear fields
 		if( $this->nomelement == "TourneeUnique" && !empty($object->fk_tourneedelivraison)){
-			$object->ref=$object->getTourneeDeLivraison()->ref . $object->getTourneeDeLivraison()->getNumeroTourneeUniqueSuivante();
+			$object->ref=$object->getTourneeDeLivraison()->ref . $object->getTourneeDeLivraison()->getNumeroTourneeUniqueSuivante($user);
 		} else  $object->ref = "copy_of_".$object->ref;
 
 		if( ! empty($this->title)) $object->title = $langs->trans("CopyOf")." ".$object->title;
@@ -812,6 +855,9 @@ public function supprimerCategories($categories){
 		print '</td>';
 		print '</tr>';
 	}
+
+
+
 
 
 

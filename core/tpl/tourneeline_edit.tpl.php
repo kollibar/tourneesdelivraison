@@ -60,46 +60,18 @@ $domData .= ' data-id="'.$line->id.'"';
 	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?></td>
 
 	<td class="nobottom linecolclient" align="left" width="5">
-		<span class="tournee_line_type_thirdparty">
-			<label for="tournee_line_type_thirdparty">
-				<input type="radio" class="tournee_line_type_thirdparty" name="tournee_line_type_thirdparty" id="tournee_line_type_thirdparty" value="thirdparty"  <?php echo ($line->type==0?' checked':''); ?> >
-				<?php echo $langs->trans('Customer'); ?>
-			</label>
-			<?php echo $form->select_company($line->fk_soc, 'socid', '(s.client = 1 OR s.client = 3)  AND s.status = 1', 'SelectThirdParty', 0, 0, null, 0, 'minwidth300');
-									//string	$selected	Preselected type
-									//string	$htmlname	Name of field in form
-									//string	$filter	Optional filters criteras (example: 's.rowid <> x', 's.client in (1,3)')
-									//string	$showempty	Add an empty field (Can be '1' or text to use on empty line like 'SelectThirdParty')
-									//int	$showtype	Show third party type in combolist (customer, prospect or supplier)
-									//int	$forcecombo	Force to use standard HTML select component without beautification
-									//array	$events	Event options. Example: array(array('method'=>'getContacts', 'url'=>dol_buildpath('/core/ajax/contacts.php',1), 'htmlname'=>'contactid', 'params'=>array('add-customer-contact'=>'disabled')))
-									//string	$filterkey	Filter on key value
-									//int	$outputmode	0=HTML select string, 1=Array
-									//int	$limit	Limit number of answers
-									//string	$morecss	Add more css styles to the SELECT component
-									//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
-									//bool	$multiple	add [] in the name of element and add 'multiple' attribut
+
+		<span>
+			<?php if ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
+				echo $line->getBannerAddressSociete('bannerSociete_'.$line->id);
+			} else {
+				echo $line->getBannerTourneeLivraison();
+			}
 			?>
 		</span>
-		<span class="tournee_line_type_tournee">
-			<label for="tournee_line_type_tournee">
-				<input type="radio" class="tournee_line_type_tournee" name="tournee_line_type_tournee" id="tournee_line_type_tournee" value="tournee" <?php echo ($line->type==1?' checked':''); ?>>
-				<?php echo $langs->trans('TourneeDeLivraison'); ?>
-			</label>
-			<?php echo $formtournee->select_tourneedelivraison($line->fk_tourneedelivraison_incluse, 'tourneeincluseid', '(s.statut=1)', 'SelectTourneeDeLivraison', 0, null, 0, 'minwidth300');
-									//string	$selected	Preselected type
-									//string	$htmlname	Name of field in form
-									//string	$filter	Optional filters criteras (example: 's.rowid <> x', 's.client in (1,3)')
-									//string	$showempty	Add an empty field (Can be '1' or text to use on empty line like 'SelectThirdParty')
-									//int	$forcecombo	Force to use standard HTML select component without beautification
-									//array	$events	Event options. Example: array(array('method'=>'getContacts', 'url'=>dol_buildpath('/core/ajax/contacts.php',1), 'htmlname'=>'contactid', 'params'=>array('add-customer-contact'=>'disabled')))
-									//string	$filterkey	Filter on key value
-									//int	$outputmode	0=HTML select string, 1=Array
-									//int	$limit	Limit number of answers
-									//string	$morecss	Add more css styles to the SELECT component
-									//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
-									//bool	$multiple	add [] in the name of element and add 'multiple' attribut
-			?>
+		<span>
+			<input type="checkbox" name="force_email_soc" id="force_email_soc" value="1" <?php echo empty($line->force_email_soc)?'':'checked' ?> >
+		  <label for="force_email_soc"> <?php echo $langs->trans('ajoutMailAuto'); ?> </label>
 		</span>
 	</td>
 

@@ -202,6 +202,17 @@ SuppressionAutoDocs = Génération automatique des documents à chaque modificat
 SimplificationURLQrCode = Simplification des urls des QR-code
 MettreEnPlaceReducQRCode = Mettre en place une réduction des QR-code
 
+ParametresDivers = Paramètres divers
+GestionsDesSMS = Gestion des SMS
+ActivelesSMS = Active les SMS
+
+#
+# SMS / mail
+#
+noEmailAuto = Pas d'email auto
+sms = SMS
+ajoutMailAuto = Ajout du mail dans les envois auto
+
 #
 # Autres
 #

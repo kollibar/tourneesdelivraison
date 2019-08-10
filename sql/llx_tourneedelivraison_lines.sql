@@ -35,6 +35,7 @@ CREATE TABLE llx_tourneedelivraison_lines(
 	type integer NOT NULL,
 	tpstheorique integer,
 	infolivraison text,
-	fk_parent_line integer
+	fk_parent_line integer,
+	force_email_soc integer
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

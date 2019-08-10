@@ -101,6 +101,8 @@ class TourneeDeLivraison_lines_contacts extends TourneeGeneric_lines_contacts
 		'rang' => array('type'=>'integer', 'label'=>'Rang', 'enabled'=>1, 'visible'=>-1, 'position'=>400, 'notnull'=>1,),
 		'fk_tournee_lines' => array('type'=>'integer:TourneeDeLivraison_lines:tourneesdelivraison/class/tourneedelivraison_lines.class.php', 'label'=>'TourneeDeLivraison_Lines', 'enabled'=>1, 'visible'=>1, 'position'=>40, 'notnull'=>1,),
 		'fk_parent_line' => array('type'=>'integer', 'label'=>'ParentLine', 'enabled'=>1, 'visible'=>-1, 'position'=>80, 'notnull'=>-1,),
+		'no_email' => array('type'=>'integer', 'label'=>'NoEmail', 'enabled'=>1, 'visible'=>-1, 'position'=>63, 'notnull'=>-1,),
+		'sms' => array('type'=>'integer', 'label'=>'SMS', 'enabled'=>1, 'visible'=>-1, 'position'=>64, 'notnull'=>-1,),
 	);
 	public $rowid;
 	public $fk_soc;
@@ -115,6 +117,8 @@ class TourneeDeLivraison_lines_contacts extends TourneeGeneric_lines_contacts
 	public $rang;
 	public $fk_tournee_lines;
 	public $fk_parent_line;
+	public $no_email;
+	public $sms;
 	// END MODULEBUILDER PROPERTIES
 
 

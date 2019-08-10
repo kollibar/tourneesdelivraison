@@ -144,6 +144,7 @@ class TourneeDeLivraison extends TourneeGeneric
 	public $ae_1elt_par_cmde;
 	public $change_date_affectation;
 	public $model_pdf;
+	public $date_prochaine;
 	// END MODULEBUILDER PROPERTIES
 
 
@@ -190,8 +191,13 @@ class TourneeDeLivraison extends TourneeGeneric
 		return $line;
 	}
 
-	public function getNumeroTourneeUniqueSuivante(){
-		return $this->nb_tourneeunique++;
+	public function getNumeroTourneeUniqueSuivante(User $user){
+		if(empty($this->nb_tourneeunique)) {
+			$r=0;$this->nb_tourneeunique=1;
+		} else  $r=$this->nb_tourneeunique++;
+
+		$this->update($user);
+		return $r;
 	}
 
 	public function createTourneeUnique(User $user){
@@ -206,7 +212,7 @@ class TourneeDeLivraison extends TourneeGeneric
 			$this->db->begin();
 
 			// Copie des champs
-			$object->ref = $this->ref . $this->getNumeroTourneeUniqueSuivante();
+			$object->ref = $this->ref . $this->getNumeroTourneeUniqueSuivante($user);
 			$object->label = $object->label;
 			$object->fk_tourneedelivraison=$this->id;
 
@@ -246,7 +252,7 @@ class TourneeDeLivraison extends TourneeGeneric
 				$tabFait=$this->createLineTourneeUnique($user, $result, $tabFait);
 
 				// clone des catégories
-				$object->setCategories($this->getCategories());
+				$object->copyCategorieFromObject($user, $this);
 			}
 			unset($object->context['createfrom'.$this->element]);
 
@@ -268,7 +274,7 @@ class TourneeDeLivraison extends TourneeGeneric
 
 	public function createLineTourneeUnique($user, $tourneeunique, $tabFait, $fk_parent_line=0){
 		foreach($this->lines as $line){
-			if($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY){
+			if($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
 				if( ! in_array($line->fk_soc,$tabFait['soc'])) {
 					$line->createLineTourneeUnique($user,$tourneeunique,$fk_parent_line);
 					$tabFait['soc'][$line->fk_soc]=$line->fk_soc;

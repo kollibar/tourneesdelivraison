@@ -164,6 +164,7 @@ if( $action == 'setavertissement'){
 }
 
 $actions=array(
+	// commande 		=>     VARIABLE DE CONFIGURATION À MODIFIER
 	'setpdfautodelete' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE',
 	'setpdfautoupdate' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE',
 	'setcontactintegre' => "TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE",
@@ -171,6 +172,7 @@ $actions=array(
 	'setaffectautodateok' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK",
 	'setaffectautosi1eltparcmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE",
 	'setaffectauto1erecmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE",
+	'setsms' => "TOURNEESDELIVRAISON_SMS",
 );
 
 
@@ -193,10 +195,10 @@ if( $action == 'setup_reduc_qrcode' && GETPOSTISSET('value')){
 	if( !empty(GETPOST('value','int'))){
 		if( strpos($_SERVER['PHP_SELF'], '/custom/') === FALSE){
 			$url_origin = '/tourneesdelivraison/livraison_card.php';
-			$url_replace = 'tdl.php';
+			$url_replace = '/tdl.php';
 		} else {
 			$url_origin = '/custom/tourneesdelivraison/livraison_card.php';
-			$url_replace = 'tdl.php';
+			$url_replace = '/tdl.php';
 		}
 		$res=copy(substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'setup.php')).'tdl.php', DOL_DOCUMENT_ROOT.'/tdl.php');
 		if( $res ){
@@ -256,8 +258,8 @@ if ($action == 'updateoptions') {
 	}
 
 	if (GETPOSTISSET("URL_QRCODE")){
-		$url_origin=GETPOST('url_origin','aZ09');
-		$url_replace=GETPOST('url_replace','aZ09');
+		$url_origin=GETPOST('url_origin','nohtml');
+		$url_replace=GETPOST('url_replace','nohtml');
 		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_ORIGIN", $url_origin,'chaine',0,'',$conf->entity);
 		if (! $res > 0) $error++;
 		$res = dolibarr_set_const($db, "TOURNEESDELIVRAISON_URL_REPLACE", $url_replace,'chaine',0,'',$conf->entity);
@@ -695,6 +697,10 @@ print '</div>';
 
 
 print '<div id="urlqrcode" class="div-table-responsive-no-min">';
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
+
 print '<table class="noborder" width="100%">';
 print '<tr class="liste_titre">';
 print '<td colspan="3" align="left">'.$langs->trans("SimplificationURLQrCode")."</td>\n";
@@ -705,7 +711,7 @@ print '<td width="80">&nbsp;</td></tr>'."\n";
 print '<tr class="oddeven">';
 //print '<td width="80%">'.$langs->trans("GenerationAutoDocs").'</td>';
 
-print '<td width="35%"><input name="url_origin"  class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_ORIGIN . '"></td>';
+print '<td width="35%"><input name="url_origin" class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_ORIGIN . '"></td>';
 print '<td> => </td>';
 print '<td width="35%"><input name="url_replace"  class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_REPLACE . '"></td>';
 
@@ -730,8 +736,36 @@ else
 print '</a></td>';
 print '</tr>';
 print '</table>';
+print '</form>';
 
 
+print load_fiche_titre($langs->trans("ParametresDivers"),'','');
+
+print '<div class="div-table-responsive-no-min" id="divdivers">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print "<td>".$langs->trans("GestionsDesSMS")."</td>\n";
+print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
+print '<td width="80">&nbsp;</td></tr>'."\n";
+
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("ActivelesSMS").'</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_SMS))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setsms&value=0#divdivers">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setsms&value=1#divdivers">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+print '</a></td>';
+print '</tr>';
+
+print '</table></div>';
 
 
 
@@ -820,6 +854,8 @@ else
 }
 print '</a></td>';
 print '</tr>';
+
+print '</table></div>';
 
 // Page end
 dol_fiche_end();

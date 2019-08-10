@@ -170,42 +170,52 @@ class TourneeGeneric extends TourneeObject
 	 *	@param		int				$rang				rang
 	 *	@param		str				$note_public			note public
 	 *	@param		str				$note_private			note private
+	 *  @param 		int       $force_email_soc   si true force l'envoi d'un email à soc
 	 * 	@param		int				$fk_parent_line		Id of parent line (0 in most cases, used by modules adding sublevels into lines).
 	 * 	@param		int				$notrigger			disable line update trigger
 	 *  @return   	int              					< 0 if KO, > 0 if OK
 	 */
-	function addline($type, $fk_soc=0, $fk_tournee_incluse=0, $BL=1, $facture=1, $etiquettes=1, $tempstheorique=0, $infolivraison='', $fk_adresselivraison=0, $note_public='', $note_private='', $rang=-1, $fk_parent_line=0, $notrigger=0)
+	function addline($type, $fk_soc=0, $fk_tournee_incluse=0, $BL=1, $facture=1, $etiquettes=1, $tempstheorique=0, $infolivraison='', $fk_adresselivraison=0, $force_email_soc=0, $note_public='', $note_private='', $rang=-1, $fk_parent_line=0, $notrigger=0)
 	{
 		global $mysoc, $conf, $langs, $user;
 
-		dol_syslog(get_class($this)."::addline type=$type, fk_soc=$fk_soc, fk_tournee_incluse=$fk_tournee_incluse, BL=$BL, facture=$facture, fk_parent_line=$fk_parent_line, ");
+		dol_syslog(get_class($this)."::addline type=$type, fk_soc=$fk_soc, fk_tournee_incluse=$fk_tournee_incluse, BL=$BL, facture=$facture, etiquettes=$etiquettes, infolivraison=$infolivraison, fk_adresselivraison=$fk_adresselivraison, force_email_soc=$force_email_soc, fk_parent_line=$fk_parent_line, ");
 
 		if ($this->statut == self::STATUS_DRAFT)
 		{
-			if (empty($BL)) $BL=0;
-			if (empty($facture)) $facture=0;
-			if (empty($etiquettes)) $etiquettes=0;
+			if(empty($BL)) $BL=0;
+			if(empty($facture)) $facture=0;
+			if(empty($etiquettes)) $etiquettes=0;
 			if(empty($fk_soc)) $fk_soc=0;
 			if(empty($fk_adresselivraison)) $fk_adresselivraison=0;
 			if(empty($fk_tournee_incluse)) $fk_tournee_incluse=0;
 			if(empty($infolivraison)) $infolivraison='';
 			if(empty($tempstheorique)) $tempstheorique=0;
 			if(empty($rang)) $rang=-1;
-			if (empty($fk_parent_line) || $fk_parent_line < 0) $fk_parent_line=0;
+			if(empty($fk_parent_line) || $fk_parent_line < 0) $fk_parent_line=0;
+			if(empty($force_email_soc)) $force_email_soc=0;
+
+			$fk_tourneedelivraison_origine=0;
 
 			// Check parameters
-			if ($type==TourneeGeneric_lines::TYPE_THIRDPARTY and ($fk_soc==0 or $fk_soc==-1) or $type == TourneeGeneric_lines::TYPE_TOURNEE and ($fk_tournee_incluse==0 or $fk_tournee_incluse==-1) or $type <TourneeGeneric_lines::TYPE_THIRDPARTY or $type>TourneeGeneric_lines::TYPE_TOURNEE) {
+			if (
+					$type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT && ($fk_soc==0 || $fk_soc==-1)
+				|| $type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR && ($fk_soc==0 || $fk_soc==-1)
+				|| $type == TourneeGeneric_lines::TYPE_TOURNEE && ($fk_tournee_incluse==0 or $fk_tournee_incluse==-1)
+				|| $type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT && $type != TourneeGeneric_lines::TYPE_TOURNEE && $type != TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR
+			) {
 				$this->error=get_class($this)."::addline ".$langs->Trans('ErreurTdLAddLineType');
 							$this->errors=array('ErreurTypeNonRemplitOuTypeNonValide');
 							return -1;
 			}
-			if ($type  !=TourneeGeneric_lines::TYPE_TOURNEE) $fk_tournee_incluse=0;
-			elseif ($type != TourneeGeneric_lines::TYPE_TOURNEE) $fk_soc=0;
 
-			if($type == TourneeGeneric_lines::TYPE_THIRDPARTY){	// ligne de type client
+			if ($type !=TourneeGeneric_lines::TYPE_TOURNEE) $fk_tournee_incluse=0;
+			elseif ($type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT && $type != TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR ) $fk_soc=0;
+
+			if($type == TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $type == TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){	// ligne de type client
 				// le client ajouté ne doit pas être déjà présent dans la tournée
-				$sql = 'SELECT l.rowid, l.type, l.fk_soc, l.rang, l.'.$this->fk_element.'  FROM '.MAIN_DB_PREFIX.$this->table_element_line.' as l';
-				$sql.= ' WHERE l.'.$this->fk_element.' = '.$this->id.' AND l.type = '.TourneeGeneric_lines::TYPE_THIRDPARTY;
+				$sql = 'SELECT l.rowid, l.type, l.fk_soc, l.rang, l.'.$this->fk_element.'  FROM ' . MAIN_DB_PREFIX . $this->table_element_line.' as l';
+				$sql .= ' WHERE l.' . $this->fk_element . ' = ' . $this->id . ' AND ( l.type = ' . TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT . ' OR l.TYPE = ' . TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR . ')';
 
 				$result = $this->db->query($sql);
 				$error=0;
@@ -282,6 +292,7 @@ class TourneeGeneric extends TourneeObject
 			$this->line->note_private=$note_private;
 			$this->line->fk_parent_line=$fk_parent_line;
 			$this->line->rang = $rangtouse;
+			$this->line->force_email_soc= $force_email_soc;
 
 			$result=$this->line->create($user,$notrigger);
 
@@ -333,11 +344,12 @@ class TourneeGeneric extends TourneeObject
 	 *	@param		int				$rang				rang
 	 *	@param		str				$note_public			note public
 	 *	@param		str				$note_private			note private
+	 *  @param 		int       $force_email_soc   si true force l'envoi d'un email à soc
 	 * 	@param		int				$fk_parent_line		Id of parent line (0 in most cases, used by modules adding sublevels into lines).
 	 * 	@param		int				$notrigger			disable line update trigger
 	 *  @return   	int              					< 0 if KO, > 0 if OK
 	 */
-	function updateline($rowid, $type=0, $fk_soc=0,$fk_tournee_incluse=0,$BL=1,$facture=1, $etiquettes=1, $tempstheorique=0, $infolivraison='', $fk_adresselivraison=0, $note_public='', $note_private='', $rang=-1, $fk_parent_line=0, $notrigger=0)
+	function updateline($rowid, $type=0, $fk_soc=0,$fk_tournee_incluse=0,$BL=1,$facture=1, $etiquettes=1, $tempstheorique=0, $infolivraison='', $fk_adresselivraison=0, $force_email_soc=0, $note_public='', $note_private='',  $rang=-1, $fk_parent_line=0, $notrigger=0)
 	{
 		global $conf, $mysoc, $langs, $user;
 
@@ -358,6 +370,7 @@ class TourneeGeneric extends TourneeObject
 			if(empty($rang)) $rang=-1;
 			if(empty($note_public)) $note_public='';
 			if(empty($note_private)) $note_private='';
+			if(empty($force_email_soc)) $force_email_soc=0;
 
 
 
@@ -405,6 +418,7 @@ class TourneeGeneric extends TourneeObject
 			$this->line->note_private=$note_private;
 			$this->line->fk_parent_line = $fk_parent_line;
 			$this->line->rang = $rangtouse;
+			$this->line->force_email_soc= $force_email_soc;
 
 			$result=$this->line->update($user, $notrigger);
 			if ($result > 0)
@@ -434,7 +448,7 @@ class TourneeGeneric extends TourneeObject
 		}
 	}
 
-	public function addcontactline($lineid, $fk_soc=0, $fk_people=0, $note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
+	public function addcontactline($lineid, $fk_soc=0, $fk_people=0, $no_email=0, $sms=0, $note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
 	{
 		global $conf, $mysoc, $langs, $user;
 
@@ -447,13 +461,13 @@ class TourneeGeneric extends TourneeObject
 			$line->fetch($lineid);
 
 			// transmet à la ligne la demande d'ajout
-			$result = $line->addline($fk_soc, $fk_people, $note_public, $note_private, $fk_parent_line, $notrigger);
+			$result = $line->addline($fk_soc, $fk_people, $no_email, $sms, $note_public, $note_private, $fk_parent_line, $notrigger);
 
 			$this->db->commit();
 		}
 	}
 
-	public function updatecontactline($contactrowid, $fk_soc=0, $fk_people=0, $note_public='', $note_private='', $fk_parent_line=0, $notrigger=0)
+	public function updatecontactline($contactrowid, $fk_soc=0, $fk_people=0, $no_email=0, $sms=0, $note_public='', $note_private='',  $fk_parent_line=0, $notrigger=0)
 	{
 		global $conf, $mysoc, $langs, $user;
 
@@ -466,7 +480,7 @@ class TourneeGeneric extends TourneeObject
 			$line->fetch($lineid);
 
 			// transmet à la ligne la demande d'ajout
-			$result = $line->updateline($fk_soc, $fk_people, $note_public, $note_private, $fk_parent_line, $notrigger);
+			$result = $line->updateline($fk_soc, $fk_people, $note_public, $note_private, $no_email, $sms, $fk_parent_line, $notrigger);
 
 			$this->db->commit();
 		}
@@ -896,24 +910,28 @@ public function LibStatut($status, $mode=0)
 		print "<tbody>\n";
 		foreach ($this->lines as $line)
 		{
-			if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
-			 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
-						|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
-						)){
-				continue;
-			}
-			if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
-				&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
-				$ok=1;
-				foreach ($line->lines_cmde as $lcmde) {
-					if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
-							|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
-						){
-						$ok=0;
-						break;
-					}
+			// masquage des lignes suivant $this->masque_ligne
+			$c=$line->getCategories();
+			if( empty($line->note_public) && count($c)==0){ // si pas de note plublic ni de tag
+				if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+				 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
+							|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
+							)){
+					continue;
 				}
-				if(!empty($ok)) continue;
+				if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+					&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
+					$ok=1;
+					foreach ($line->lines_cmde as $lcmde) {
+						if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
+								|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
+							){
+							$ok=0;
+							break;
+						}
+					}
+					if(!empty($ok)) continue;
+				}
 			}
 			//Line extrafield
 			$line->fetch_optionals();
@@ -1076,7 +1094,7 @@ public function LibStatut($status, $mode=0)
 				$listeSoc=$line->getListeSoc($listeSoc, $params);
 
 				if($line->type == TourneeGeneric_lines::TYPE_TOURNEE) $listeSoc['tournee_tournee'][$this->rowid][]= $line->fk_tournee_incluse;
-				if($line->type == TourneeGeneric_lines::TYPE_THIRDPARTY) $listeSoc['tournee_soc'][$this->rowid][]= $line->fk_soc;
+				if($line->type == TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type == TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR) $listeSoc['tournee_soc'][$this->rowid][]= $line->fk_soc;
 			}
 		}
 		return $listeSoc;

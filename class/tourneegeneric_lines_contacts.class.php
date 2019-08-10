@@ -371,7 +371,7 @@ class TourneeGeneric_lines_contacts extends TourneeObject
 
 	public function getBannerContact($htmlkey='bannerContact%id%')
 	{
-		global $langs;
+		global $langs, $conf;
 		if( !empty($contact->rowid) ){
 			$htmlkey=str_replace("%id%",$contact->rowid,$htmlkey);
 		} else {
@@ -444,6 +444,16 @@ class TourneeGeneric_lines_contacts extends TourneeObject
 		{
 			if ($contact->facebook) $out.=dol_print_socialnetworks($contact->facebook,$contact->id,$object->id,'facebook');
 			$outdone++;
+		}
+		$out.='</div>';
+
+		$out.='<div style="clear: both;">';
+		$out .= '<input type="checkbox" name="contact'.$this->id.'_noemail" id="contact'.$this->id.'_noemail" value="contact'.$this->id.'_noemail" disabled ' . ((!empty($this->no_email))?'checked':'') . '>';
+		$out .= '<label for="contact'.$this->id.'_noemail">' . $langs->trans('noEmailAuto'). '</label>';
+
+		if (! empty($conf->global->TOURNEESDELIVRAISON_SMS)){
+			$out .= '<input type="checkbox" name="contact'.$this->id.'_sms" id="contact'.$this->id.'_sms" value="contact'.$this->id.'_sms" disabled' . ((!empty($this->sms))?'checked':'') . '>';
+			$out .= '<label for="contact'.$this->id.'_sms">' . $langs->trans('sms'). '</label>';
 		}
 		$out.='</div>';
 

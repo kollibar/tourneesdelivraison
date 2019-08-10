@@ -16,18 +16,20 @@
 
 CREATE TABLE llx_tourneedelivraison_lines_contacts(
 	-- BEGIN MODULEBUILDER FIELDS
-	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-	fk_soc integer, 
-	note_public text, 
-	note_private text, 
-	date_creation datetime NOT NULL, 
-	tms timestamp NOT NULL, 
-	fk_user_creat integer NOT NULL, 
-	fk_user_modif integer, 
-	import_key varchar(14), 
-	fk_socpeople integer, 
-	rang integer NOT NULL, 
-	fk_tournee_lines integer NOT NULL, 
-	fk_parent_line integer
+	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	fk_soc integer,
+	note_public text,
+	note_private text,
+	date_creation datetime NOT NULL,
+	tms timestamp NOT NULL,
+	fk_user_creat integer NOT NULL,
+	fk_user_modif integer,
+	import_key varchar(14),
+	fk_socpeople integer,
+	rang integer NOT NULL,
+	fk_tournee_lines integer NOT NULL,
+	fk_parent_line integer,
+	no_email integer,
+	sms integer
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

@@ -214,6 +214,8 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array("TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYUNBILLED","ouinon","0","Validation avant de supprimer le contact d'une ligne Tournée",0);
 		$r++;
+		$this->const[$r]=array("TOURNEESDELIVRAISON_SMS","ouinon","0","Active la gestion des sms",0);
+		$r++;
 
 
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DRAFT_WATERMARK', 'chaine', 'brouillon', 'Watermark brouillon sur les tournées de livraison', 1, 'allentities', 1);

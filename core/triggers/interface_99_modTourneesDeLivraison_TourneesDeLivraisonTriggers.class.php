@@ -154,6 +154,8 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 		    //case 'ORDER_CREATE':
 		    //case 'ORDER_MODIFY':
 		    case 'ORDER_VALIDATE':
+					dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
+					dol_include_once('/tourneesdelivraison/class/tourneeunique_lines.class.php');
 					$object->fetchObjectLinked();
 
 					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
@@ -229,6 +231,8 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 					break;
 		    //case 'BILL_MODIFY':
 		    case 'BILL_VALIDATE':
+					dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
+					dol_include_once('/tourneesdelivraison/class/tourneeunique_lines.class.php');
 					$object->fetchObjectLinked();
 
 					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
@@ -321,6 +325,8 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 					break;
 		    //case 'SHIPPING_MODIFY':
 		    case 'SHIPPING_VALIDATE':
+					dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
+					dol_include_once('/tourneesdelivraison/class/tourneeunique_lines.class.php');
 					$object->fetchObjectLinked();
 
 					if(!empty($object->linkedObjectsIds['tourneesdelivraison'])){
@@ -338,7 +344,7 @@ class InterfaceTourneesDeLivraisonTriggers extends DolibarrTriggers
 			//case 'SHIPPING_DELETE':
 			//	break;
 			default:
-		        dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
+		        //dol_syslog("Trigger '".$this->name."' for action '$action' launched by ".__FILE__.". id=".$object->id);
 		        break;
 		    }
 

@@ -78,10 +78,15 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	<?php
 
-		if ($line->type==0){
+		if ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
 	?>
 			<td align="left" class="linecolclient nowrap"><?php $coldisplay++; ?>
-				<?php echo $line->getBannerAddressSociete('bannerSociete_'.$line->id); ?>
+				<?php echo $line->getBannerAddressSociete('bannerSociete_'.$line->id); ?><br>
+
+				<?php if(!empty($line->force_email_soc)) {?>
+					<input type="checkbox" name="force_email_soc_"<?php echo $line->id;?> id="force_email_soc_"<?php echo $line->id;?> value="1" disabled <?php echo empty($line->force_email_soc)?'':'checked' ?> >
+					<label for="force_email_soc_"<?php echo $line->id;?> > <?php echo $langs->trans('ajoutMailAuto'); ?> </label>
+				<?php } ?>
 
 				<?php if( !empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
 
@@ -112,6 +117,17 @@ $domData .= ' data-id="'.$line->id.'"';
 								<td>
 									<?php $ret=$form->select_contacts($line->fk_soc, '', 'addcontactid_'.$line->id, 1, $liste, '',0,'', 0,0,array(), false,'',''); ?>
 								</td><?php if($ret-count($liste)>0){ ?>
+								<td>
+									<?php
+										print '<input type="checkbox" name="addcontactid_'.$line->id.'_noemail" id="addcontactid_'.$line->id.'_noemail" value="addcontactid_'.$line->id.'_noemail"' . ((!empty($this->no_email))?'checked':'') . ' >';
+										print '<label for="addcontactid_'.$line->id.'_noemail">' . $langs->trans('noEmailAuto'). '</label>';
+
+										if (! empty($conf->global->TOURNEESDELIVRAISON_SMS)){
+											print '<input type="checkbox" name="addcontactid_'.$line->id.'_sms" id="addcontactid_'.$line->id.'_sms" value="addcontactid_'.$line->id.'_sms"' . ((!empty($this->no_email))?'checked':'') . 'disabled >';
+											print '<label for="addcontactid_'.$line->id.'_sms">' . $langs->trans('sms'). '</label>';
+										}
+									?>
+								</td>
 								<td>
 									<input type="submit" class="button" value="<?php echo $langs->Trans("AjouterContact"); ?>" name="addcontact_<?php echo $line->id; ?>" id="addcontact_<?php echo $line->id; ?>" <?php  echo (($ret-count($liste)<=0)?'disabled':'')?>>
 								</td><?php } ?>
@@ -148,6 +164,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	if( $line->element != 'tourneeunique_lines' || $parent->statut == STATUS_DRAFT){ ?>
 	<td align="right" class="linecoldocs nowrap"><?php $coldisplay++; ?>
+		<?php if($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT){ ?>
 		<table class="noborderbottom">
 			<tr><td>
 				<label for="BL1_<?php echo $line->id; ?>"><?php echo $langs->trans('BL'); ?></label>
@@ -163,6 +180,7 @@ $domData .= ' data-id="'.$line->id.'"';
 				<input type="checkbox" id="etiquettes_<?php echo $line->id; ?>" name="etiquettes_<?php echo $line->id; ?>" disabled <?php echo ($line->etiquettes>0)?'checked':'' ?> >
 			</td></tr>
 		</table>
+	<?php } ?>
 	</td>
 <?php } ?>
 

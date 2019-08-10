@@ -62,10 +62,10 @@ $coldisplay=2;
 <td class="nobottom linecolclient" align="left" width="5">
 <span class="tournee_line_type_thirdparty">
 	<label for="tournee_line_type_thirdparty">
-		<input type="radio" class="tournee_line_type_thirdparty" name="tournee_line_type_thirdparty" id="tournee_line_type_thirdparty" value="thirdparty"  <?php echo (GETPOST('tournee_line_type')=='thirdparty'?' checked':''); ?> >
+		<input type="radio" class="tournee_line_type_thirdparty" name="tournee_line_type_thirdparty_client" id="tournee_line_type_thirdparty_client" value="client"  <?php echo (GETPOST('tournee_line_type')=='client'?' checked':''); ?> >
 		<?php echo $langs->trans('Customer'); ?>
 	</label>
-	<?php echo $form->select_company('', 'socid', '(s.client = 1 OR s.client = 3) AND s.status = 1', 'SelectThirdParty', 0, 0, null, 0, 'minwidth300');
+	<?php echo $form->select_company('', 'socid_client', '(s.client = 1 OR s.client = 3) AND s.status = 1', 'SelectThirdParty', 0, 0, null, 0, 'minwidth300');
 							//string	$selected	Preselected type
 							//string	$htmlname	Name of field in form
 							//string	$filter	Optional filters criteras (example: 's.rowid <> x', 's.client in (1,3)')
@@ -80,7 +80,14 @@ $coldisplay=2;
 							//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
 							//bool	$multiple	add [] in the name of element and add 'multiple' attribut
 	?>
-</span>
+</span></br>
+<span class="tournee_line_type_thirdparty">
+	<label for="tournee_line_type_thirdparty_fournisseur">
+		<input type="radio" class="tournee_line_type_thirdparty" name="tournee_line_type_thirdparty_fournisseur" id="tournee_line_type_thirdparty_fournisseur" value="fournisseur"  <?php echo (GETPOST('tournee_line_type')=='fournisseur'?' checked':''); ?> >
+		<?php echo $langs->trans('Supplier'); ?>
+	</label>
+	<?php echo $form->select_company('', 'socid_fournisseur', 's.fournisseur = 1 AND s.status = 1', 'SelectThirdParty_fournisseur', 0, 0, null, 0, 'minwidth300'); ?>
+</span></br>
 <span class="tournee_line_type_tournee">
 	<label for="tournee_line_type_tournee">
 		<input type="radio" class="tournee_line_type_tournee" name="tournee_line_type_tournee" id="tournee_line_type_tournee" value="tournee" <?php echo (GETPOST('tournee_line_type')=='tournee'?' checked':''); ?>>
@@ -100,6 +107,10 @@ $coldisplay=2;
 							//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
 							//bool	$multiple	add [] in the name of element and add 'multiple' attribut
 	?>
+</span></br>
+<span>
+  <input type="checkbox" name="force_email_soc" id="force_email_soc" value="1" >
+  <label for="force_email_soc"> <?php echo $langs->trans('ajoutMailAuto'); ?> </label>
 </span>
 </td>
 
@@ -180,8 +191,11 @@ $coldisplay=2;
 
 /* JQuery for product free or predefined select */
 jQuery(document).ready(function() {
-	$("#tournee_line_type_thirdparty").on( "click", function() {
-		setfor3party();
+	$("#tournee_line_type_thirdparty_client").on( "click", function() {
+		setfor3party_client();
+	});
+  $("#tournee_line_type_thirdparty_fournisseur").on( "click", function() {
+		setfor3party_fournisseur();
 	});
 	$("#tournee_line_type_tournee").on( "click", function() {
 		setfortournee();
@@ -226,23 +240,42 @@ function BL1choix(){
 }
 
 /* Function to set fields from choice */
-function setfor3party() {
+function setfor3party_client() {
 	console.log("Call set3party. We show most fields");
 	/*jQuery("#search_idprod").val('');
 	jQuery("#idprod").val('');
 	jQuery("#idprodfournprice").val('0');	// Set cursor on not selected product
 	jQuery("#search_idprodfournprice").val('');*/
-	jQuery("#tournee_line_type_thirdparty").prop('checked',true).change();
+	jQuery("#tournee_line_type_thirdparty_client").prop('checked',true).change();
+  jQuery("#tournee_line_type_thirdparty_fournisseur").prop('checked',false).change();
 	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
-	jQuery("#BL").show();
+	jQuery("#BL1").show();
+	jQuery("#BL2").show();
 	jQuery("#facture").show();
 	jQuery("#etiquettes").show();
 	jQuery("#tempstheorique").show();
 	jQuery("#infolivraison").show();
 }
+function setfor3party_fournisseur() {
+	console.log("Call set3party_fournisseur. We show most fields");
+	/*jQuery("#search_idprod").val('');
+	jQuery("#idprod").val('');
+	jQuery("#idprodfournprice").val('0');	// Set cursor on not selected product
+	jQuery("#search_idprodfournprice").val('');*/
+	jQuery("#tournee_line_type_thirdparty_fournisseur").prop('checked',true).change();
+	jQuery("#tournee_line_type_thirdparty_client").prop('checked',false).change();
+	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
+  jQuery("#BL1").hide();
+  jQuery("#BL2").hide();
+	jQuery("#facture").hide();
+	jQuery("#etiquettes").hide();
+	jQuery("#tempstheorique").hide();
+	jQuery("#infolivraison").hide();
+}
 function setfortournee() {
 	console.log("Call setfortournee. We hide some fields and show dates");
-	jQuery("#tournee_line_type_thirdparty").prop('checked',false).change();
+	jQuery("#tournee_line_type_thirdparty_client").prop('checked',false).change();
+  jQuery("#tournee_line_type_thirdparty_fournisseur").prop('checked',false).change();
 	jQuery("#tournee_line_type_tournee").prop('checked',true).change();
 
 	/*jQuery("#price_ht").val('').hide();
@@ -252,7 +285,8 @@ function setfortournee() {
 	jQuery("#tva_tx").hide();
 	jQuery("#buying_price").show();
 	jQuery("#title_vat").hide();*/
-	jQuery("#BL").hide();
+	jQuery("#BL1").hide();
+	jQuery("#BL2").hide();
 	jQuery("#facture").hide();
 	jQuery("#etiquettes").hide();
 	jQuery("#tempstheorique").hide();
