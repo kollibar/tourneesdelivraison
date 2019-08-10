@@ -393,7 +393,7 @@ if (($id || $ref) && $action == 'edit') {
 	// date de la tournée et référence à la tournée de livraison liée (si tournée unique)
 	if( $typetournee == 'tourneeunique'){
 		$object->field_create('date_tournee', 'edit');
-		if( !emtpy($object->fk_tourneedelivraison)){
+		if( !empty($object->fk_tourneedelivraison)){
 			$object->field_create('date_prochaine', 'edit');
 			$object->field_view('fk_tourneedelivraison');
 		} else {
@@ -614,7 +614,12 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// date de la tournée (si tournée unique)
 	if( $typetournee == 'tourneeunique'){
 		$object->field_view('date_tournee', true);
-		if( !empty($object->fk_tourneedelivraison)) $object->field_view('fk_tourneedelivraison', false);
+		if( !empty($object->fk_tourneedelivraison)) {
+			$object->field_view('fk_tourneedelivraison', false);
+			$object->field_view('date_prochaine');
+		}
+	} else if($typetournee == 'tourneedelivraison'){
+		$object->field_view('date_prochaine');
 	}
 
 	//description

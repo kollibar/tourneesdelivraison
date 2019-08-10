@@ -65,8 +65,7 @@
 	// Action to update record	// A FAIRE / MODIFIER
 	else if ($action == 'update' && ! empty($permissiontoadd))
 	{
-		foreach ($object->fields as $key => $val)
-		{
+		foreach ($object->fields as $key => $val) {
 			if (! GETPOSTISSET($key)) continue;		// The field was not submited to be edited
 			if (in_array($key, array('rowid', 'entity', 'date_creation', 'tms', 'fk_user_creat', 'fk_user_modif', 'import_key'))) continue;	// Ignore special fields
 
@@ -95,10 +94,23 @@
 
 		if (! $error)
 		{
+      if(!empty($object->fk_tourneedelivraison)){
+        $tourneedelivraison =  new TourneeDeLivraison($object->db);
+        $tourneedelivraison->fetch($object->fk_tourneedelivraison);
+
+        $key='date_tournee';
+        $object->ref=$tourneedelivraison->ref.GETPOST($key.'year').GETPOST($key.'month').GETPOST($key.'day');
+      }
+
 			$result=$object->update($user);
 			if ($result > 0)
 			{
 				$action='view';
+
+        if( !empty($object->fk_tourneedelivraison)){
+          $tourneedelivraison->date_prochaine=$object->date_prochaine;
+          $tourneedelivraison->update($user);
+        }
 
 				// Prevent categorie's emptying if a user hasn't rights $user->rights->categorie->lire (in such a case, post of 'custcats' is not defined)
 				if (! $error && !empty($user->rights->categorie->lire))

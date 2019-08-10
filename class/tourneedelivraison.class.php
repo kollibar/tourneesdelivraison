@@ -224,7 +224,7 @@ class TourneeDeLivraison extends TourneeGeneric
 
 			$object->km=$this->km;
 			$object->dureeTrajet = $this->dureeTrajet;
-			$object->date_prochaine = $this->date_prochaine;
+			$object->date_tournee = $this->date_prochaine;
 
 			$object->ae_1elt_par_cmde=$this->ae_1elt_par_cmde;
 			$object->ae_1ere_future_cmde=$this->ae_1ere_future_cmde;
