@@ -266,24 +266,7 @@ function setfor3party_client() {
   $("#tourneeincluseid").val("-1").change();
 
   if( $("#socid_client").val()!=-1 && $("#socid_client").val()!=0){
-    var fk_soc=$("#socid_client").val();
-    if( listeContact.has(fk_soc)){
-      alert("en mémoire");
-      $("#td_adresselivraisonid").html(listeContact.get(fk_soc)).change();
-    } else {
-    <?php
-    $r=explode("/",$_SERVER["PHP_SELF" ]);
-    $r[]=$r[count($r)-1];
-    $r[count($r)-2]="ajax";
-    $url=implode("/",$r);
-    ?>
-      $.get("<?php echo $url."?id=$object->id&action=ajax_actualiseFormAddressLivraison&new_fk_soc=";?>"+fk_soc, function(data, status){
-        if( status=="success"){
-          $("#td_adresselivraisonid").html(data).change();
-          listeContact.set(fk_soc,data);
-        }
-      });
-    }
+    loadAdresseLivraison($("#socid_client").val());
   }
 }
 function setfor3party_fournisseur() {
@@ -301,6 +284,9 @@ function setfor3party_fournisseur() {
 
   $("#socid_client").val("-1").change();
   $("#tourneeincluseid").val("-1").change();
+  if( $("#socid_fournisseur").val()!=-1 && $("#socid_fournisseur").val()!=0){
+    loadAdresseLivraison($("#socid_fournisseur").val());
+  }
 }
 function setfortournee() {
 	console.log("Call setfortournee. We hide some fields and show dates");
@@ -322,6 +308,27 @@ function setfortournee() {
 
   $("#socid_fournisseur").val("-1").change();
   $("#socid_client").val("-1").change();
+
+  $("#td_adresselivraisonid").html("").change();
+}
+
+function loadAdresseLivraison(fk_soc){
+  if( listeContact.has(fk_soc)){
+    $("#td_adresselivraisonid").html(listeContact.get(fk_soc)).change();
+  } else {
+    <?php
+      $r=explode("/",$_SERVER["PHP_SELF" ]);
+      $r[]=$r[count($r)-1];
+      $r[count($r)-2]="ajax";
+      $url=implode("/",$r);
+    ?>
+    $.get("<?php echo $url."?id=$object->id&action=ajax_actualiseFormAddressLivraison&new_fk_soc=";?>"+fk_soc, function(data, status){
+      if( status=="success"){
+        $("#td_adresselivraisonid").html(data).change();
+        listeContact.set(fk_soc,data);
+      }
+    });
+  }
 }
 
 </script>
