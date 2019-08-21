@@ -383,6 +383,7 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
             $contact = new Contact($this->db);
             $contact->fetch($object->lines[$i]->fk_adresselivraison);
             $contact->fetch_optionals();
+            $usecontact=1;
           }
 
           $expedition=array();
