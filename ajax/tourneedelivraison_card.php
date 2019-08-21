@@ -44,7 +44,6 @@ if (! $res && file_exists("../../main.inc.php")) $res=@include "../../main.inc.p
 if (! $res && file_exists("../../../main.inc.php")) $res=@include "../../../main.inc.php";
 if (! $res) die("Include of main fails");
 
-
 $tpl = dol_buildpath('/tourneesdelivraison/ajax/tournee_card.php');
 
 if (empty($conf->file->strict_mode)) {

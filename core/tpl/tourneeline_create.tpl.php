@@ -80,14 +80,14 @@ $coldisplay=2;
 							//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
 							//bool	$multiple	add [] in the name of element and add 'multiple' attribut
 	?>
-</span></br>
+</span><br />
 <span class="tournee_line_type_thirdparty">
 	<label for="tournee_line_type_thirdparty_fournisseur">
 		<input type="radio" class="tournee_line_type_thirdparty" name="tournee_line_type_thirdparty_fournisseur" id="tournee_line_type_thirdparty_fournisseur" value="fournisseur"  <?php echo (GETPOST('tournee_line_type')=='fournisseur'?' checked':''); ?> >
 		<?php echo $langs->trans('Supplier'); ?>
 	</label>
 	<?php echo $form->select_company('', 'socid_fournisseur', 's.fournisseur = 1 AND s.status = 1', 'SelectThirdParty_fournisseur', 0, 0, null, 0, 'minwidth300'); ?>
-</span></br>
+</span><br />
 <span class="tournee_line_type_tournee">
 	<label for="tournee_line_type_tournee">
 		<input type="radio" class="tournee_line_type_tournee" name="tournee_line_type_tournee" id="tournee_line_type_tournee" value="tournee" <?php echo (GETPOST('tournee_line_type')=='tournee'?' checked':''); ?>>
@@ -107,7 +107,7 @@ $coldisplay=2;
 							//string	$moreparam	Add more parameters onto the select tag. For example 'style="width: 95%"' to avoid select2 component to go over parent container
 							//bool	$multiple	add [] in the name of element and add 'multiple' attribut
 	?>
-</span></br>
+</span><br />
 <span>
   <input type="checkbox" name="force_email_soc" id="force_email_soc" value="1" >
   <label for="force_email_soc"> <?php echo $langs->trans('ajoutMailAuto'); ?> </label>
@@ -115,7 +115,7 @@ $coldisplay=2;
 </td>
 
 <td align="right" class="linecoldocs nowrap"><?php $coldisplay++; ?>
-		<table>
+		<table id="tabledocs">
 			<tr><td>
 				<label for="BL1"><?php echo $langs->trans('BL'); ?></label>
 				<input type="checkbox" name="BL1" id="BL1" value="BL1">
@@ -174,9 +174,9 @@ $coldisplay=2;
     </table>
   </td>
 
-	<td class="nobottom linecoladresselivraison" align="right">
-		<?php //remettre le champs $form_>select_contact en mettant un système pour actualisé les valeurs en fon,ction  du socid . comment ??
-		//$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'',''); ?>
+	<td class="nobottom linecoladresselivraison" id="td_adresselivraisonid" align="right">
+		<?php //remplit par ajax après selection d'une société
+		?>
 	</td>
 
 	<td class="nobottom linecoledit" align="center" valign="middle">
@@ -188,6 +188,8 @@ $coldisplay=2;
 
 
 <script type="text/javascript">
+
+var listeContact = new Map();
 
 /* JQuery for product free or predefined select */
 jQuery(document).ready(function() {
@@ -208,8 +210,11 @@ jQuery(document).ready(function() {
 		BL1choix();
 	});
 
-	$("#socid").on( "change", function() {
+	$("#socid_client").on( "change", function() {
 		changeClient();
+	});
+  $("#socid_fournisseur").on( "change", function() {
+		changeFournisseur();
 	});
 	$("#tourneeincluseid").on( "change", function() {
 		changeTourneeIncluse();
@@ -225,11 +230,14 @@ jQuery(document).ready(function() {
 });
 
 function changeClient(){
-	if( $("socid").val()!=-1 && $("socid").val()!=0) setfor3party();
+	if( $("#socid_client").val()!=-1 && $("#socid_client").val()!=0) setfor3party_client();
+}
+function changeFournisseur(){
+	if( $("#socid_fournisseur").val()!=-1 && $("#socid_fournisseur").val()!=0) setfor3party_fournisseur();
 }
 
 function changeTourneeIncluse(){
-	if( $("tourneeincluseid").val()!=-1 && $("tourneeincluseid").val()!=0) setfortournee();
+	if( $("#tourneeincluseid").val()!=-1 && $("#tourneeincluseid").val()!=0) setfortournee();
 }
 
 function BL1choix(){
@@ -249,12 +257,34 @@ function setfor3party_client() {
 	jQuery("#tournee_line_type_thirdparty_client").prop('checked',true).change();
   jQuery("#tournee_line_type_thirdparty_fournisseur").prop('checked',false).change();
 	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
-	jQuery("#BL1").show();
-	jQuery("#BL2").show();
-	jQuery("#facture").show();
-	jQuery("#etiquettes").show();
+
+  jQuery("#tabledocs").show();
 	jQuery("#tempstheorique").show();
 	jQuery("#infolivraison").show();
+
+  $("#socid_fournisseur").val("-1").change();
+  $("#tourneeincluseid").val("-1").change();
+
+  if( $("#socid_client").val()!=-1 && $("#socid_client").val()!=0){
+    var fk_soc=$("#socid_client").val();
+    if( listeContact.has(fk_soc)){
+      alert("en mémoire");
+      $("#td_adresselivraisonid").html(listeContact.get(fk_soc)).change();
+    } else {
+    <?php
+    $r=explode("/",$_SERVER["PHP_SELF" ]);
+    $r[]=$r[count($r)-1];
+    $r[count($r)-2]="ajax";
+    $url=implode("/",$r);
+    ?>
+      $.get("<?php echo $url."?id=$object->id&action=ajax_actualiseFormAddressLivraison&new_fk_soc=";?>"+fk_soc, function(data, status){
+        if( status=="success"){
+          $("#td_adresselivraisonid").html(data).change();
+          listeContact.set(fk_soc,data);
+        }
+      });
+    }
+  }
 }
 function setfor3party_fournisseur() {
 	console.log("Call set3party_fournisseur. We show most fields");
@@ -265,12 +295,12 @@ function setfor3party_fournisseur() {
 	jQuery("#tournee_line_type_thirdparty_fournisseur").prop('checked',true).change();
 	jQuery("#tournee_line_type_thirdparty_client").prop('checked',false).change();
 	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
-  jQuery("#BL1").hide();
-  jQuery("#BL2").hide();
-	jQuery("#facture").hide();
-	jQuery("#etiquettes").hide();
-	jQuery("#tempstheorique").hide();
-	jQuery("#infolivraison").hide();
+  jQuery("#tabledocs").hide();
+	jQuery("#tempstheorique").show();
+	jQuery("#infolivraison").show();
+
+  $("#socid_client").val("-1").change();
+  $("#tourneeincluseid").val("-1").change();
 }
 function setfortournee() {
 	console.log("Call setfortournee. We hide some fields and show dates");
@@ -285,12 +315,13 @@ function setfortournee() {
 	jQuery("#tva_tx").hide();
 	jQuery("#buying_price").show();
 	jQuery("#title_vat").hide();*/
-	jQuery("#BL1").hide();
-	jQuery("#BL2").hide();
-	jQuery("#facture").hide();
-	jQuery("#etiquettes").hide();
+	jQuery("#tabledocs").hide();
 	jQuery("#tempstheorique").hide();
 	jQuery("#infolivraison").hide();
+
+
+  $("#socid_fournisseur").val("-1").change();
+  $("#socid_client").val("-1").change();
 }
 
 </script>

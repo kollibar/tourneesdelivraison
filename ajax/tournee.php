@@ -54,8 +54,7 @@ dol_syslog(join(',', $_GET));
 
 dol_include_once('/tourneesdelivraison/class/html.formtourneesdelivraison.class.php');
 
-if (! empty($action) && $action == 'fetch' && ! empty($id))
-{
+if (! empty($action) && $action == 'fetch' && ! empty($id)) {
 	dol_include_once('/tourneesdelivraison/class/'.$typetournee.'.class.php');
 
 	$outjson=array();
@@ -63,7 +62,7 @@ if (! empty($action) && $action == 'fetch' && ! empty($id))
 	if($typetournee=='tourneedelivraison') $object = new TourneeDeLivraison($db);
 	elseif ($typetournee=='tourneeunique') $object= new TourneeUnique($db);
 	else die('');
-	
+
 	$ret=$object->fetch($id);
 	if ($ret > 0)
 	{
@@ -76,9 +75,7 @@ if (! empty($action) && $action == 'fetch' && ! empty($id))
 	}
 
 	echo json_encode($outjson);
-}
-else
-{
+} else {
 	require_once DOL_DOCUMENT_ROOT.'/core/class/html.form.class.php';
 
 	$langs->load("tourneesdelivraison");
@@ -103,4 +100,3 @@ else
 
 	if ($outjson) print json_encode($arrayresult);
 }
-

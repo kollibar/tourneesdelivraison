@@ -144,9 +144,9 @@ $domData .= ' data-id="'.$line->id.'"';
 </td>
 
 	<td align="right" class="linecoladresselivraison nowrap"><?php $coldisplay++; ?>
-		<input type="hidden" value="0" id="adresselivraisonid" name="adresselivraisonid">
-		<?php //remettre le champs $form_>select_contact en mettant un système pour actualisé les valeurs en fon,ction  du socid
-		//$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'',''); ?>
+		<?php
+			$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'','');
+		?>
 	</td>
 
 	<?php if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
