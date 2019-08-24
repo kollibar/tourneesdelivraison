@@ -99,7 +99,7 @@
         $tourneedelivraison->fetch($object->fk_tourneedelivraison);
 
         $key='date_tournee';
-        $object->ref=$tourneedelivraison->ref.GETPOST($key.'year').GETPOST($key.'month').GETPOST($key.'day');
+        $object->ref=$tourneedelivraison->ref.GETPOST($key.'year').(GETPOST($key.'month')<10?'0':'').GETPOST($key.'month').(GETPOST($key.'day')<10?'0':'').GETPOST($key.'day');
       }
 
 			$result=$object->update($user);
