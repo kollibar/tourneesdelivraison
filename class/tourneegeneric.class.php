@@ -402,7 +402,7 @@ class TourneeGeneric extends TourneeObject
 			{
 				$rangmax = $this->line_max($fk_parent_line);
 				$this->line->rang = $rangmax + 1;
-			}
+			} else $this->line->rang=$rang;
 
 			$this->line->fk_rowid = $fk_rowid;
 			$this->line->type=$type;
@@ -417,7 +417,6 @@ class TourneeGeneric extends TourneeObject
 			$this->line->note_public=$note_public;
 			$this->line->note_private=$note_private;
 			$this->line->fk_parent_line = $fk_parent_line;
-			$this->line->rang = $rangtouse;
 			$this->line->force_email_soc= $force_email_soc;
 
 			$result=$this->line->update($user, $notrigger);
