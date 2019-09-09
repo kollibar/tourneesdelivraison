@@ -206,6 +206,8 @@ else if( ($action == 'updateline'|| substr($action,0,9) == 'editline_') && !empt
       $force_email_soc = GETPOST('force_email_soc');
       if( empty($force_email_soc)) $force_email_soc = 0;
 
+
+
       $result = $object->updateline($lineid, $line->type, $line->fk_soc, $line->fk_tournee_incluse, $BL, $facture, $etiquettes, $tempstheorique, $infolivraison, $fk_adresselivraison, $force_email_soc, $note_public, $note_private, $line->rang);
 
       if ($result > 0) {
