@@ -437,7 +437,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	public function checkElt(User $user){
 		// parcours de toutes les ligne cmde
 		if( $this->type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) return;
-		
+
 		foreach ($this->lines_cmde as $lcmde) {
 			if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK){
 				$lcmde->checkElt($user);
@@ -570,6 +570,8 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 		$totalOrdered=0;
 		$totalToShip=0;
 		foreach ($this->lines_cmde as $line) {
+			if( $line->statut != TourneeUnique_lines_cmde::DATE_OK && $line->statut != TourneeUnique_lines_cmde::DATE_NON_OK ) continue;
+
 			$ret=$line->getTotalWeightVolume($type);
 			$totalWeight += $ret['weight'];
 			$totalVolume += $ret['volume'];

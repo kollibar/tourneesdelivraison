@@ -891,6 +891,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		$totalToShip=0;
 		if($type == "shipping" || $type=="facture"){
 			foreach ($this->lines as $line) {
+				if( $line->statut != TourneeUnique_lines_cmde::DATE_OK && $line->statut != TourneeUnique_lines_cmde::DATE_NON_OK ) continue;
 				$ret=$line->getTotalWeightVolume($type);
 				$totalWeight += $ret['weight'];
 				$totalVolume += $ret['volume'];
