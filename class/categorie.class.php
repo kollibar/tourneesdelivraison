@@ -1861,6 +1861,20 @@ class Categorie extends CommonObject{
   return CommonObject::commonReplaceThirdparty($db, $origin_id, $dest_id, $tables, 1);
   }
 
+  /**
+  * Function used to check if an object support tags
+  *
+  * @param void
+  * @return bool
+  */
+  public function checkCategoriePourObjet($type){
+    if (! is_numeric($type) && ! array_key_exists($type,$this->MAP_ID)
+      || ! array_key_exists($type,$this->MAP_CAT_TABLE)
+      ) return false ;
+
+    return true;
+  }
+
 
   public function cloneToAnotherObject(User $user, $new_type){
     if( !empty($this->fk_parent)){

@@ -516,13 +516,18 @@ class TourneeObject extends CommonObject
 		$type_id=$this->element;
 		$type_text=$this->element;
 
+
+
 		// Handle single category
 		if (!is_array($categories)) {
 			$categories = array($categories);
 		}
 
+
 		// Get current categories
 		$c = new Categorie($this->db);
+		if( ! $c->checkCategoriePourObjet($type)) return 1;
+
 		$existing = $c->containing($this->id, $type_id, 'id');
 
 		// Diff
@@ -574,6 +579,8 @@ public function getCategories()
 
 	// Get current categories
 	$c = new Categorie($this->db);
+	if( ! $c->checkCategoriePourObjet($type)) return array();
+
 	$existing = $c->containing($this->id, $this->element, 'id');
 
 	return $existing;

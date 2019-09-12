@@ -218,7 +218,8 @@ $domData .= ' data-id="'.$line->id.'"';
 							}
 						}
 						echo '</table>';
-					} else {
+					}
+					if( ! $lcmde->estLivreCompletement() ){
 						// Ship
 						if ($cmde->statut > Commande::STATUS_DRAFT && $cmde->statut < Commande::STATUS_CLOSED && ($cmde->getNbOfProductsLines() > 0 || !empty($conf->global->STOCK_SUPPORTS_SERVICES))) {
 							if (($conf->expedition_bon->enabled && $user->rights->expedition->creer) || ($conf->livraison_bon->enabled && $user->rights->expedition->livraison->creer)) {

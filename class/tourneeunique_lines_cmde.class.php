@@ -515,6 +515,13 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $out;
 	}
 
+	/**
+	*	Retourne l'objet Tournee parent
+	*
+	*	@param  void
+	*	@return	TourneeUnique
+	*/
+
 	public function getTournee(){
 		if( empty($this->tournee)){
 			$parent=$this->getParent();
@@ -523,12 +530,48 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		return $this->tournee;
 	}
 
+	/**
+	*	Retourne l'objet parent
+	*
+	*	@param  void
+	*	@return	TourneeUnique_lines
+	*/
+
 	public function getParent(){
 		if( empty($this->parent)){
 			$this->parent=new TourneeUnique_lines($this->db);;
 			$this->parent->fetch($this->fk_tournee_lines);
 		}
 		return $this->parent;
+	}
+
+/**
+*	récupère la liste des expeditions liées à cette commandes
+*
+*	@param  void
+*	@return	array contenant la liste des id d'expedition
+*/
+	public function getAllExpeditionObjCmde(){
+		$sql = 'SELECT t.fk_source, t.sourcetype, t.fk_target, t.targettype';
+		$sql .= ' FROM ' . MAIN_DB_PREFIX . 'element_element as t';
+		$sql .= ' WHERE t.fk_source = '. $this->fk_commande . ' AND t.sourcetype = "commande" AND t.targettype = "shipping"';
+
+		dol_syslog(get_class($this)."::checkElt", LOG_DEBUG);
+		$result = $this->db->query($sql);
+		$error=0;
+		if ($result) { // query sql succés
+			$result=array();
+			$num = $this->db->num_rows($result);
+			$i = 0;
+			// parcours de la requête
+			while ($i < $num) {
+				$objp = $this->db->fetch_object($result);
+				$result[]=$objp->fk_target;
+				$i++;
+			}
+		} else $result=array();
+
+		return $result;
 	}
 
 	public function checkElt(User $user){
@@ -557,7 +600,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 					if( $line_elt->fk_elt == $objp->fk_target && $line_elt->type_element == $objp->targettype) {
 						$tulce=$line_cmde;
 						$tulce->fait=1;
-						if( $tulce->statut == TourneeUnique_lines_cmde_elt::INUTILE ) {	// si elle avais le styatut inutile, réinitialisation de son styatut
+						if( $tulce->statut == TourneeUnique_lines_cmde_elt::INUTILE ) {	// si elle avais le statut inutile, réinitialisation de son styatut
 							if( $tulce->type_element == 'shipping'){	// cas d'une expédition
 								$elt=$tulce->loadElt();
 								// vérification de la date
@@ -666,11 +709,12 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		}
 
 		// si affectation -> vérification que n'est pas déjà affecté ailleurs
+		/*
 		if( $affectation == self::DATE_OK or $affectation == self::DATE_NON_OK){
 			$result=$this->dejaAffecte();
 			if( $result === -1) return -3; //erreur lors de la vérif si déjà affectée
 			if( $result === true ) return -4; //impossible d'affecter: déjà affecté!
-		}
+		}*/
 
 		$old_affectation=$this->statut;
 		$this->statut=$affectation;
@@ -701,6 +745,41 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		}
 
 		return 1;
+
+	}
+/**
+* vérifie si la commande est entièrement en livraison
+*
+* @param void
+* @return boolean
+*/
+
+	public function estLivreCompletement(){
+		$this->loadElt();
+
+		$prod=array();
+
+		foreach ($this->elt->lines as $line) {
+			$prod[$line->fk_product]=$line->qty;
+		}
+
+		$listeExp=$this->getAllExpeditionObjCmde();
+
+		foreach ($listeExp as $fk_exp) {
+			$exp = new Expedition($this->db);
+			$exp->fetch($fk_exp);
+			$exp->fetch_optionals();
+			foreach ($exp->lines as $line) {
+				if( array_key_exists($line->fk_product, $prod) ){
+					$prod[$line->fk_product]-=$line->qty;
+				}
+			}
+		}
+		foreach ($prod as $fk_prod => $qty) {
+			if($qty>0) return false;
+		}
+
+		return true;
 
 	}
 
