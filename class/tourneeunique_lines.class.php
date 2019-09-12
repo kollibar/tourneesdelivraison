@@ -476,7 +476,9 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 					if( $line_cmde->statut != TourneeUnique_lines_cmde::INUTILE && $line_cmde->statut != TourneeUnique_lines_cmde::AUTRE_AFFECTATION
 						&& ($lcmde == null
 							|| $line_cmde->getTimestamp() > $ajd && $line_cmde->getTimestamp() < $lcmde->getTimestamp())
-						&& ! $line_cmde->dejaAffecte()) {
+						&& ( ! $line_cmde->dejaAffecte()
+								|| $line_cmde->dejaAffecte() && ! $line_cmde->estLivreCompletement())
+						) {
 						$lcmde=$line_cmde;
 					}
 				}
