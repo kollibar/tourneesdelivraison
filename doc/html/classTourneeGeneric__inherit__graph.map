@@ -1,0 +1,5 @@
+<map id="TourneeGeneric" name="TourneeGeneric">
+<area shape="rect" id="node4" href="$classTourneeDeLivraison.html" title="TourneeDeLivraison" alt="" coords="5,229,144,256"/>
+<area shape="rect" id="node5" href="$classTourneeUnique.html" title="TourneeUnique" alt="" coords="169,229,279,256"/>
+<area shape="rect" id="node2" href="$classTourneeObject.html" title="TourneeObject" alt="" coords="96,80,203,107"/>
+</map>

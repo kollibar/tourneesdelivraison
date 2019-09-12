@@ -1,0 +1,351 @@
+\hypertarget{classTourneeObject}{}\section{Référence de la classe Tournee\+Object}
+\label{classTourneeObject}\index{Tournee\+Object@{Tournee\+Object}}
+
+
+Est dérivée de Common\+Object.
+
+
+
+Dérivée par \hyperlink{classTourneeGeneric}{Tournee\+Generic}, \hyperlink{classTourneeGeneric__lines}{Tournee\+Generic\+\_\+lines}, \hyperlink{classTourneeGeneric__lines__contacts}{Tournee\+Generic\+\_\+lines\+\_\+contacts}, \hyperlink{classTourneeUnique__lines__cmde}{Tournee\+Unique\+\_\+lines\+\_\+cmde}, et \hyperlink{classTourneeUnique__lines__cmde__elt}{Tournee\+Unique\+\_\+lines\+\_\+cmde\+\_\+elt}.
+
+\subsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTourneeObject_ab9d8bb7b8b6e5ddbdad0686ec58f2cff}{\+\_\+\+\_\+construct} (Doli\+DB \$db, \$parent=null)
+\item 
+\hyperlink{classTourneeObject_a7e7abdc1526aff2aa479a69d556c2e33}{fetch} (\$id, \$ref=null)
+\item 
+\hyperlink{classTourneeObject_af36a3b3e99489f3476c2a7833f98fc99}{fetch\+\_\+lines} ()
+\item 
+\hyperlink{classTourneeObject_a6a9976287b0875d6557c6cc9d4ae68f6}{fetch\+All} (\$sortorder=\textquotesingle{}\textquotesingle{}, \$sortfield=\textquotesingle{}\textquotesingle{}, \$limit=0, \$offset=0, array \$filter=array(), \$filtermode=\textquotesingle{}A\+ND\textquotesingle{})
+\item 
+\hyperlink{classTourneeObject_a8d652020470deae2373d86509dcc86ea}{delete} (User \$user, \$notrigger=false)
+\item 
+\hyperlink{classTourneeObject_a46c3bb645f096ebf1668a76f7fea0595}{deletelines} (User \$user, \$notrigger=false)
+\item 
+\hyperlink{classTourneeObject_a9b71233f3654dbf3ed935ecbef106e4a}{create} (User \$user, \$notrigger=false)
+\item 
+\hyperlink{classTourneeObject_a3391a48883a2ff7f6862d1f0195beaf7}{update} (User \$user, \$notrigger=false)
+\item 
+\mbox{\Hypertarget{classTourneeObject_aacb648b3fd86a4978e06caa92fcebeb5}\label{classTourneeObject_aacb648b3fd86a4978e06caa92fcebeb5}} 
+{\bfseries check\+Defaut} ()
+\item 
+\hyperlink{classTourneeObject_a92abf5c0eb6c1c07aa18e1d9923cb808}{get\+Nom\+Url} (\$withpicto=0, \$option=\textquotesingle{}\textquotesingle{}, \$notooltip=0, \$morecss=\textquotesingle{}\textquotesingle{}, \$save\+\_\+lastsearch\+\_\+value=-\/1)
+\item 
+\hyperlink{classTourneeObject_a15de2c8fefd05e6d54d50e7508538216}{get\+Lib\+Statut} (\$mode=0)
+\item 
+\hyperlink{classTourneeObject_a7c0fc621023d578afd8e5c6ee785fd19}{Lib\+Statut} (\$status, \$mode=0)
+\item 
+\hyperlink{classTourneeObject_a846f4cdedd2f2f6353d55470740f55c3}{info} (\$id)
+\item 
+\hyperlink{classTourneeObject_a57c9b21299fbc8f8ead42fdc48da105b}{init\+As\+Specimen} ()
+\item 
+\hyperlink{classTourneeObject_a7d1b14c0a0716433c556867ffd3e0494}{do\+Scheduled\+Job} ()
+\item 
+\hyperlink{classTourneeObject_ac12b04b14ae684119d7701e52382b5a8}{set\+Categories} (\$categories)
+\item 
+\hyperlink{classTourneeObject_a932240236e5582fbfbe3672320f58d0f}{get\+Categories} ()
+\item 
+\mbox{\Hypertarget{classTourneeObject_adf457290caae2e22905d43edcf95b9fc}\label{classTourneeObject_adf457290caae2e22905d43edcf95b9fc}} 
+{\bfseries supprimer\+Categories} (\$categories)
+\item 
+\mbox{\Hypertarget{classTourneeObject_a526064f892779bb9651300ac9fb6435f}\label{classTourneeObject_a526064f892779bb9651300ac9fb6435f}} 
+{\bfseries copy\+Categorie\+From\+Object} (User \$user, \$object)
+\item 
+\hyperlink{classTourneeObject_aa4e5b605ee9f763520b6e052568e9b4a}{create\+From\+Clone} (User \$user, \$fromid, \$fk\+\_\+parent=null, \$parentid=0)
+\item 
+\mbox{\Hypertarget{classTourneeObject_ac0a8139009a5cd78e4a64154e05797e1}\label{classTourneeObject_ac0a8139009a5cd78e4a64154e05797e1}} 
+{\bfseries field\+\_\+view} (\$key, \$editable=false)
+\item 
+\mbox{\Hypertarget{classTourneeObject_af73f8e582beb2e8a227aee1faee27852}\label{classTourneeObject_af73f8e582beb2e8a227aee1faee27852}} 
+{\bfseries field\+\_\+create} (\$key, \$mode=\textquotesingle{}\hyperlink{classTourneeObject_a9b71233f3654dbf3ed935ecbef106e4a}{create}\textquotesingle{}, \$width=\textquotesingle{}\textquotesingle{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Documentation des constructeurs et destructeur}
+\mbox{\Hypertarget{classTourneeObject_ab9d8bb7b8b6e5ddbdad0686ec58f2cff}\label{classTourneeObject_ab9d8bb7b8b6e5ddbdad0686ec58f2cff}} 
+\index{Tournee\+Object@{Tournee\+Object}!\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}}
+\index{\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Tournee\+Object\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{Doli\+DB}]{\$db,  }\item[{}]{\$parent = {\ttfamily null} }\end{DoxyParamCaption})}
+
+Constructor
+
+
+\begin{DoxyParams}[1]{Paramètres}
+Doli\+Db & {\em \$db} & Database handler \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Documentation des fonctions membres}
+\mbox{\Hypertarget{classTourneeObject_a9b71233f3654dbf3ed935ecbef106e4a}\label{classTourneeObject_a9b71233f3654dbf3ed935ecbef106e4a}} 
+\index{Tournee\+Object@{Tournee\+Object}!create@{create}}
+\index{create@{create}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Tournee\+Object\+::create (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$notrigger = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Create object into database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+User & {\em \$user} & User that creates \\
+\hline
+bool & {\em \$notrigger} & false=launch triggers after, true=disable triggers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, Id of created object if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_aa4e5b605ee9f763520b6e052568e9b4a}\label{classTourneeObject_aa4e5b605ee9f763520b6e052568e9b4a}} 
+\index{Tournee\+Object@{Tournee\+Object}!create\+From\+Clone@{create\+From\+Clone}}
+\index{create\+From\+Clone@{create\+From\+Clone}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{create\+From\+Clone()}{createFromClone()}}
+{\footnotesize\ttfamily Tournee\+Object\+::create\+From\+Clone (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$fromid,  }\item[{}]{\$fk\+\_\+parent = {\ttfamily null},  }\item[{}]{\$parentid = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Clone and object into another one
+
+
+\begin{DoxyParams}[1]{Paramètres}
+User & {\em \$user} & User that creates \\
+\hline
+int & {\em \$fromid} & Id of object to clone \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+mixed New object created, $<$0 if KO 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a8d652020470deae2373d86509dcc86ea}\label{classTourneeObject_a8d652020470deae2373d86509dcc86ea}} 
+\index{Tournee\+Object@{Tournee\+Object}!delete@{delete}}
+\index{delete@{delete}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{delete()}{delete()}}
+{\footnotesize\ttfamily Tournee\+Object\+::delete (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$notrigger = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Delete object in database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+User & {\em \$user} & User that deletes \\
+\hline
+bool & {\em \$notrigger} & false=launch triggers after, true=disable triggers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a46c3bb645f096ebf1668a76f7fea0595}\label{classTourneeObject_a46c3bb645f096ebf1668a76f7fea0595}} 
+\index{Tournee\+Object@{Tournee\+Object}!deletelines@{deletelines}}
+\index{deletelines@{deletelines}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{deletelines()}{deletelines()}}
+{\footnotesize\ttfamily Tournee\+Object\+::deletelines (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$notrigger = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Delete all lines
+
+\begin{DoxyReturn}{Renvoie}
+int $>$0 if OK, $<$0 if KO 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a7d1b14c0a0716433c556867ffd3e0494}\label{classTourneeObject_a7d1b14c0a0716433c556867ffd3e0494}} 
+\index{Tournee\+Object@{Tournee\+Object}!do\+Scheduled\+Job@{do\+Scheduled\+Job}}
+\index{do\+Scheduled\+Job@{do\+Scheduled\+Job}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{do\+Scheduled\+Job()}{doScheduledJob()}}
+{\footnotesize\ttfamily Tournee\+Object\+::do\+Scheduled\+Job (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Action executed by scheduler C\+AN BE A C\+R\+ON T\+A\+SK. In such a case, paramerts come from the schedule job setup field \textquotesingle{}Parameters\textquotesingle{}
+
+\begin{DoxyReturn}{Renvoie}
+int 0 if OK, $<$$>$0 if KO (this function is used also by cron so only 0 is OK) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a7e7abdc1526aff2aa479a69d556c2e33}\label{classTourneeObject_a7e7abdc1526aff2aa479a69d556c2e33}} 
+\index{Tournee\+Object@{Tournee\+Object}!fetch@{fetch}}
+\index{fetch@{fetch}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{fetch()}{fetch()}}
+{\footnotesize\ttfamily Tournee\+Object\+::fetch (\begin{DoxyParamCaption}\item[{}]{\$id,  }\item[{}]{\$ref = {\ttfamily null} }\end{DoxyParamCaption})}
+
+Load object in memory from the database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$id} & Id object \\
+\hline
+string & {\em \$ref} & Ref \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, 0 if not found, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_af36a3b3e99489f3476c2a7833f98fc99}\label{classTourneeObject_af36a3b3e99489f3476c2a7833f98fc99}} 
+\index{Tournee\+Object@{Tournee\+Object}!fetch\+\_\+lines@{fetch\+\_\+lines}}
+\index{fetch\+\_\+lines@{fetch\+\_\+lines}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{fetch\+\_\+lines()}{fetch\_lines()}}
+{\footnotesize\ttfamily Tournee\+Object\+::fetch\+\_\+lines (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Load object line in memory from the database
+
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a6a9976287b0875d6557c6cc9d4ae68f6}\label{classTourneeObject_a6a9976287b0875d6557c6cc9d4ae68f6}} 
+\index{Tournee\+Object@{Tournee\+Object}!fetch\+All@{fetch\+All}}
+\index{fetch\+All@{fetch\+All}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{fetch\+All()}{fetchAll()}}
+{\footnotesize\ttfamily Tournee\+Object\+::fetch\+All (\begin{DoxyParamCaption}\item[{}]{\$sortorder = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$sortfield = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$limit = {\ttfamily 0},  }\item[{}]{\$offset = {\ttfamily 0},  }\item[{array}]{\$filter = {\ttfamily array()},  }\item[{}]{\$filtermode = {\ttfamily \textquotesingle{}AND\textquotesingle{}} }\end{DoxyParamCaption})}
+
+Load list of objects in memory from the database.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$sortorder} & Sort Order \\
+\hline
+string & {\em \$sortfield} & Sort field \\
+\hline
+int & {\em \$limit} & limit \\
+\hline
+int & {\em \$offset} & Offset \\
+\hline
+array & {\em \$filter} & Filter array. Example array(\textquotesingle{}field\textquotesingle{}=$>$\textquotesingle{}valueforlike\textquotesingle{}, \textquotesingle{}customurl\textquotesingle{}=$>$...) \\
+\hline
+string & {\em \$filtermode} & Filter mode (A\+ND or OR) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+array$\vert$int int $<$0 if KO, array of pages if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a932240236e5582fbfbe3672320f58d0f}\label{classTourneeObject_a932240236e5582fbfbe3672320f58d0f}} 
+\index{Tournee\+Object@{Tournee\+Object}!get\+Categories@{get\+Categories}}
+\index{get\+Categories@{get\+Categories}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{get\+Categories()}{getCategories()}}
+{\footnotesize\ttfamily Tournee\+Object\+::get\+Categories (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Sets object to supplied categories.
+
+Deletes object from existing categories not supplied. Adds it to non existing supplied categories. Existing categories are left untouch.
+
+\begin{DoxyReturn}{Renvoie}
+int\mbox{[}\mbox{]} Array of Categories I\+Ds 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a15de2c8fefd05e6d54d50e7508538216}\label{classTourneeObject_a15de2c8fefd05e6d54d50e7508538216}} 
+\index{Tournee\+Object@{Tournee\+Object}!get\+Lib\+Statut@{get\+Lib\+Statut}}
+\index{get\+Lib\+Statut@{get\+Lib\+Statut}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{get\+Lib\+Statut()}{getLibStatut()}}
+{\footnotesize\ttfamily Tournee\+Object\+::get\+Lib\+Statut (\begin{DoxyParamCaption}\item[{}]{\$mode = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return label of the status
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$mode} & 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string Label of status 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a92abf5c0eb6c1c07aa18e1d9923cb808}\label{classTourneeObject_a92abf5c0eb6c1c07aa18e1d9923cb808}} 
+\index{Tournee\+Object@{Tournee\+Object}!get\+Nom\+Url@{get\+Nom\+Url}}
+\index{get\+Nom\+Url@{get\+Nom\+Url}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{get\+Nom\+Url()}{getNomUrl()}}
+{\footnotesize\ttfamily Tournee\+Object\+::get\+Nom\+Url (\begin{DoxyParamCaption}\item[{}]{\$withpicto = {\ttfamily 0},  }\item[{}]{\$option = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$notooltip = {\ttfamily 0},  }\item[{}]{\$morecss = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$save\+\_\+lastsearch\+\_\+value = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+Return a link to the object card (with optionaly the picto)
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$withpicto} & Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto) \\
+\hline
+string & {\em \$option} & On what the link point to (\textquotesingle{}nolink\textquotesingle{}, ...) \\
+\hline
+int & {\em \$notooltip} & 1=Disable tooltip \\
+\hline
+string & {\em \$morecss} & Add more css on link \\
+\hline
+int & {\em \$save\+\_\+lastsearch\+\_\+value} & -\/1=Auto, 0=No save of lastsearch\+\_\+values when clicking, 1=Save lastsearch\+\_\+values whenclicking \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string String with U\+RL 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a846f4cdedd2f2f6353d55470740f55c3}\label{classTourneeObject_a846f4cdedd2f2f6353d55470740f55c3}} 
+\index{Tournee\+Object@{Tournee\+Object}!info@{info}}
+\index{info@{info}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily Tournee\+Object\+::info (\begin{DoxyParamCaption}\item[{}]{\$id }\end{DoxyParamCaption})}
+
+Charge les informations d\textquotesingle{}ordre info dans l\textquotesingle{}objet commande
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$id} & Id of order \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a57c9b21299fbc8f8ead42fdc48da105b}\label{classTourneeObject_a57c9b21299fbc8f8ead42fdc48da105b}} 
+\index{Tournee\+Object@{Tournee\+Object}!init\+As\+Specimen@{init\+As\+Specimen}}
+\index{init\+As\+Specimen@{init\+As\+Specimen}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{init\+As\+Specimen()}{initAsSpecimen()}}
+{\footnotesize\ttfamily Tournee\+Object\+::init\+As\+Specimen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialise object with example values Id must be 0 if object instance is a specimen
+
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a7c0fc621023d578afd8e5c6ee785fd19}\label{classTourneeObject_a7c0fc621023d578afd8e5c6ee785fd19}} 
+\index{Tournee\+Object@{Tournee\+Object}!Lib\+Statut@{Lib\+Statut}}
+\index{Lib\+Statut@{Lib\+Statut}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{Lib\+Statut()}{LibStatut()}}
+{\footnotesize\ttfamily Tournee\+Object\+::\+Lib\+Statut (\begin{DoxyParamCaption}\item[{}]{\$status,  }\item[{}]{\$mode = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return the status
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$status} & Id status \\
+\hline
+int & {\em \$mode} & 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string Label of status 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_ac12b04b14ae684119d7701e52382b5a8}\label{classTourneeObject_ac12b04b14ae684119d7701e52382b5a8}} 
+\index{Tournee\+Object@{Tournee\+Object}!set\+Categories@{set\+Categories}}
+\index{set\+Categories@{set\+Categories}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{set\+Categories()}{setCategories()}}
+{\footnotesize\ttfamily Tournee\+Object\+::set\+Categories (\begin{DoxyParamCaption}\item[{}]{\$categories }\end{DoxyParamCaption})}
+
+Sets object to supplied categories.
+
+Deletes object from existing categories not supplied. Adds it to non existing supplied categories. Existing categories are left untouch.
+
+
+\begin{DoxyParams}{Paramètres}
+{\em int\mbox{[}$\,$\mbox{]}$\vert$int} & \$categories Category ID or array of Categories I\+Ds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeObject_a3391a48883a2ff7f6862d1f0195beaf7}\label{classTourneeObject_a3391a48883a2ff7f6862d1f0195beaf7}} 
+\index{Tournee\+Object@{Tournee\+Object}!update@{update}}
+\index{update@{update}!Tournee\+Object@{Tournee\+Object}}
+\subsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily Tournee\+Object\+::update (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$notrigger = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Update object into database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+User & {\em \$user} & User that modifies \\
+\hline
+bool & {\em \$notrigger} & false=launch triggers after, true=disable triggers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+class/tourneeobject.\+class.\+php\end{DoxyCompactItemize}

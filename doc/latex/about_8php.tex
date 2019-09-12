@@ -1,0 +1,51 @@
+\hypertarget{about_8php}{}\section{Référence du fichier admin/about.php}
+\label{about_8php}\index{admin/about.\+php@{admin/about.\+php}}
+
+
+About page of module Tournees\+De\+Livraison.  
+
+
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{about_8php_a49a8a4009b02e49717caa88b128affc5}\label{about_8php_a49a8a4009b02e49717caa88b128affc5}} 
+{\bfseries \$res} =0
+\item 
+\mbox{\Hypertarget{about_8php_a57024d47cf8348153f5fdda16f8fefa9}\label{about_8php_a57024d47cf8348153f5fdda16f8fefa9}} 
+{\bfseries \$tmp} =empty(\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]})?\textquotesingle{}\textquotesingle{}\+:\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{about_8php_aed9bcb6730d1510376ce80e32bd9504d}\label{about_8php_aed9bcb6730d1510376ce80e32bd9504d}} 
+{\bfseries \$tmp2} =realpath(\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+)
+\item 
+\mbox{\Hypertarget{about_8php_a83018d9153d17d91fbcf3bc10158d34f}\label{about_8php_a83018d9153d17d91fbcf3bc10158d34f}} 
+{\bfseries \$i} =strlen(\$tmp)-\/1
+\item 
+\mbox{\Hypertarget{about_8php_a6f16db779ef3ccea921b277b5dc245d1}\label{about_8php_a6f16db779ef3ccea921b277b5dc245d1}} 
+{\bfseries \$j} =strlen(\$tmp2)-\/1
+\item 
+\mbox{\Hypertarget{about_8php_aa698a3e72116e8e778be0e95d908ee30}\label{about_8php_aa698a3e72116e8e778be0e95d908ee30}} 
+{\bfseries \$action} = G\+E\+T\+P\+O\+ST(\textquotesingle{}action\textquotesingle{}, \textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{about_8php_a71552e61097747f0d8e8288daf9be44d}\label{about_8php_a71552e61097747f0d8e8288daf9be44d}} 
+{\bfseries \$backtopage} = G\+E\+T\+P\+O\+ST(\textquotesingle{}backtopage\textquotesingle{}, \textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{about_8php_a1a4fda4c28a9ee5f91102c023b9501f4}\label{about_8php_a1a4fda4c28a9ee5f91102c023b9501f4}} 
+{\bfseries \$form} = new Form(\$db)
+\item 
+\mbox{\Hypertarget{about_8php_adc3f16c3b03bc755ab09d40e79211d08}\label{about_8php_adc3f16c3b03bc755ab09d40e79211d08}} 
+{\bfseries \$page\+\_\+name} = \char`\"{}Tournees\+De\+Livraison\+About\char`\"{}
+\item 
+\mbox{\Hypertarget{about_8php_aa8a538bac04922850b15c7460fb1bfc7}\label{about_8php_aa8a538bac04922850b15c7460fb1bfc7}} 
+{\bfseries \$linkback} = \textquotesingle{}$<$a href=\char`\"{}\textquotesingle{}.(\$backtopage?\$backtopage\+:\+D\+O\+L\+\_\+\+U\+R\+L\+\_\+\+R\+O\+O\+T.\textquotesingle{}/admin/modules.\+php?restore\+\_\+lastsearch\+\_\+values=1\textquotesingle{}).\textquotesingle{}\char`\"{}$>$\textquotesingle{}.\$langs-\/$>$trans(\char`\"{}Back\+To\+Module\+List\char`\"{}).\textquotesingle{}$<$/a$>$\textquotesingle{}
+\item 
+\mbox{\Hypertarget{about_8php_a687ea7fcd78263867b5bd34ed56b6379}\label{about_8php_a687ea7fcd78263867b5bd34ed56b6379}} 
+{\bfseries \$head} = tourneesdelivraison\+Admin\+Prepare\+Head()
+\item 
+\mbox{\Hypertarget{about_8php_a2b7b465d78d9b8379a9ec8070a5c4bb3}\label{about_8php_a2b7b465d78d9b8379a9ec8070a5c4bb3}} 
+{\bfseries \$tmpmodule} = new \hyperlink{classmodTourneesDeLivraison}{mod\+Tournees\+De\+Livraison}(\$db)
+\end{DoxyCompactItemize}
+
+
+\subsection{Description détaillée}
+About page of module Tournees\+De\+Livraison. 
+

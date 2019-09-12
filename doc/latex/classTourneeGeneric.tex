@@ -1,0 +1,495 @@
+\hypertarget{classTourneeGeneric}{}\section{Référence de la classe Tournee\+Generic}
+\label{classTourneeGeneric}\index{Tournee\+Generic@{Tournee\+Generic}}
+
+
+Est dérivée de \hyperlink{classTourneeObject}{Tournee\+Object}.
+
+
+
+Dérivée par \hyperlink{classTourneeDeLivraison}{Tournee\+De\+Livraison}, et \hyperlink{classTourneeUnique}{Tournee\+Unique}.
+
+\subsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTourneeGeneric_a3fc9031d22ff4fb9a9e1707780f670b6}{actualise\+\_\+infoG} ()
+\item 
+\hyperlink{classTourneeGeneric_adc718dcdaf08e4f883cab901d88286e8}{fetch\+\_\+lines} ()
+\item 
+\hyperlink{classTourneeGeneric_a011b211a5a70aac1d8bd559d0db8bf7f}{deleteline} (\$user=null, \$lineid=0)
+\item 
+\hyperlink{classTourneeGeneric_a677b4ec88b34669b307441d9c068ca1c}{addline} (\$type, \$fk\+\_\+soc=0, \$fk\+\_\+tournee\+\_\+incluse=0, \$BL=1, \$facture=1, \$etiquettes=1, \$tempstheorique=0, \$infolivraison=\textquotesingle{}\textquotesingle{}, \$fk\+\_\+adresselivraison=0, \$force\+\_\+email\+\_\+soc=0, \$note\+\_\+public=\textquotesingle{}\textquotesingle{}, \$note\+\_\+private=\textquotesingle{}\textquotesingle{}, \$rang=-\/1, \$fk\+\_\+parent\+\_\+line=0, \$notrigger=0)
+\item 
+\hyperlink{classTourneeGeneric_ad74c7f751188c8020857aac6b20d8a8f}{updateline} (\$rowid, \$type=0, \$fk\+\_\+soc=0, \$fk\+\_\+tournee\+\_\+incluse=0, \$BL=1, \$facture=1, \$etiquettes=1, \$tempstheorique=0, \$infolivraison=\textquotesingle{}\textquotesingle{}, \$fk\+\_\+adresselivraison=0, \$force\+\_\+email\+\_\+soc=0, \$note\+\_\+public=\textquotesingle{}\textquotesingle{}, \$note\+\_\+private=\textquotesingle{}\textquotesingle{}, \$rang=-\/1, \$fk\+\_\+parent\+\_\+line=0, \$notrigger=0)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a7a5f1c5670260e48bd2684c682553d87}\label{classTourneeGeneric_a7a5f1c5670260e48bd2684c682553d87}} 
+{\bfseries addcontactline} (\$lineid, \$fk\+\_\+soc=0, \$fk\+\_\+people=0, \$no\+\_\+email=0, \$sms=0, \$note\+\_\+public=\textquotesingle{}\textquotesingle{}, \$note\+\_\+private=\textquotesingle{}\textquotesingle{}, \$fk\+\_\+parent\+\_\+line=0, \$notrigger=0)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_afb0339c6db7b9ebc5e9ddac1b4c71705}\label{classTourneeGeneric_afb0339c6db7b9ebc5e9ddac1b4c71705}} 
+{\bfseries updatecontactline} (\$contactrowid, \$fk\+\_\+soc=0, \$fk\+\_\+people=0, \$no\+\_\+email=0, \$sms=0, \$note\+\_\+public=\textquotesingle{}\textquotesingle{}, \$note\+\_\+private=\textquotesingle{}\textquotesingle{}, \$fk\+\_\+parent\+\_\+line=0, \$notrigger=0)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_aeb51187de4861989bef62e4a185f539c}\label{classTourneeGeneric_aeb51187de4861989bef62e4a185f539c}} 
+{\bfseries deletecontactline} (User \$user=null, \$contactlineid)
+\item 
+\hyperlink{classTourneeGeneric_a10a64e1dda4704a4e06881b3c91a4d70}{get\+Lines\+Array} ()
+\item 
+\hyperlink{classTourneeGeneric_aad2a54dc58e21b6cb5b134700998778c}{fetch\+All} (\$sortorder=\textquotesingle{}\textquotesingle{}, \$sortfield=\textquotesingle{}\textquotesingle{}, \$limit=0, \$offset=0, array \$filter=array(), \$filtermode=\textquotesingle{}A\+ND\textquotesingle{})
+\item 
+\hyperlink{classTourneeGeneric_a384bb4a87b8c4ba69be3903e0e1997a7}{get\+Nom\+Url} (\$withpicto=0, \$option=\textquotesingle{}\textquotesingle{}, \$notooltip=0, \$morecss=\textquotesingle{}\textquotesingle{}, \$save\+\_\+lastsearch\+\_\+value=-\/1)
+\item 
+\hyperlink{classTourneeGeneric_a467dafa411ddc3d1832546590280e295}{Lib\+Statut} (\$status, \$mode=0)
+\item 
+\hyperlink{classTourneeGeneric_a134eebbb26416c1ed75176beb6288f5d}{init\+As\+Specimen} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_af7f3eb439fe8a30e7d28069c140de262}\label{classTourneeGeneric_af7f3eb439fe8a30e7d28069c140de262}} 
+{\bfseries get\+Rights} ()
+\item 
+\hyperlink{classTourneeGeneric_acf58f9823680a80f041a90a23017c460}{print\+Tournee\+Lines} (\$action, \$seller, \$selected=0, \$date\+Selector=0)
+\item 
+\hyperlink{classTourneeGeneric_a1a07c23b1527eec5c606b63551f29446}{print\+Tournee\+Line} (\$action, \$line, \$var, \$num, \$i, \$date\+Selector, \$seller, \$selected=0, \$extrafieldsline=0)
+\item 
+\hyperlink{classTourneeGeneric_a9bc89936bc1d2c3e6c561075d4fff784}{form\+Add\+Tournee\+Line} (\$seller)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_aa1a68282c8efd4030f945583bd06839d}\label{classTourneeGeneric_aa1a68282c8efd4030f945583bd06839d}} 
+{\bfseries get\+Liste\+Soc} (\$liste\+Soc=\mbox{[}$\,$\mbox{]}, \$params=\mbox{[}$\,$\mbox{]})
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a1955081803d88cdec54542ccab435945}\label{classTourneeGeneric_a1955081803d88cdec54542ccab435945}} 
+{\bfseries genere\+Mail\+To\+From\+Liste\+Mail} (\$liste\+Soc)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_adde6879d00a1b58d3ba6983cbe198f8d}\label{classTourneeGeneric_adde6879d00a1b58d3ba6983cbe198f8d}} 
+{\bfseries mailto\+To\+All} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a514eefa11f6a0ddf31c9f9ff77c3c9a4}\label{classTourneeGeneric_a514eefa11f6a0ddf31c9f9ff77c3c9a4}} 
+{\bfseries field\+\_\+view} (\$key, \$editable=false)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a88463f78c29cb435d0c4814fbb5390bc}\label{classTourneeGeneric_a88463f78c29cb435d0c4814fbb5390bc}} 
+{\bfseries field\+\_\+create} (\$key, \$mode=\textquotesingle{}\hyperlink{classTourneeObject_a9b71233f3654dbf3ed935ecbef106e4a}{create}\textquotesingle{}, \$width=\textquotesingle{}\textquotesingle{})
+\item 
+\hyperlink{classTourneeGeneric_a756e32cfc9bb433beaba3dfc224603ba}{show\+Input\+Field} (\$val, \$key, \$value, \$moreparam=\textquotesingle{}\textquotesingle{}, \$keysuffix=\textquotesingle{}\textquotesingle{}, \$keyprefix=\textquotesingle{}\textquotesingle{}, \$morecss=0)
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_af98a434d793d284c1e29914ba852bd07}\label{classTourneeGeneric_af98a434d793d284c1e29914ba852bd07}} 
+{\bfseries get\+Line\+By\+Id} (\$lineid)
+\item 
+\hyperlink{classTourneeGeneric_aecb57833a3e70efc929500f09368ddd5}{generate\+Document} (\$modele, \$outputlangs, \$hidedetails=0, \$hidedesc=0, \$hideref=0, \$moreparams=null)
+\item 
+\hyperlink{classTourneeGeneric_a7e7c1ca874ff21c27902d409f1dbf666}{fetch\+\_\+origin} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a9b0680e32be14c22797846d550494bb6}\label{classTourneeGeneric_a9b0680e32be14c22797846d550494bb6}} 
+{\bfseries get\+Tournee} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a977d48e795402711f194422d557ae551}\label{classTourneeGeneric_a977d48e795402711f194422d557ae551}} 
+{\bfseries generate\+All\+Documents} (\$modellist, \$outputlangs, \$hidedetails, \$hidedesc, \$hideref, \$moreparams=\textquotesingle{}\textquotesingle{})
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a63c97c6846e62328edabae097676f8e1}\label{classTourneeGeneric_a63c97c6846e62328edabae097676f8e1}} 
+{\bfseries delete\+All\+Documents} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_aefb3505d279b48d85b83c70b17f74030}\label{classTourneeGeneric_aefb3505d279b48d85b83c70b17f74030}} 
+{\bfseries print\+Recap} ()
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_a8e057877d2db261e8b2f430c9982933f}\label{classTourneeGeneric_a8e057877d2db261e8b2f430c9982933f}} 
+{\bfseries supprimer\+Categories\+Lines} (\$categories)
+\end{DoxyCompactItemize}
+\subsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{classTourneeGeneric_a3aedfebda4df17691d9183dbbeadd28a}{S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED} = -\/1
+\item 
+const \hyperlink{classTourneeGeneric_ab9791c4f2cee457bf1971fe344c7e955}{S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT} = 0
+\item 
+const \hyperlink{classTourneeGeneric_a47330ed89033f9602c7c932113233e27}{S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED} = 1
+\item 
+const \hyperlink{classTourneeGeneric_a43ec4261c3697b774ef86110b3d37a2b}{S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED} = 3
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_accfa2f657dfefd23ffbf7000d5596c80}\label{classTourneeGeneric_accfa2f657dfefd23ffbf7000d5596c80}} 
+{\bfseries \$element} = \textquotesingle{}tourneegeneric\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTourneeGeneric_abbd225ce1e88166a462c8a26f9260daf}\label{classTourneeGeneric_abbd225ce1e88166a462c8a26f9260daf}} 
+{\bfseries \$nomelement} = \textquotesingle{}\hyperlink{classTourneeGeneric}{Tournee\+Generic}\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Documentation des fonctions membres}
+\mbox{\Hypertarget{classTourneeGeneric_a3fc9031d22ff4fb9a9e1707780f670b6}\label{classTourneeGeneric_a3fc9031d22ff4fb9a9e1707780f670b6}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!actualise\+\_\+infoG@{actualise\+\_\+infoG}}
+\index{actualise\+\_\+infoG@{actualise\+\_\+infoG}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{actualise\+\_\+info\+G()}{actualise\_infoG()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::actualise\+\_\+infoG (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Actualise les info générales de la tournée
+
+A F\+A\+I\+RE (par exemple calcul d\textquotesingle{}itinéraire, temps, nb de km ...)
+
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a677b4ec88b34669b307441d9c068ca1c}\label{classTourneeGeneric_a677b4ec88b34669b307441d9c068ca1c}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!addline@{addline}}
+\index{addline@{addline}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{addline()}{addline()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::addline (\begin{DoxyParamCaption}\item[{}]{\$type,  }\item[{}]{\$fk\+\_\+soc = {\ttfamily 0},  }\item[{}]{\$fk\+\_\+tournee\+\_\+incluse = {\ttfamily 0},  }\item[{}]{\$\+BL = {\ttfamily 1},  }\item[{}]{\$facture = {\ttfamily 1},  }\item[{}]{\$etiquettes = {\ttfamily 1},  }\item[{}]{\$tempstheorique = {\ttfamily 0},  }\item[{}]{\$infolivraison = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$fk\+\_\+adresselivraison = {\ttfamily 0},  }\item[{}]{\$force\+\_\+email\+\_\+soc = {\ttfamily 0},  }\item[{}]{\$note\+\_\+public = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$note\+\_\+private = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$rang = {\ttfamily -\/1},  }\item[{}]{\$fk\+\_\+parent\+\_\+line = {\ttfamily 0},  }\item[{}]{\$notrigger = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Add a line in database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$rowid} & Id of line to update \\
+\hline
+int & {\em \$type} & Type of line (1=Tiers, 1=Tournee incluse) \\
+\hline
+int & {\em \$fk\+\_\+soc} & id societe (0 si pas ) \\
+\hline
+int & {\em \$fk\+\_\+tournee\+\_\+incluse} & id tournee de livraison incluse (0 si pas ) \\
+\hline
+int & {\em \$\+BL} & nb de BL à imprimer \\
+\hline
+int & {\em \$facture} & nb de facture à imprimer \\
+\hline
+int & {\em \$tempstheorique} & temps théorique \\
+\hline
+str & {\em \$infolivraison} & info livraison \\
+\hline
+int & {\em \$rang} & rang \\
+\hline
+str & {\em \$note\+\_\+public} & note public \\
+\hline
+str & {\em \$note\+\_\+private} & note private \\
+\hline
+int & {\em \$force\+\_\+email\+\_\+soc} & si true force l\textquotesingle{}envoi d\textquotesingle{}un email à soc \\
+\hline
+int & {\em \$fk\+\_\+parent\+\_\+line} & Id of parent line (0 in most cases, used by modules adding sublevels into lines). \\
+\hline
+int & {\em \$notrigger} & disable line update trigger \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$ 0 if KO, $>$ 0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a011b211a5a70aac1d8bd559d0db8bf7f}\label{classTourneeGeneric_a011b211a5a70aac1d8bd559d0db8bf7f}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!deleteline@{deleteline}}
+\index{deleteline@{deleteline}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{deleteline()}{deleteline()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::deleteline (\begin{DoxyParamCaption}\item[{}]{\$user = {\ttfamily null},  }\item[{}]{\$lineid = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Delete an order line
+
+
+\begin{DoxyParams}[1]{Paramètres}
+User & {\em \$user} & User object \\
+\hline
+int & {\em \$lineid} & Id of line to delete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $>$0 if OK, 0 if nothing to do, $<$0 if KO 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_adc718dcdaf08e4f883cab901d88286e8}\label{classTourneeGeneric_adc718dcdaf08e4f883cab901d88286e8}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!fetch\+\_\+lines@{fetch\+\_\+lines}}
+\index{fetch\+\_\+lines@{fetch\+\_\+lines}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{fetch\+\_\+lines()}{fetch\_lines()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::fetch\+\_\+lines (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Load object line in memory from the database
+
+\begin{DoxyReturn}{Renvoie}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a7e7c1ca874ff21c27902d409f1dbf666}\label{classTourneeGeneric_a7e7c1ca874ff21c27902d409f1dbf666}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!fetch\+\_\+origin@{fetch\+\_\+origin}}
+\index{fetch\+\_\+origin@{fetch\+\_\+origin}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{fetch\+\_\+origin()}{fetch\_origin()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::fetch\+\_\+origin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Read linked origin object
+
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_aad2a54dc58e21b6cb5b134700998778c}\label{classTourneeGeneric_aad2a54dc58e21b6cb5b134700998778c}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!fetch\+All@{fetch\+All}}
+\index{fetch\+All@{fetch\+All}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{fetch\+All()}{fetchAll()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::fetch\+All (\begin{DoxyParamCaption}\item[{}]{\$sortorder = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$sortfield = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$limit = {\ttfamily 0},  }\item[{}]{\$offset = {\ttfamily 0},  }\item[{array}]{\$filter = {\ttfamily array()},  }\item[{}]{\$filtermode = {\ttfamily \textquotesingle{}AND\textquotesingle{}} }\end{DoxyParamCaption})}
+
+Load list of objects in memory from the database.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$sortorder} & Sort Order \\
+\hline
+string & {\em \$sortfield} & Sort field \\
+\hline
+int & {\em \$limit} & limit \\
+\hline
+int & {\em \$offset} & Offset \\
+\hline
+array & {\em \$filter} & Filter array. Example array(\textquotesingle{}field\textquotesingle{}=$>$\textquotesingle{}valueforlike\textquotesingle{}, \textquotesingle{}customurl\textquotesingle{}=$>$...) \\
+\hline
+string & {\em \$filtermode} & Filter mode (A\+ND or OR) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+array$\vert$int int $<$0 if KO, array of pages if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a9bc89936bc1d2c3e6c561075d4fff784}\label{classTourneeGeneric_a9bc89936bc1d2c3e6c561075d4fff784}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!form\+Add\+Tournee\+Line@{form\+Add\+Tournee\+Line}}
+\index{form\+Add\+Tournee\+Line@{form\+Add\+Tournee\+Line}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{form\+Add\+Tournee\+Line()}{formAddTourneeLine()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::form\+Add\+Tournee\+Line (\begin{DoxyParamCaption}\item[{}]{\$seller }\end{DoxyParamCaption})}
+
+Show add free and predefined products/services form
+
+
+\begin{DoxyParams}[1]{Paramètres}
+Societe & {\em \$seller} & Object thirdparty who sell \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_aecb57833a3e70efc929500f09368ddd5}\label{classTourneeGeneric_aecb57833a3e70efc929500f09368ddd5}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!generate\+Document@{generate\+Document}}
+\index{generate\+Document@{generate\+Document}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{generate\+Document()}{generateDocument()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::generate\+Document (\begin{DoxyParamCaption}\item[{}]{\$modele,  }\item[{}]{\$outputlangs,  }\item[{}]{\$hidedetails = {\ttfamily 0},  }\item[{}]{\$hidedesc = {\ttfamily 0},  }\item[{}]{\$hideref = {\ttfamily 0},  }\item[{}]{\$moreparams = {\ttfamily null} }\end{DoxyParamCaption})}
+
+Create a document onto disk according to template module.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$modele} & Force the model to using (\textquotesingle{}\textquotesingle{} to not force) \\
+\hline
+Translate & {\em \$outputlangs} & object lang to use for translations \\
+\hline
+int & {\em \$hidedetails} & Hide details of lines \\
+\hline
+int & {\em \$hidedesc} & Hide description \\
+\hline
+int & {\em \$hideref} & Hide ref \\
+\hline
+null | array & {\em \$moreparams} & Array to provide more information \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int 0 if KO, 1 if OK 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a10a64e1dda4704a4e06881b3c91a4d70}\label{classTourneeGeneric_a10a64e1dda4704a4e06881b3c91a4d70}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!get\+Lines\+Array@{get\+Lines\+Array}}
+\index{get\+Lines\+Array@{get\+Lines\+Array}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{get\+Lines\+Array()}{getLinesArray()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::get\+Lines\+Array (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Create an array of order lines
+
+\begin{DoxyReturn}{Renvoie}
+int $>$0 if OK, $<$0 if KO 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a384bb4a87b8c4ba69be3903e0e1997a7}\label{classTourneeGeneric_a384bb4a87b8c4ba69be3903e0e1997a7}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!get\+Nom\+Url@{get\+Nom\+Url}}
+\index{get\+Nom\+Url@{get\+Nom\+Url}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{get\+Nom\+Url()}{getNomUrl()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::get\+Nom\+Url (\begin{DoxyParamCaption}\item[{}]{\$withpicto = {\ttfamily 0},  }\item[{}]{\$option = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$notooltip = {\ttfamily 0},  }\item[{}]{\$morecss = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$save\+\_\+lastsearch\+\_\+value = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+Return a link to the object card (with optionaly the picto)
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$withpicto} & Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto) \\
+\hline
+string & {\em \$option} & On what the link point to (\textquotesingle{}nolink\textquotesingle{}, ...) \\
+\hline
+int & {\em \$notooltip} & 1=Disable tooltip \\
+\hline
+string & {\em \$morecss} & Add more css on link \\
+\hline
+int & {\em \$save\+\_\+lastsearch\+\_\+value} & -\/1=Auto, 0=No save of lastsearch\+\_\+values when clicking, 1=Save lastsearch\+\_\+values whenclicking \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string String with U\+RL 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a134eebbb26416c1ed75176beb6288f5d}\label{classTourneeGeneric_a134eebbb26416c1ed75176beb6288f5d}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!init\+As\+Specimen@{init\+As\+Specimen}}
+\index{init\+As\+Specimen@{init\+As\+Specimen}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{init\+As\+Specimen()}{initAsSpecimen()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::init\+As\+Specimen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialise object with example values Id must be 0 if object instance is a specimen
+
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a467dafa411ddc3d1832546590280e295}\label{classTourneeGeneric_a467dafa411ddc3d1832546590280e295}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!Lib\+Statut@{Lib\+Statut}}
+\index{Lib\+Statut@{Lib\+Statut}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{Lib\+Statut()}{LibStatut()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::\+Lib\+Statut (\begin{DoxyParamCaption}\item[{}]{\$status,  }\item[{}]{\$mode = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return the status
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$status} & Id status \\
+\hline
+int & {\em \$mode} & 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string Label of status 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a1a07c23b1527eec5c606b63551f29446}\label{classTourneeGeneric_a1a07c23b1527eec5c606b63551f29446}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!print\+Tournee\+Line@{print\+Tournee\+Line}}
+\index{print\+Tournee\+Line@{print\+Tournee\+Line}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{print\+Tournee\+Line()}{printTourneeLine()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::print\+Tournee\+Line (\begin{DoxyParamCaption}\item[{}]{\$action,  }\item[{}]{\$line,  }\item[{}]{\$var,  }\item[{}]{\$num,  }\item[{}]{\$i,  }\item[{}]{\$date\+Selector,  }\item[{}]{\$seller,  }\item[{}]{\$selected = {\ttfamily 0},  }\item[{}]{\$extrafieldsline = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return H\+T\+ML content of a detail line T\+O\+DO Move this into an output class file (htmlline.\+class.\+php)
+
+
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$action} & G\+E\+T/\+P\+O\+ST action \\
+\hline
+Common\+Object\+Line & {\em \$line} & Selected object line to output \\
+\hline
+string & {\em \$var} & Is it a an odd line (true) \\
+\hline
+int & {\em \$num} & Number of line (0) \\
+\hline
+int & {\em \$i} & I \\
+\hline
+int & {\em \$date\+Selector} & 1=Show also date range input fields \\
+\hline
+string & {\em \$seller} & Object of seller third party \\
+\hline
+int & {\em \$selected} & Object line selected \\
+\hline
+int & {\em \$extrafieldsline} & Object of extrafield line attribute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_acf58f9823680a80f041a90a23017c460}\label{classTourneeGeneric_acf58f9823680a80f041a90a23017c460}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!print\+Tournee\+Lines@{print\+Tournee\+Lines}}
+\index{print\+Tournee\+Lines@{print\+Tournee\+Lines}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{print\+Tournee\+Lines()}{printTourneeLines()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::print\+Tournee\+Lines (\begin{DoxyParamCaption}\item[{}]{\$action,  }\item[{}]{\$seller,  }\item[{}]{\$selected = {\ttfamily 0},  }\item[{}]{\$date\+Selector = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return H\+T\+ML table for object lines T\+O\+DO Move this into an output class file (htmlline.\+class.\+php) If lines are into a template, title must also be into a template But for the moment we don\textquotesingle{}t know if it\textquotesingle{}s possible as we keep a method available on overloaded objects.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$action} & Action code \\
+\hline
+string & {\em \$seller} & Object of seller third party \\
+\hline
+int & {\em \$selected} & Object line selected \\
+\hline
+int & {\em \$date\+Selector} & 1=Show also date range input fields \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_a756e32cfc9bb433beaba3dfc224603ba}\label{classTourneeGeneric_a756e32cfc9bb433beaba3dfc224603ba}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!show\+Input\+Field@{show\+Input\+Field}}
+\index{show\+Input\+Field@{show\+Input\+Field}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{show\+Input\+Field()}{showInputField()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::show\+Input\+Field (\begin{DoxyParamCaption}\item[{}]{\$val,  }\item[{}]{\$key,  }\item[{}]{\$value,  }\item[{}]{\$moreparam = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$keysuffix = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$keyprefix = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$morecss = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return H\+T\+ML string to put an input field into a page Code very similar with show\+Input\+Field of extra fields
+
+
+\begin{DoxyParams}[1]{Paramètres}
+array & {\em \$val} & Array of properties for field to show \\
+\hline
+string & {\em \$key} & Key of attribute \\
+\hline
+string & {\em \$value} & Preselected value to show (for date type it must be in timestamp format, for amount or price it must be a php numeric value) \\
+\hline
+string & {\em \$moreparam} & To add more parameters on html input tag \\
+\hline
+string & {\em \$keysuffix} & Prefix string to add into name and id of field (can be used to avoid duplicate names) \\
+\hline
+string & {\em \$keyprefix} & Suffix string to add into name and id of field (can be used to avoid duplicate names) \\
+\hline
+string | int & {\em \$morecss} & Value for css to define style/length of field. May also be a numeric. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTourneeGeneric_ad74c7f751188c8020857aac6b20d8a8f}\label{classTourneeGeneric_ad74c7f751188c8020857aac6b20d8a8f}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!updateline@{updateline}}
+\index{updateline@{updateline}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{updateline()}{updateline()}}
+{\footnotesize\ttfamily Tournee\+Generic\+::updateline (\begin{DoxyParamCaption}\item[{}]{\$rowid,  }\item[{}]{\$type = {\ttfamily 0},  }\item[{}]{\$fk\+\_\+soc = {\ttfamily 0},  }\item[{}]{\$fk\+\_\+tournee\+\_\+incluse = {\ttfamily 0},  }\item[{}]{\$\+BL = {\ttfamily 1},  }\item[{}]{\$facture = {\ttfamily 1},  }\item[{}]{\$etiquettes = {\ttfamily 1},  }\item[{}]{\$tempstheorique = {\ttfamily 0},  }\item[{}]{\$infolivraison = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$fk\+\_\+adresselivraison = {\ttfamily 0},  }\item[{}]{\$force\+\_\+email\+\_\+soc = {\ttfamily 0},  }\item[{}]{\$note\+\_\+public = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$note\+\_\+private = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$rang = {\ttfamily -\/1},  }\item[{}]{\$fk\+\_\+parent\+\_\+line = {\ttfamily 0},  }\item[{}]{\$notrigger = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Update a line in database
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$rowid} & Id of line to update \\
+\hline
+int & {\em \$type} & Type of line (1=Tiers, 1=Tournee incluse) \\
+\hline
+int & {\em \$fk\+\_\+soc} & id societe (0 si pas ) \\
+\hline
+int & {\em \$fk\+\_\+tournee\+\_\+incluse} & id tournee de livraison incluse (0 si pas ) \\
+\hline
+int & {\em \$\+BL} & nb de BL à imprimer (0/1/2) \\
+\hline
+int & {\em \$facture} & nb de facture à imprimer (1/0) \\
+\hline
+int & {\em \$etiquettes} & impression de planches d\textquotesingle{}étiquettes (1/0) \\
+\hline
+int & {\em \$tempstheorique} & temps théorique \\
+\hline
+str & {\em \$infolivraison} & info livraison \\
+\hline
+int & {\em \$rang} & rang \\
+\hline
+str & {\em \$note\+\_\+public} & note public \\
+\hline
+str & {\em \$note\+\_\+private} & note private \\
+\hline
+int & {\em \$force\+\_\+email\+\_\+soc} & si true force l\textquotesingle{}envoi d\textquotesingle{}un email à soc \\
+\hline
+int & {\em \$fk\+\_\+parent\+\_\+line} & Id of parent line (0 in most cases, used by modules adding sublevels into lines). \\
+\hline
+int & {\em \$notrigger} & disable line update trigger \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int $<$ 0 if KO, $>$ 0 if OK 
+\end{DoxyReturn}
+
+
+\subsection{Documentation des données membres}
+\mbox{\Hypertarget{classTourneeGeneric_a3aedfebda4df17691d9183dbbeadd28a}\label{classTourneeGeneric_a3aedfebda4df17691d9183dbbeadd28a}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED}{STATUS\_CANCELED}}
+{\footnotesize\ttfamily const Tournee\+Generic\+::\+S\+T\+A\+T\+U\+S\+\_\+\+C\+A\+N\+C\+E\+L\+ED = -\/1}
+
+Canceled status \mbox{\Hypertarget{classTourneeGeneric_a43ec4261c3697b774ef86110b3d37a2b}\label{classTourneeGeneric_a43ec4261c3697b774ef86110b3d37a2b}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED}{STATUS\_CLOSED}}
+{\footnotesize\ttfamily const Tournee\+Generic\+::\+S\+T\+A\+T\+U\+S\+\_\+\+C\+L\+O\+S\+ED = 3}
+
+Closed (Sent, billed or not) \mbox{\Hypertarget{classTourneeGeneric_ab9791c4f2cee457bf1971fe344c7e955}\label{classTourneeGeneric_ab9791c4f2cee457bf1971fe344c7e955}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT@{S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT@{S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT}{STATUS\_DRAFT}}
+{\footnotesize\ttfamily const Tournee\+Generic\+::\+S\+T\+A\+T\+U\+S\+\_\+\+D\+R\+A\+FT = 0}
+
+Draft status \mbox{\Hypertarget{classTourneeGeneric_a47330ed89033f9602c7c932113233e27}\label{classTourneeGeneric_a47330ed89033f9602c7c932113233e27}} 
+\index{Tournee\+Generic@{Tournee\+Generic}!S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED}}
+\index{S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED@{S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED}!Tournee\+Generic@{Tournee\+Generic}}
+\subsubsection{\texorpdfstring{S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED}{STATUS\_VALIDATED}}
+{\footnotesize\ttfamily const Tournee\+Generic\+::\+S\+T\+A\+T\+U\+S\+\_\+\+V\+A\+L\+I\+D\+A\+T\+ED = 1}
+
+Validated status 
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+class/tourneegeneric.\+class.\+php\end{DoxyCompactItemize}

@@ -1,0 +1,5 @@
+<map id="TourneeGeneric_lines_contacts" name="TourneeGeneric_lines_contacts">
+<area shape="rect" id="node4" href="$classTourneeDeLivraison__lines__contacts.html" title="TourneeDeLivraison\l_lines_contacts" alt="" coords="5,244,144,285"/>
+<area shape="rect" id="node5" href="$classTourneeUnique__lines__contacts.html" title="TourneeUnique_lines\l_contacts" alt="" coords="168,244,312,285"/>
+<area shape="rect" id="node2" href="$classTourneeObject.html" title="TourneeObject" alt="" coords="104,80,211,107"/>
+</map>

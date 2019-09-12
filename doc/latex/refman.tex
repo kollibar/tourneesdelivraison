@@ -1,0 +1,263 @@
+\documentclass[twoside]{book}
+
+% Packages required by doxygen
+\usepackage{fixltx2e}
+\usepackage{calc}
+\usepackage{doxygen}
+\usepackage[export]{adjustbox} % also loads graphicx
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{multicol}
+\usepackage{multirow}
+\PassOptionsToPackage{warn}{textcomp}
+\usepackage{textcomp}
+\usepackage[nointegrals]{wasysym}
+\usepackage[table]{xcolor}
+
+% NLS support packages
+\usepackage[french]{babel}
+
+% Font selection
+\usepackage[T1]{fontenc}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+\usepackage{amssymb}
+\usepackage{sectsty}
+\renewcommand{\familydefault}{\sfdefault}
+\allsectionsfont{%
+  \fontseries{bc}\selectfont%
+  \color{darkgray}%
+}
+\renewcommand{\DoxyLabelFont}{%
+  \fontseries{bc}\selectfont%
+  \color{darkgray}%
+}
+\newcommand{\+}{\discretionary{\mbox{\scriptsize$\hookleftarrow$}}{}{}}
+
+% Page & text layout
+\usepackage{geometry}
+\geometry{%
+  a4paper,%
+  top=2.5cm,%
+  bottom=2.5cm,%
+  left=2.5cm,%
+  right=2.5cm%
+}
+\tolerance=750
+\hfuzz=15pt
+\hbadness=750
+\setlength{\emergencystretch}{15pt}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{3ex plus 2ex minus 2ex}
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
+    \normalfont\normalsize\bfseries\SS@parafont%
+  }%
+}
+\renewcommand{\subparagraph}{%
+  \@startsection{subparagraph}{5}{0ex}{-1.0ex}{1.0ex}{%
+    \normalfont\normalsize\bfseries\SS@subparafont%
+  }%
+}
+\makeatother
+
+% Headers & footers
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[LE]{\fancyplain{}{\bfseries\thepage}}
+\fancyhead[CE]{\fancyplain{}{}}
+\fancyhead[RE]{\fancyplain{}{\bfseries\leftmark}}
+\fancyhead[LO]{\fancyplain{}{\bfseries\rightmark}}
+\fancyhead[CO]{\fancyplain{}{}}
+\fancyhead[RO]{\fancyplain{}{\bfseries\thepage}}
+\fancyfoot[LE]{\fancyplain{}{}}
+\fancyfoot[CE]{\fancyplain{}{}}
+\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize Généré par Doxygen }}
+\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize Généré par Doxygen }}
+\fancyfoot[CO]{\fancyplain{}{}}
+\fancyfoot[RO]{\fancyplain{}{}}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\chaptermark}[1]{%
+  \markboth{#1}{}%
+}
+\renewcommand{\sectionmark}[1]{%
+  \markright{\thesection\ #1}%
+}
+
+% Indices & bibliography
+\usepackage{natbib}
+\usepackage[titles]{tocloft}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{5}
+\makeindex
+
+% Hyperlinks (required, but should be loaded last)
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage[pdftex,pagebackref=true]{hyperref}
+\else
+  \usepackage[ps2pdf,pagebackref=true]{hyperref}
+\fi
+\hypersetup{%
+  colorlinks=true,%
+  linkcolor=blue,%
+  citecolor=blue,%
+  unicode%
+}
+
+% Custom commands
+\newcommand{\clearemptydoublepage}{%
+  \newpage{\pagestyle{empty}\cleardoublepage}%
+}
+
+\usepackage{caption}
+\captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
+
+%===== C O N T E N T S =====
+
+\begin{document}
+
+% Titlepage & ToC
+\hypersetup{pageanchor=false,
+             bookmarksnumbered=true,
+             pdfencoding=unicode
+            }
+\pagenumbering{alph}
+\begin{titlepage}
+\vspace*{7cm}
+\begin{center}%
+{\Large Tournée de livraison }\\
+\vspace*{1cm}
+{\large Généré par Doxygen 1.8.13}\\
+\end{center}
+\end{titlepage}
+\clearemptydoublepage
+\pagenumbering{roman}
+\tableofcontents
+\clearemptydoublepage
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+%--- Begin generated contents ---
+\chapter{C\+H\+A\+N\+G\+E\+L\+OG T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+ON F\+OR $<$a href=\char`\"{}https\+://www.\+dolibarr.\+org\char`\"{}$>$D\+O\+L\+I\+B\+A\+RR E\+RP C\+RM$<$/a$>$}
+\label{md_ChangeLog}
+\Hypertarget{md_ChangeLog}
+\input{md_ChangeLog}
+\chapter{R\+E\+A\+D\+ME}
+\label{md_core_boxes_README}
+\Hypertarget{md_core_boxes_README}
+\input{md_core_boxes_README}
+\chapter{R\+E\+A\+D\+ME}
+\label{md_core_triggers_README}
+\Hypertarget{md_core_triggers_README}
+\input{md_core_triggers_README}
+\chapter{T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+ON F\+OR $<$a href=\char`\"{}https\+://www.\+dolibarr.\+org\char`\"{}$>$D\+O\+L\+I\+B\+A\+RR E\+RP C\+RM$<$/a$>$}
+\label{md_README}
+\Hypertarget{md_README}
+\input{md_README}
+\chapter{Liste des choses à faire}
+\label{todo}
+\Hypertarget{todo}
+\input{todo}
+\chapter{Index des modules}
+\input{modules}
+\chapter{Index des espaces de nommage}
+\input{namespaces}
+\chapter{Index hiérarchique}
+\input{hierarchy}
+\chapter{Index des classes}
+\input{annotated}
+\chapter{Index des fichiers}
+\input{files}
+\chapter{Documentation des modules}
+\input{group__tourneesdelivraison}
+\chapter{Documentation des espaces de nommage}
+\input{namespaceTesttourneesdelivraison}
+\chapter{Documentation des classes}
+\input{classActionsTourneesDeLivraison}
+\input{classCarton}
+\input{classCategorie}
+\input{classDolibarrApiAccess}
+\input{classFormTourneesDeLivraison}
+\input{classInterfaceTourneesDeLivraisonTriggers}
+\input{classmailing__mailinglist__tourneesdelivraison__myobject}
+\input{classModelePDFTourneesdelivraison}
+\input{classmodTourneesDeLivraison}
+\input{classMyObjectApi}
+\input{classpdf__cargo}
+\input{classpdf__fourgon}
+\input{classpdf__palette21}
+\input{classpdf__palette40}
+\input{classpdf__saumon}
+\input{classTourneeDeLivraison}
+\input{classTourneeDeLivraison__lines}
+\input{classTourneeDeLivraison__lines__contacts}
+\input{classtest_1_1unit_1_1TourneeDeLivraison__lines__contactsTest}
+\input{classtest_1_1unit_1_1TourneeDeLivraison__linesTest}
+\input{classtest_1_1unit_1_1TourneeDeLivraison__TourneesInclusesTest}
+\input{classtest_1_1unit_1_1TourneeDeLivraisonTest}
+\input{classTourneeGeneric}
+\input{classTourneeGeneric__lines}
+\input{classTourneeGeneric__lines__contacts}
+\input{classTourneeObject}
+\input{classTourneesdelivraison}
+\input{classtest_1_1functional_1_1TourneesDeLivraisonFunctionalTest}
+\input{classtourneesdelivraisonwidget1}
+\input{classTourneeUnique}
+\input{classtest_1_1unit_1_1TourneeUnique__clients__commandes__expeditionsTest}
+\input{classtest_1_1unit_1_1TourneeUnique__clients__commandesTest}
+\input{classtest_1_1unit_1_1TourneeUnique__clients__contactsTest}
+\input{classtest_1_1unit_1_1TourneeUnique__clientsTest}
+\input{classTourneeUnique__lines}
+\input{classTourneeUnique__lines__cmde}
+\input{classTourneeUnique__lines__cmde__elt}
+\input{classTourneeUnique__lines__contacts}
+\input{classtest_1_1unit_1_1TourneeUniqueTest}
+\chapter{Documentation des fichiers}
+\input{about_8php}
+\input{setup_8php}
+\input{scripts_2tourneedelivraison_8php}
+\input{scripts_2tourneeunique_8php}
+\input{actions__tourneesdelivraison_8class_8php}
+\input{api__myobject_8class_8php}
+\input{tourneedelivraison_8class_8php}
+\input{tourneedelivraison__lines_8class_8php}
+\input{tourneedelivraison__lines__contacts_8class_8php}
+\input{interface__99__modTourneesDeLivraison__TourneesDeLivraisonTriggers_8class_8php}
+\input{tourneesdelivraison_8css_8php}
+\input{tourneesdelivraison_8js_8php}
+\input{myobject_8lib_8php}
+\input{tourneesdelivraison__myobject_8lib_8php}
+\input{tourneesdelivraison__tourneedelivraison_8lib_8php}
+\input{tourneesdelivraison__tourneedelivraison__lines_8lib_8php}
+\input{tourneesdelivraison__tourneedelivraison__lines__contacts_8lib_8php}
+\input{tourneesdelivraison__tourneedelivraison__tourneesincluses_8lib_8php}
+\input{tourneesdelivraison__tourneeunique_8lib_8php}
+\input{tourneesdelivraison__tourneeunique__clients_8lib_8php}
+\input{tourneesdelivraison__tourneeunique__clients__commandes_8lib_8php}
+\input{tourneesdelivraison__tourneeunique__clients__commandes__expeditions_8lib_8php}
+\input{tourneesdelivraison__tourneeunique__clients__contacts_8lib_8php}
+\input{tourneedelivraison__lines_8php}
+\input{tourneedelivraison__lines__contacts_8php}
+\input{tourneedelivraison__tourneesincluses_8php}
+\input{tourneeunique__clients_8php}
+\input{tourneeunique__clients__commandes_8php}
+\input{tourneeunique__clients__commandes__expeditions_8php}
+\input{tourneeunique__clients__contacts_8php}
+\input{tourneedelivraison__agenda_8php}
+\input{tourneedelivraison__document_8php}
+\input{tourneedelivraison__list_8php}
+\input{tourneedelivraison__note_8php}
+%--- End generated contents ---
+
+% Index
+\backmatter
+\newpage
+\phantomsection
+\clearemptydoublepage
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}

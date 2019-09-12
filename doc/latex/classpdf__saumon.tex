@@ -1,0 +1,176 @@
+\hypertarget{classpdf__saumon}{}\section{Référence de la classe pdf\+\_\+saumon}
+\label{classpdf__saumon}\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+
+
+Est dérivée de Modele\+Pdf\+Expedition.
+
+\subsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpdf__saumon_ad75af6ab7895542a39daf5bc0f83037a}{\+\_\+\+\_\+construct} (\$db=0)
+\item 
+\hyperlink{classpdf__saumon_ae7d84d5d2dda62f49c125990b1f2d2b2}{write\+\_\+file} (\$object, \$outputlangs, \$srctemplatepath=\textquotesingle{}\textquotesingle{}, \$hidedetails=0, \$hidedesc=0, \$hideref=0)
+\item 
+\hyperlink{classpdf__saumon_ae1b4babd74a0a1d56ec3576adfac5ba4}{\+\_\+tableau\+\_\+tot} (\&\$pdf, \$object, \$deja\+\_\+regle, \$posy, \$outputlangs)
+\item 
+\hyperlink{classpdf__saumon_a7aa51aa0faaacc5acd4b35326112b960}{\+\_\+tableau} (\&\$pdf, \$tab\+\_\+top, \$tab\+\_\+height, \$nexY, \$outputlangs, \$hidetop=0, \$hidebottom=0)
+\item 
+\hyperlink{classpdf__saumon_a52359461169b4bfb40d5e2494e4687b7}{\+\_\+pagehead} (\&\$pdf, \$object, \$showaddress, \$outputlangs)
+\item 
+\hyperlink{classpdf__saumon_a8d3373b699d9ffcdb811027e61c48665}{\+\_\+pagefoot} (\&\$pdf, \$object, \$outputlangs, \$hidefreetext=0)
+\end{DoxyCompactItemize}
+\subsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classpdf__saumon_a083f1b315e154cca857cf759385a8484}\label{classpdf__saumon_a083f1b315e154cca857cf759385a8484}} 
+{\bfseries \$emetteur}
+\end{DoxyCompactItemize}
+
+
+\subsection{Description détaillée}
+Classe permettant de generer les borderaux envoi au modele bordereau\+Livraison 
+
+\subsection{Documentation des constructeurs et destructeur}
+\mbox{\Hypertarget{classpdf__saumon_ad75af6ab7895542a39daf5bc0f83037a}\label{classpdf__saumon_ad75af6ab7895542a39daf5bc0f83037a}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}}
+\index{\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+construct()}{\_\_construct()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{}]{\$db = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Constructor
+
+
+\begin{DoxyParams}[1]{Paramètres}
+Doli\+DB & {\em \$db} & Database handler \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Documentation des fonctions membres}
+\mbox{\Hypertarget{classpdf__saumon_a8d3373b699d9ffcdb811027e61c48665}\label{classpdf__saumon_a8d3373b699d9ffcdb811027e61c48665}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!\+\_\+pagefoot@{\+\_\+pagefoot}}
+\index{\+\_\+pagefoot@{\+\_\+pagefoot}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{\+\_\+pagefoot()}{\_pagefoot()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::\+\_\+pagefoot (\begin{DoxyParamCaption}\item[{\&}]{\$pdf,  }\item[{}]{\$object,  }\item[{}]{\$outputlangs,  }\item[{}]{\$hidefreetext = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Show footer of page. Need this-\/$>$emetteur object
+
+
+\begin{DoxyParams}[1]{Paramètres}
+P\+DF & {\em \$pdf} & P\+DF \\
+\hline
+Object & {\em \$object} & Object to show \\
+\hline
+Translate & {\em \$outputlangs} & Object lang for output \\
+\hline
+int & {\em \$hidefreetext} & 1=Hide free text \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int Return height of bottom margin including footer text 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classpdf__saumon_a52359461169b4bfb40d5e2494e4687b7}\label{classpdf__saumon_a52359461169b4bfb40d5e2494e4687b7}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!\+\_\+pagehead@{\+\_\+pagehead}}
+\index{\+\_\+pagehead@{\+\_\+pagehead}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{\+\_\+pagehead()}{\_pagehead()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::\+\_\+pagehead (\begin{DoxyParamCaption}\item[{\&}]{\$pdf,  }\item[{}]{\$object,  }\item[{}]{\$showaddress,  }\item[{}]{\$outputlangs }\end{DoxyParamCaption})}
+
+Show top header of page.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+P\+DF & {\em \$pdf} & Object P\+DF \\
+\hline
+Object & {\em \$object} & Object to show \\
+\hline
+int & {\em \$showaddress} & 0=no, 1=yes \\
+\hline
+Translate & {\em \$outputlangs} & Object lang for output \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classpdf__saumon_a7aa51aa0faaacc5acd4b35326112b960}\label{classpdf__saumon_a7aa51aa0faaacc5acd4b35326112b960}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!\+\_\+tableau@{\+\_\+tableau}}
+\index{\+\_\+tableau@{\+\_\+tableau}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{\+\_\+tableau()}{\_tableau()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::\+\_\+tableau (\begin{DoxyParamCaption}\item[{\&}]{\$pdf,  }\item[{}]{\$tab\+\_\+top,  }\item[{}]{\$tab\+\_\+height,  }\item[{}]{\$nexY,  }\item[{}]{\$outputlangs,  }\item[{}]{\$hidetop = {\ttfamily 0},  }\item[{}]{\$hidebottom = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Show table for lines
+
+
+\begin{DoxyParams}[1]{Paramètres}
+P\+DF & {\em \$pdf} & Object P\+DF \\
+\hline
+string & {\em \$tab\+\_\+top} & Top position of table \\
+\hline
+string & {\em \$tab\+\_\+height} & Height of table (rectangle) \\
+\hline
+int & {\em \$nexY} & Y \\
+\hline
+Translate & {\em \$outputlangs} & Langs object \\
+\hline
+int & {\em \$hidetop} & Hide top bar of array \\
+\hline
+int & {\em \$hidebottom} & Hide bottom bar of array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classpdf__saumon_ae1b4babd74a0a1d56ec3576adfac5ba4}\label{classpdf__saumon_ae1b4babd74a0a1d56ec3576adfac5ba4}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!\+\_\+tableau\+\_\+tot@{\+\_\+tableau\+\_\+tot}}
+\index{\+\_\+tableau\+\_\+tot@{\+\_\+tableau\+\_\+tot}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{\+\_\+tableau\+\_\+tot()}{\_tableau\_tot()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::\+\_\+tableau\+\_\+tot (\begin{DoxyParamCaption}\item[{\&}]{\$pdf,  }\item[{}]{\$object,  }\item[{}]{\$deja\+\_\+regle,  }\item[{}]{\$posy,  }\item[{}]{\$outputlangs }\end{DoxyParamCaption})}
+
+Show total to pay
+
+
+\begin{DoxyParams}[1]{Paramètres}
+P\+DF & {\em \$pdf} & Object P\+DF \\
+\hline
+Facture & {\em \$object} & Object invoice \\
+\hline
+int & {\em \$deja\+\_\+regle} & Montant deja regle \\
+\hline
+int & {\em \$posy} & Position depart \\
+\hline
+Translate & {\em \$outputlangs} & Objet langs \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int Position pour suite 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classpdf__saumon_ae7d84d5d2dda62f49c125990b1f2d2b2}\label{classpdf__saumon_ae7d84d5d2dda62f49c125990b1f2d2b2}} 
+\index{pdf\+\_\+saumon@{pdf\+\_\+saumon}!write\+\_\+file@{write\+\_\+file}}
+\index{write\+\_\+file@{write\+\_\+file}!pdf\+\_\+saumon@{pdf\+\_\+saumon}}
+\subsubsection{\texorpdfstring{write\+\_\+file()}{write\_file()}}
+{\footnotesize\ttfamily pdf\+\_\+saumon\+::write\+\_\+file (\begin{DoxyParamCaption}\item[{}]{\$object,  }\item[{}]{\$outputlangs,  }\item[{}]{\$srctemplatepath = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$hidedetails = {\ttfamily 0},  }\item[{}]{\$hidedesc = {\ttfamily 0},  }\item[{}]{\$hideref = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Function to build pdf onto disk
+
+
+\begin{DoxyParams}[1]{Paramètres}
+Object & {\em \$object} & Object expedition to generate (or id if old method) \\
+\hline
+Translate & {\em \$outputlangs} & Lang output object \\
+\hline
+string & {\em \$srctemplatepath} & Full path of source filename for generator using a template file \\
+\hline
+int & {\em \$hidedetails} & Do not show line details \\
+\hline
+int & {\em \$hidedesc} & Do not show desc \\
+\hline
+int & {\em \$hideref} & Do not show ref \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int 1=OK, 0=KO 
+\end{DoxyReturn}
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+core/modules/expedition/doc/pdf\+\_\+saumon.\+modules.\+php\end{DoxyCompactItemize}

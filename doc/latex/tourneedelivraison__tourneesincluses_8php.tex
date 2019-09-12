@@ -1,0 +1,76 @@
+\hypertarget{tourneedelivraison__tourneesincluses_8php}{}\section{Référence du fichier scripts/tourneedelivraison\+\_\+tourneesincluses.php}
+\label{tourneedelivraison__tourneesincluses_8php}\index{scripts/tourneedelivraison\+\_\+tourneesincluses.\+php@{scripts/tourneedelivraison\+\_\+tourneesincluses.\+php}}
+
+
+This file is an example for a command line script to work on Tournee\+De\+Livraison\+\_\+\+Tournees\+Incluses.  
+
+
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a86e02f00a36d0fcbf274de973b2640d0}\label{tourneedelivraison__tourneesincluses_8php_a86e02f00a36d0fcbf274de973b2640d0}} 
+{\bfseries \$sapi\+\_\+type} = php\+\_\+sapi\+\_\+name()
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a97b9f047572d6c50f29fbea522f6c17e}\label{tourneedelivraison__tourneesincluses_8php_a97b9f047572d6c50f29fbea522f6c17e}} 
+{\bfseries \$script\+\_\+file} = basename(\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+)
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a0a4baf0b22973c07685c3981f0d17fc4}\label{tourneedelivraison__tourneesincluses_8php_a0a4baf0b22973c07685c3981f0d17fc4}} 
+{\bfseries \$path} =dirname(\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+).\textquotesingle{}/\textquotesingle{}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a0a351317886caa2358df1658880c0c78}\label{tourneedelivraison__tourneesincluses_8php_a0a351317886caa2358df1658880c0c78}} 
+if(substr(\$sapi\+\_\+type, 0, 3)==\textquotesingle{}cgi\textquotesingle{}) {\bfseries \$version} =\textquotesingle{}1.\+0\textquotesingle{}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_aeba2ab722cedda53dbb7ec1a59f45550}\label{tourneedelivraison__tourneesincluses_8php_aeba2ab722cedda53dbb7ec1a59f45550}} 
+{\bfseries \$error} =0
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a2b87986264c1ca3cddb96a106af7b37a}\label{tourneedelivraison__tourneesincluses_8php_a2b87986264c1ca3cddb96a106af7b37a}} 
+const {\bfseries E\+V\+E\+N\+\_\+\+I\+F\+\_\+\+O\+N\+L\+Y\+\_\+\+L\+O\+G\+I\+N\+\_\+\+A\+L\+L\+O\+W\+ED} 1
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a49a8a4009b02e49717caa88b128affc5}\label{tourneedelivraison__tourneesincluses_8php_a49a8a4009b02e49717caa88b128affc5}} 
+{\bfseries \$res} =0
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a57024d47cf8348153f5fdda16f8fefa9}\label{tourneedelivraison__tourneesincluses_8php_a57024d47cf8348153f5fdda16f8fefa9}} 
+{\bfseries \$tmp} =empty(\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]})?\textquotesingle{}\textquotesingle{}\+:\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_aed9bcb6730d1510376ce80e32bd9504d}\label{tourneedelivraison__tourneesincluses_8php_aed9bcb6730d1510376ce80e32bd9504d}} 
+{\bfseries \$tmp2} =realpath(\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+)
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a83018d9153d17d91fbcf3bc10158d34f}\label{tourneedelivraison__tourneesincluses_8php_a83018d9153d17d91fbcf3bc10158d34f}} 
+{\bfseries \$i} =strlen(\$tmp)-\/1
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a6f16db779ef3ccea921b277b5dc245d1}\label{tourneedelivraison__tourneesincluses_8php_a6f16db779ef3ccea921b277b5dc245d1}} 
+{\bfseries \$j} =strlen(\$tmp2)-\/1
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a112ef069ddc0454086e3d1e6d8d55d07}\label{tourneedelivraison__tourneesincluses_8php_a112ef069ddc0454086e3d1e6d8d55d07}} 
+{\bfseries \$result} =\$user-\/$>$fetch(\textquotesingle{}\textquotesingle{},\textquotesingle{}admin\textquotesingle{})
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_af9edfce80596a171cfb2884ba7ad01df}\label{tourneedelivraison__tourneesincluses_8php_af9edfce80596a171cfb2884ba7ad01df}} 
+print $\ast$$\ast$$\ast$$\ast$$\ast$\$script\+\_\+file(\char`\"{}.\$version.\char`\"{}) pid {\bfseries field2}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a047170d6020a882807665812a27e2525}\label{tourneedelivraison__tourneesincluses_8php_a047170d6020a882807665812a27e2525}} 
+{\bfseries \$sql} = \char`\"{} F\+R\+OM \char`\"{}.M\+A\+I\+N\+\_\+\+D\+B\+\_\+\+P\+R\+E\+F\+I\+X.\char`\"{}tourneedelivraison\+\_\+tourneesincluses\char`\"{}
+\item 
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a6adc5ef389ab51c21dee69262018d615}\label{tourneedelivraison__tourneesincluses_8php_a6adc5ef389ab51c21dee69262018d615}} 
+{\bfseries \$resql} =\$db-\/$>$query(\$sql)
+\item 
+if(\$resql) {\bfseries else}
+\end{DoxyCompactItemize}
+
+
+\subsection{Description détaillée}
+This file is an example for a command line script to work on Tournee\+De\+Livraison\+\_\+\+Tournees\+Incluses. 
+
+
+
+\subsection{Documentation des variables}
+\mbox{\Hypertarget{tourneedelivraison__tourneesincluses_8php_a7b6906d90f668055f3c8e8b2ae497513}\label{tourneedelivraison__tourneesincluses_8php_a7b6906d90f668055f3c8e8b2ae497513}} 
+\index{tourneedelivraison\+\_\+tourneesincluses.\+php@{tourneedelivraison\+\_\+tourneesincluses.\+php}!else@{else}}
+\index{else@{else}!tourneedelivraison\+\_\+tourneesincluses.\+php@{tourneedelivraison\+\_\+tourneesincluses.\+php}}
+\subsubsection{\texorpdfstring{else}{else}}
+{\footnotesize\ttfamily $\ast$ if (! \$error) else}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+\{
+    $error++
+\end{DoxyCode}

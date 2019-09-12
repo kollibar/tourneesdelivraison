@@ -1,0 +1,8 @@
+<map id="Graphe hiérarchique des classes" name="Graphe hiérarchique des classes">
+<area shape="rect" id="node2" href="$classModelePDFTourneesdelivraison.html" title="ModelePDFTourneesdelivraison" alt="" coords="209,95,416,121"/>
+<area shape="rect" id="node3" href="$classpdf__cargo.html" title="pdf_cargo" alt="" coords="475,5,553,32"/>
+<area shape="rect" id="node4" href="$classpdf__fourgon.html" title="pdf_fourgon" alt="" coords="469,56,559,83"/>
+<area shape="rect" id="node5" href="$classpdf__palette21.html" title="pdf_palette21" alt="" coords="464,107,564,133"/>
+<area shape="rect" id="node6" href="$classpdf__palette40.html" title="pdf_palette40" alt="" coords="464,157,564,184"/>
+<area shape="rect" id="node8" href="$classpdf__saumon.html" title="pdf_saumon" alt="" coords="467,208,561,235"/>
+</map>

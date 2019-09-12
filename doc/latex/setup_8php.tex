@@ -1,0 +1,215 @@
+\hypertarget{setup_8php}{}\section{Référence du fichier admin/setup.php}
+\label{setup_8php}\index{admin/setup.\+php@{admin/setup.\+php}}
+
+
+Tournees\+De\+Livraison setup page.  
+
+
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{setup_8php_a49a8a4009b02e49717caa88b128affc5}\label{setup_8php_a49a8a4009b02e49717caa88b128affc5}} 
+{\bfseries \$res} =0
+\item 
+\mbox{\Hypertarget{setup_8php_a57024d47cf8348153f5fdda16f8fefa9}\label{setup_8php_a57024d47cf8348153f5fdda16f8fefa9}} 
+{\bfseries \$tmp} =empty(\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]})?\textquotesingle{}\textquotesingle{}\+:\$\+\_\+\+S\+E\+R\+V\+ER\mbox{[}\textquotesingle{}S\+C\+R\+I\+P\+T\+\_\+\+F\+I\+L\+E\+N\+A\+ME\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_aed9bcb6730d1510376ce80e32bd9504d}\label{setup_8php_aed9bcb6730d1510376ce80e32bd9504d}} 
+{\bfseries \$tmp2} =realpath(\+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+)
+\item 
+\mbox{\Hypertarget{setup_8php_a83018d9153d17d91fbcf3bc10158d34f}\label{setup_8php_a83018d9153d17d91fbcf3bc10158d34f}} 
+{\bfseries \$i} =strlen(\$tmp)-\/1
+\item 
+\mbox{\Hypertarget{setup_8php_a6f16db779ef3ccea921b277b5dc245d1}\label{setup_8php_a6f16db779ef3ccea921b277b5dc245d1}} 
+{\bfseries \$j} =strlen(\$tmp2)-\/1
+\item 
+\mbox{\Hypertarget{setup_8php_a29be2d9bc87fa3c921824a078a22e09a}\label{setup_8php_a29be2d9bc87fa3c921824a078a22e09a}} 
+global {\bfseries \$langs}
+\item 
+\mbox{\Hypertarget{setup_8php_a00365e6c5f70c43fb2ed86c9bc5626e0}\label{setup_8php_a00365e6c5f70c43fb2ed86c9bc5626e0}} 
+global {\bfseries \$user}
+\item 
+\mbox{\Hypertarget{setup_8php_aa698a3e72116e8e778be0e95d908ee30}\label{setup_8php_aa698a3e72116e8e778be0e95d908ee30}} 
+{\bfseries \$action} = G\+E\+T\+P\+O\+ST(\textquotesingle{}action\textquotesingle{}, \textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{setup_8php_a71552e61097747f0d8e8288daf9be44d}\label{setup_8php_a71552e61097747f0d8e8288daf9be44d}} 
+{\bfseries \$backtopage} = G\+E\+T\+P\+O\+ST(\textquotesingle{}backtopage\textquotesingle{}, \textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{setup_8php_a0f298096f322952a72a50f98a74c7b60}\label{setup_8php_a0f298096f322952a72a50f98a74c7b60}} 
+{\bfseries \$value} =G\+E\+T\+P\+O\+ST(\textquotesingle{}value\textquotesingle{},\textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{setup_8php_a177af2bf70bede02de3d05a425fb8e43}\label{setup_8php_a177af2bf70bede02de3d05a425fb8e43}} 
+{\bfseries \$label} = G\+E\+T\+P\+O\+ST(\textquotesingle{}label\textquotesingle{},\textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{setup_8php_af8740e47a115ee055d40254054b37978}\label{setup_8php_af8740e47a115ee055d40254054b37978}} 
+{\bfseries \$scandir} = G\+E\+T\+P\+O\+ST(\textquotesingle{}scan\+\_\+dir\textquotesingle{},\textquotesingle{}alpha\textquotesingle{})
+\item 
+\mbox{\Hypertarget{setup_8php_ac4d4c56358032c00065202143a3b7a85}\label{setup_8php_ac4d4c56358032c00065202143a3b7a85}} 
+{\bfseries \$type} =\textquotesingle{}tourneesdelivraison\textquotesingle{}
+\item 
+{\bfseries \$arrayofparameters}
+\item 
+if((float) D\+O\+L\+\_\+\+V\+E\+R\+S\+I\+ON $>$=6) if(\$action==\textquotesingle{}specimen\textquotesingle{}) else if(\$action==\textquotesingle{}set\textquotesingle{}) else if(\$action==\textquotesingle{}del\textquotesingle{}) else if(\$action==\textquotesingle{}setdoc\textquotesingle{}) if( \$action==\textquotesingle{}setavertissement\textquotesingle{}) {\bfseries \$actions}
+\item 
+\mbox{\Hypertarget{setup_8php_a87a7c946a6ea036f23049b1a981c35ae}\label{setup_8php_a87a7c946a6ea036f23049b1a981c35ae}} 
+if(array\+\_\+key\+\_\+exists(\$action, \$actions) \&\&G\+E\+T\+P\+O\+S\+T\+I\+S\+S\+ET(\textquotesingle{}value\textquotesingle{})) if( \$action==\textquotesingle{}setup\+\_\+reduc\+\_\+qrcode\textquotesingle{} \&\&G\+E\+T\+P\+O\+S\+T\+I\+S\+S\+ET(\textquotesingle{}value\textquotesingle{})) if(\$action==\textquotesingle{}updateoptions\textquotesingle{}) {\bfseries \$page\+\_\+name} = \char`\"{}Tournees\+De\+Livraison\+Setup\char`\"{}
+\item 
+\mbox{\Hypertarget{setup_8php_aa8a538bac04922850b15c7460fb1bfc7}\label{setup_8php_aa8a538bac04922850b15c7460fb1bfc7}} 
+{\bfseries \$linkback} = \textquotesingle{}$<$a href=\char`\"{}\textquotesingle{}.(\$backtopage?\$backtopage\+:\+D\+O\+L\+\_\+\+U\+R\+L\+\_\+\+R\+O\+O\+T.\textquotesingle{}/admin/modules.\+php?restore\+\_\+lastsearch\+\_\+values=1\textquotesingle{}).\textquotesingle{}\char`\"{}$>$\textquotesingle{}.\$langs-\/$>$trans(\char`\"{}Back\+To\+Module\+List\char`\"{}).\textquotesingle{}$<$/a$>$\textquotesingle{}
+\item 
+\mbox{\Hypertarget{setup_8php_a687ea7fcd78263867b5bd34ed56b6379}\label{setup_8php_a687ea7fcd78263867b5bd34ed56b6379}} 
+{\bfseries \$head} = tourneesdelivraison\+Admin\+Prepare\+Head()
+\item 
+\mbox{\Hypertarget{setup_8php_a1a4fda4c28a9ee5f91102c023b9501f4}\label{setup_8php_a1a4fda4c28a9ee5f91102c023b9501f4}} 
+{\bfseries \$form} =new Form(\$db)
+\item 
+\mbox{\Hypertarget{setup_8php_a2b596c6f93d14726cedde094189e00c4}\label{setup_8php_a2b596c6f93d14726cedde094189e00c4}} 
+print {\bfseries \$\+\_\+\+S\+E\+R\+V\+ER} \mbox{[}\textquotesingle{}P\+H\+P\+\_\+\+S\+E\+LF\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}\label{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}} 
+print {\bfseries \$\+\_\+\+S\+E\+S\+S\+I\+ON} \mbox{[}\textquotesingle{}newtoken\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_a8ad7c5b8e0149bfaf0d2a34149e2edf8}\label{setup_8php_a8ad7c5b8e0149bfaf0d2a34149e2edf8}} 
+{\bfseries print}
+\item 
+\mbox{\Hypertarget{setup_8php_aa1514cd512d27b0f6cd83ce89d2f3475}\label{setup_8php_aa1514cd512d27b0f6cd83ce89d2f3475}} 
+print {\bfseries n}
+\item 
+if(!empty(\$conf-\/$>$global-\/$>$T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+R\+E\+G\+L\+E\+S\+\_\+\+A\+F\+F\+E\+C\+T\+A\+U\+T\+O\+\_\+\+A\+F\+F\+E\+C\+T\+A\+U\+T\+O\+\_\+\+D\+A\+T\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+OK)) {\bfseries else}
+\item 
+{\bfseries \$arrval}
+\item 
+\mbox{\Hypertarget{setup_8php_a9f8f890e2d5fb4b002a11db42621b997}\label{setup_8php_a9f8f890e2d5fb4b002a11db42621b997}} 
+{\bfseries \$def} = array()
+\item 
+\mbox{\Hypertarget{setup_8php_a7f00382b9231fafd3ad71e9dc1135c0d}\label{setup_8php_a7f00382b9231fafd3ad71e9dc1135c0d}} 
+{\bfseries \$sql} = \char`\"{}S\+E\+L\+E\+CT nom\char`\"{}
+\item 
+\mbox{\Hypertarget{setup_8php_a6adc5ef389ab51c21dee69262018d615}\label{setup_8php_a6adc5ef389ab51c21dee69262018d615}} 
+{\bfseries \$resql} =\$db-\/$>$query(\$sql)
+\item 
+\mbox{\Hypertarget{setup_8php_a258e275c12848e432846f775d3ae98be}\label{setup_8php_a258e275c12848e432846f775d3ae98be}} 
+{\bfseries \$dirmodels} =array\+\_\+merge(array(\textquotesingle{}/\textquotesingle{}),(array) \$conf-\/$>$modules\+\_\+parts\mbox{[}\textquotesingle{}models\textquotesingle{}\mbox{]})
+\item 
+\mbox{\Hypertarget{setup_8php_a2b596c6f93d14726cedde094189e00c4}\label{setup_8php_a2b596c6f93d14726cedde094189e00c4}} 
+print {\bfseries \$\+\_\+\+S\+E\+R\+V\+ER} \mbox{[}\textquotesingle{}P\+H\+P\+\_\+\+S\+E\+LF\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}\label{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}} 
+print {\bfseries \$\+\_\+\+S\+E\+S\+S\+I\+ON} \mbox{[}\textquotesingle{}newtoken\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_a412c4462b7cd20123e45d8888a0c772e}\label{setup_8php_a412c4462b7cd20123e45d8888a0c772e}} 
+print \$conf global {\bfseries T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+U\+R\+L\+\_\+\+O\+R\+I\+G\+IN}
+\item 
+\mbox{\Hypertarget{setup_8php_a99c58aee88d8b9d06af605e1d2564e4e}\label{setup_8php_a99c58aee88d8b9d06af605e1d2564e4e}} 
+print \$conf global {\bfseries T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+U\+R\+L\+\_\+\+R\+E\+P\+L\+A\+CE}
+\item 
+{\bfseries \$avertissements}
+\end{DoxyCompactItemize}
+
+
+\subsection{Description détaillée}
+Tournees\+De\+Livraison setup page. 
+
+
+
+\subsection{Documentation des variables}
+\mbox{\Hypertarget{setup_8php_a62c199dfc9bd2ea2c5002e821c541fae}\label{setup_8php_a62c199dfc9bd2ea2c5002e821c541fae}} 
+\index{setup.\+php@{setup.\+php}!\$actions@{\$actions}}
+\index{\$actions@{\$actions}!setup.\+php@{setup.\+php}}
+\subsubsection{\texorpdfstring{\$actions}{$actions}}
+{\footnotesize\ttfamily if ((float) D\+O\+L\+\_\+\+V\+E\+R\+S\+I\+ON $>$=6) if ( \$action==\textquotesingle{}specimen\textquotesingle{}) else if ( \$action==\textquotesingle{}set\textquotesingle{}) else if ( \$action==\textquotesingle{}del\textquotesingle{}) else if ( \$action==\textquotesingle{}setdoc\textquotesingle{}) if (\$action==\textquotesingle{}setavertissement\textquotesingle{}) \$actions}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+=array(
+    
+    \textcolor{stringliteral}{'setpdfautodelete'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_DISABLE\_PDF\_AUTODELETE'},
+    \textcolor{stringliteral}{'setpdfautoupdate'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_DISABLE\_PDF\_AUTOUPDATE'},
+    \textcolor{stringliteral}{'setcontactintegre'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_AFFICHAGE\_CONTACT\_INTEGRE"},
+    \textcolor{stringliteral}{'setpoidsbl'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_POIDS\_BL"},
+    \textcolor{stringliteral}{'setaffectautodateok'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_DATELIVRAISONOK"},
+    \textcolor{stringliteral}{'setaffectautosi1eltparcmde'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_SI\_1ELT\_PAR\_CMDE"},
+    \textcolor{stringliteral}{'setaffectauto1erecmde'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_1ERE\_FUTURE\_CMDE"},
+    \textcolor{stringliteral}{'setsms'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_SMS"},
+)
+\end{DoxyCode}
+\mbox{\Hypertarget{setup_8php_a8369416196b10b28151091484f257bfb}\label{setup_8php_a8369416196b10b28151091484f257bfb}} 
+\index{setup.\+php@{setup.\+php}!\$arrayofparameters@{\$arrayofparameters}}
+\index{\$arrayofparameters@{\$arrayofparameters}!setup.\+php@{setup.\+php}}
+\subsubsection{\texorpdfstring{\$arrayofparameters}{$arrayofparameters}}
+{\footnotesize\ttfamily \$arrayofparameters}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+=array(
+    \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_MYPARAM1'}=>array(\textcolor{stringliteral}{'css'}=>\textcolor{stringliteral}{'minwidth200'},\textcolor{stringliteral}{'enabled'}=>1),
+    \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_MYPARAM2'}=>array(\textcolor{stringliteral}{'css'}=>\textcolor{stringliteral}{'minwidth500'},\textcolor{stringliteral}{'enabled'}=>1)
+)
+\end{DoxyCode}
+\mbox{\Hypertarget{setup_8php_a76ffbf0cd35af901af0076dafc606458}\label{setup_8php_a76ffbf0cd35af901af0076dafc606458}} 
+\index{setup.\+php@{setup.\+php}!\$arrval@{\$arrval}}
+\index{\$arrval@{\$arrval}!setup.\+php@{setup.\+php}}
+\subsubsection{\texorpdfstring{\$arrval}{$arrval}}
+{\footnotesize\ttfamily \$arrval}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+=array(\textcolor{charliteral}{'0'}=>$langs->trans(\textcolor{stringliteral}{"No"}),
+\textcolor{charliteral}{'1'}=>$langs->trans(\textcolor{stringliteral}{"Yes"}).\textcolor{stringliteral}{' ('}.$langs->trans(\textcolor{stringliteral}{"AffectationsManuellesSeulement"},1).\textcolor{charliteral}{')'},
+\textcolor{charliteral}{'2'}=>$langs->trans(\textcolor{stringliteral}{"Yes"}).\textcolor{stringliteral}{' ('}.$langs->trans(\textcolor{stringliteral}{"AffectationsManuellesEtAuto"},2).\textcolor{charliteral}{')'},
+)
+\end{DoxyCode}
+\mbox{\Hypertarget{setup_8php_a0cb03b92b289d44ff75a5f981ffad652}\label{setup_8php_a0cb03b92b289d44ff75a5f981ffad652}} 
+\index{setup.\+php@{setup.\+php}!\$avertissements@{\$avertissements}}
+\index{\$avertissements@{\$avertissements}!setup.\+php@{setup.\+php}}
+\subsubsection{\texorpdfstring{\$avertissements}{$avertissements}}
+{\footnotesize\ttfamily \$avertissements}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+= array(\textcolor{stringliteral}{'Delete'} => $conf->global->TOURNEESDELIVRAISON\_ASK\_DELETE,
+                                                \textcolor{stringliteral}{'Cancel'} => $conf->global->TOURNEESDELIVRAISON\_ASK\_CANCEL,
+                                                \textcolor{stringliteral}{'Clone'} => $conf->global->TOURNEESDELIVRAISON\_ASK\_CLONE,
+                                                \textcolor{stringliteral}{'Close'} => $conf->global->TOURNEESDELIVRAISON\_ASK\_CLOSE,
+                                                \textcolor{stringliteral}{'Validate'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_VALIDATE,
+                                                \textcolor{stringliteral}{'GenererDocs'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_GENERERDOCS,
+                                                \textcolor{stringliteral}{'Unvalidate'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_UNVALIDATE,
+                                                \textcolor{stringliteral}{'AffectationAuto'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_AFFECTATIONAUTO,
+                                                \textcolor{stringliteral}{'Reopen'} => $conf->global->TOURNEESDELIVRAISON\_ASK\_REOPEN,
+                                                \textcolor{stringliteral}{'ChangeStatutElt'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CHANGESTATUTELT,
+                                                \textcolor{stringliteral}{'ChangeDateElt'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CHANGEDATEELT,
+                                                \textcolor{stringliteral}{'DeleteLine'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_DELETELINE,
+                                                \textcolor{stringliteral}{'DeleteContact'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_DELETECONTACT,
+                                                \textcolor{stringliteral}{'Cmde\_ClassifyBilled'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CMDE\_CLASSIFYBILLED,
+                                                \textcolor{stringliteral}{'Cmde\_ClassifyUnBilled'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CMDE\_CLASSIFYUNBILLED,
+                                                \textcolor{stringliteral}{'Cmde\_Reopen'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CMDE\_REOPEN,
+                                                \textcolor{stringliteral}{'Cmde\_Shipped'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_CMDE\_SHIPPED,
+                                                \textcolor{stringliteral}{'Exp\_Shipped'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_EXP\_SHIPPED,
+                                                \textcolor{stringliteral}{'Exp\_Reopen'} => $conf->global->
+      TOURNEESDELIVRAISON\_ASK\_EXP\_REOPEN,
+                                            )
+\end{DoxyCode}
+\mbox{\Hypertarget{setup_8php_a2720c08c907ff39c34df1404f153f715}\label{setup_8php_a2720c08c907ff39c34df1404f153f715}} 
+\index{setup.\+php@{setup.\+php}!else@{else}}
+\index{else@{else}!setup.\+php@{setup.\+php}}
+\subsubsection{\texorpdfstring{else}{else}}
+{\footnotesize\ttfamily if (!empty( \$conf-\/$>$global-\/$>$T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+A\+F\+F\+I\+C\+H\+A\+G\+E\+\_\+\+C\+O\+N\+T\+A\+C\+T\+\_\+\+I\+N\+T\+E\+G\+RE)) else}
+
+{\bfseries Valeur initiale \+:}
+\begin{DoxyCode}
+\{
+    print \textcolor{stringliteral}{'<a href="'}.$\_SERVER[\textcolor{stringliteral}{'PHP\_SELF'}].\textcolor{stringliteral}{'?action=setaffectautodateok&value=1">'}
+\end{DoxyCode}

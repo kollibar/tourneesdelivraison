@@ -1,0 +1,6 @@
+<map id="ModelePDFTourneesdelivraison" name="ModelePDFTourneesdelivraison">
+<area shape="rect" id="node3" href="$classpdf__cargo.html" title="pdf_cargo" alt="" coords="5,155,84,181"/>
+<area shape="rect" id="node4" href="$classpdf__fourgon.html" title="pdf_fourgon" alt="" coords="109,155,199,181"/>
+<area shape="rect" id="node5" href="$classpdf__palette21.html" title="pdf_palette21" alt="" coords="224,155,324,181"/>
+<area shape="rect" id="node6" href="$classpdf__palette40.html" title="pdf_palette40" alt="" coords="348,155,448,181"/>
+</map>
