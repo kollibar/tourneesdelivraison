@@ -326,10 +326,24 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	}
 
 
+	public function checkCmdeAutodesaffecte(User $user){
+		foreach ($this->lines_cmde as $line_cmde) {
+			if( $line_cmde->statut != TourneeUnique_lines_cmde::DATE_OK && $line_cmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK){
+				$line_cmde->loadElt();
+				if( $line_cmde->elt->statut == Commande::STATUS_CLOSED ){
+					$line_cmde->statut = TourneeUnique_lines_cmde::AUTRE_AFFECTATION;
+					$line_cmde->update($user);
+				}
+			}
+		}
+	}
+
+
 	public function checkCommande(User $user, $date){
-		global $user;
 
 		if( $this->type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) return;
+
+		$this->checkCmdeAutodesaffecte($user);
 
 		$parent=$this->getParent();
 

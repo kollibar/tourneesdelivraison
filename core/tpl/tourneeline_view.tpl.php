@@ -193,8 +193,12 @@ $domData .= ' data-id="'.$line->id.'"';
 
 			<table class="noborderbottom">
 				<?php foreach ($line->lines_cmde as $lcmde) {
-					$cmde=new Commande($this->db);
-					$cmde->fetch($lcmde->fk_commande);
+					$cmde=$lcmde->loadElt();
+					if( $lcmde->statut!=TourneeUnique_lines_cmde::DATE_OK
+						&& $lcmde->statut!=TourneeUnique_lines_cmde::DATE_NON_OK
+						&& $cmde->statut==Commande::STATUS_CLOSED) continue;
+					// $cmde=new Commande($this->db);
+					// $cmde->fetch($lcmde->fk_commande);
 					$numshipping = $cmde->nb_expedition();
 					$numinvoice=0;
 					?>
