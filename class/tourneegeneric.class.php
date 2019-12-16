@@ -30,11 +30,35 @@ class TourneeGeneric extends TourneeObject
 	 */
 	const STATUS_CLOSED = 3;
 
+	const MODE_CLOSED = 3;
+	const MODE_EDITION = 1;
+	const MODE_CMDE = 2;
+	const MODE_UNKNOW = 0;
 
 	public $element = 'tourneegeneric';
 	public $nomelement = 'TourneeGeneric';
 
 
+
+	/**
+	 * Load object in memory from the database
+	 *
+	 * @param int    $id   Id object
+	 * @param string $ref  Ref
+	 * @return int         <0 if KO, 0 if not found, >0 if OK
+	 */
+	public function fetch($id, $ref = null)
+	{
+		$result=TourneeObject::fetch($id,$ref);
+
+		$this->mode=MODE_UNKNOW;
+		if($result>0){
+			if( $this->statut == TourneeGeneric::STATUS_CANCELED || $this->statut == TourneeGeneric::STATUS_CLOSED) $this->mode=TourneeGeneric::MODE_CLOSED;
+			else if(get_class($this) == 'TourneeDeLivraison' || $this->statut == TourneeGeneric::STATUS_DRAFT ) $this->mode=TourneeGeneric::MODE_EDITION;
+			else $this->mode=TourneeGeneric::MODE_CMDE;
+		}
+		return $result;
+	}
 
 
 
@@ -181,7 +205,7 @@ class TourneeGeneric extends TourneeObject
 
 		dol_syslog(get_class($this)."::addline type=$type, fk_soc=$fk_soc, fk_tournee_incluse=$fk_tournee_incluse, BL=$BL, facture=$facture, etiquettes=$etiquettes, infolivraison=$infolivraison, fk_adresselivraison=$fk_adresselivraison, force_email_soc=$force_email_soc, fk_parent_line=$fk_parent_line, ");
 
-		if ($this->statut == self::STATUS_DRAFT)
+		if ($this->mode == self::MODE_EDITION)
 		{
 			if(empty($BL)) $BL=0;
 			if(empty($facture)) $facture=0;
@@ -355,7 +379,7 @@ class TourneeGeneric extends TourneeObject
 
 		dol_syslog(get_class($this)."::updateline id=$rowid, type=$type, fk_soc=$fk_soc, fk_tournee_incluse=$fk_tournee_incluse, BL=$BL, facture=$facture, fk_parent_line=$fk_parent_line, ");
 
-		if ($this->statut == self::STATUS_DRAFT)
+		if ($this->mode == self::MODE_EDITION)
 		{
 			$this->db->begin();
 
@@ -907,8 +931,7 @@ public function LibStatut($status, $mode=0)
 		$i	 = 0;
 
 		print "<tbody>\n";
-		foreach ($this->lines as $line)
-		{
+		foreach ($this->lines as $line) {
 			// masquage des lignes suivant $this->masque_ligne
 			$c=$line->getCategories();
 			if( empty($line->note_public) && count($c)==0){ // si pas de note plublic ni de tag
@@ -990,6 +1013,13 @@ public function LibStatut($status, $mode=0)
 
 		$text=''; $description=''; $type=0;
 
+		$disableselect=0;
+		// si mode clos ou inconnu OU edition d'une ligne en cours
+		if( $action == 'editline' || $this->mode == TourneeGeneric::MODE_CLOSED || $this->mode == TourneeGeneric::MODE_UNKNOW  ){
+			// on désactive la selection
+			$disableselect=1;
+		}
+
 		// Ligne en mode visu
 		if ($action != 'editline' || $selected != $line->id)
 		{
@@ -1010,7 +1040,7 @@ public function LibStatut($status, $mode=0)
 		}
 
 		// Ligne en mode update
-		if ($this->statut == 0 && $action == 'editline' && $selected == $line->id)
+		if ($this->mode == TourneeGeneric::MODE_EDITION && $action == 'editline' && $selected == $line->id)
 		{
 			$label = (! empty($line->label) ? $line->label : (($line->fk_product > 0) ? $line->product_label : ''));
 			$placeholder=' placeholder="'.$langs->trans("Label").'"';
