@@ -279,6 +279,29 @@ class pdf_saumon extends ModelePdfExpedition
 				$tab_height = 130;
 				$tab_height_newpage = 150;
 
+				// message adresse
+				if(!empty($conf->global->MESSAGE_ALERTE)){
+					$tab_top -= 2;
+
+					$notetoshow = $conf->global->MESSAGE_ALERTE;
+
+					$pdf->SetFont('','', $default_font_size - 1);
+
+					$pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top-1, dol_htmlentitiesbr($notetoshow), 0, 1);
+					$nexY = $pdf->GetY();
+					$height_note=$nexY-$tab_top;
+
+					$pdf->setY($tab_top-1);
+					$pdf->SetFillColor(253,212,204);
+					$pdf->MultiCell($this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+1, "", 0, 'R', 1);
+
+					// Rect prend une longueur en 3eme param
+					$pdf->SetDrawColor(192,192,192);
+					$pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+1);
+
+					$tab_top = $nexY+6;
+				}
+
 				// Incoterm
 				$height_incoterms = 0;
 				if ($conf->incoterm->enabled)
