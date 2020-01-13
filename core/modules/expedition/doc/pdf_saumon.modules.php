@@ -328,7 +328,7 @@ class pdf_saumon extends ModelePdfExpedition
 				// Infos livraisons
 				if (! empty($object->thirdparty->array_options['options_horaires_livr']))
 				{
-					$tab_top = 88 + $height_incoterms;
+					//$tab_top = 88 + $height_incoterms;
 					$tab_top_alt = $tab_top;
 
 					$pdf->SetFont('','B', $default_font_size - 2);
