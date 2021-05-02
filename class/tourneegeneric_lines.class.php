@@ -680,22 +680,6 @@ class TourneeGeneric_lines extends TourneeObject
 		return $out;
 	}
 
-	public function getBannerAddresseLivraison($htmlkey='bannerAdresseLivraison'){
-		if( $this->fk_adresselivraison > 0){
-			$contactLivraison=new Contact($this->db);
-			$contactLivraison->fetch($this->fk_adresselivraison);
-
-
-			$outdone=0;
-			$coords = $contactLivraison->getFullAddress(1,', ',$conf->global->MAIN_SHOW_REGION_IN_STATE_SELECT);
-			if ($coords) {
-				$out.=dol_print_address($coords, $htmlkey.'_'.$contactLivraison->id, $contactLivraison->element, $contactLivraison->id, 1, ', '); $outdone++;
-			}
-
-			return $out;
-		} else return '';
-	}
-
 
 	public function getParent(){
 		if( empty($this->parent)){
@@ -784,7 +768,6 @@ class TourneeGeneric_lines extends TourneeObject
 		$this->fk_tournee=0;
 		$this->fk_tournee_incluse=0;
 		$this->fk_soc=0;
-		$this->fk_adresselivraison=0;
 		$this->type=self::TYPE_THIRDPARTY_CLIENT;
 		$this->tpstheorique=rand(0,50);
 		$this->infolivraison='info livraison';

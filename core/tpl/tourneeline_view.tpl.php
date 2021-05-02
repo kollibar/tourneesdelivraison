@@ -403,9 +403,6 @@ $domData .= ' data-id="'.$line->id.'"';
 	</td>
 <?php } ?>
 
-	<td align="right" class="linecoladresselivraison nowrap"><?php $coldisplay++; ?>
-		<?php echo $line->getBannerAddresseLivraison('bannerAdresseLivraison_'.$line->id); ?>
-	</td>
 
 
 	<?php if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>

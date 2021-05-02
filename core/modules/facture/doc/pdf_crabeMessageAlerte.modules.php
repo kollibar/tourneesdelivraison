@@ -402,7 +402,7 @@ class pdf_crabeMessageAlerte extends ModelePDFFactures
 				$tab_top = 90+$top_shift;
 				$tab_top_newpage = (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)?42+$top_shift:10);
 
-        // message  adresse
+        // message adresse
 				if(!empty($conf->global->MESSAGE_ALERTE)){
 					$tab_top -= 2;
 

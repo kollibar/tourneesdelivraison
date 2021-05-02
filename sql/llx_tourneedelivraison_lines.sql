@@ -31,7 +31,6 @@ CREATE TABLE llx_tourneedelivraison_lines(
 	fk_tournee integer NOT NULL,
 	fk_tournee_incluse integer,
 	fk_soc integer,
-	fk_adresselivraison integer,
 	type integer NOT NULL,
 	tpstheorique integer,
 	infolivraison text,

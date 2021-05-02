@@ -152,7 +152,7 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
 
 		$this->db = $db;
 		$this->name = "palette21";
-		$this->description = $langs->trans('PDFPalette21Description');
+		$this->description = $langs->trans('PDFpalette21Description');
 		$this->update_main_doc_field = 1;		// Save the name of generated file as the main doc when generating a doc with this template
 
 		// Dimensiont page
@@ -189,16 +189,16 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
     $this->nb_case=$this->nb_colonne*$this->nb_ligne;
     $this->marge_g=0; // marge à gauche de la planche
     $this->marge_d=0; // marge à droite de la planche
-    $this->marge_h=1; // marge en haut de la planche
-    $this->marge_b=2; // marge en bas de la planche
+    $this->marge_h=0; // marge en haut de la planche
+    $this->marge_b=0; // marge en bas de la planche
     $this->marge_v=0; // marge verticale entre les étiquettes
     $this->marge_h=0; // marge horizontale entre les étiquettes
 
     // marge d'impression
-    $this->marge_haute=5;
-    $this->marge_basse=5;
-    $this->marge_droite=5;
-    $this->marge_gauche=5;
+    $this->marge_haute=4;
+    $this->marge_basse=4;
+    $this->marge_droite=4;
+    $this->marge_gauche=4;
 
     $this->marge_case=2;
 
@@ -226,21 +226,24 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
   }
 
 
-  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
+  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
     global $user,$conf,$langs,$hookmanager;
+
+    $product=new Product($this->db);
+    $product->fetch($product_id);
 
     $XYP=$this->getXYP($pos);
     $curX=$XYP['X'];
     $curY=$XYP['Y'];
     $curP=$XYP['page'];
-    $this->printRect($pdf,$curX, $curY, $this->largeur, $this->hauteur, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
+    //$this->printRect($pdf,$curX, $curY, $this->largeur, $this->hauteur, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
     if( $pdf->getPage() < $XYP['page'] ) {
       $this->addPage($pdf);
     }
     $style = array(
       'border' => 0,
-      'vpadding' => 'auto',
-      'hpadding' => 'auto',
+      'vpadding' => 1,
+      'hpadding' => 0,
       'fgcolor' => array(0,0,0),
       'bgcolor' => false, //array(255,255,255)
       'module_width' => 1, // width of a single module in points
@@ -251,34 +254,34 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
       $url=str_replace($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN, $conf->global->TOURNEESDELIVRAISON_URL_REPLACE, $url);
     }
 
-    $pdf->write2DBarcode($url, 'QRCODE,L', $curX, $curY, 20, 20, $style, 'N');
+    $pdf->write2DBarcode($url, 'QRCODE,L', $curX, $curY, 18, 18, $style, 'N');
 
     $carac_client_name = pdfBuildThirdpartyName($thirdparty, $outputlangs);
-    $pdf->SetXY($curX+20,$curY);
-    $pdf->SetFont('','B', $default_font_size);
+    $pdf->SetXY($curX+18,$curY);
+    $pdf->SetFont('','B', $default_font_size*0.9);
 
-    $pdf->MultiCell($this->largeur-20, 2, pdf_reduceStringTo($pdf,$carac_client_name,round(($this->largeur-23)*1.6,0)), 0, 'L');
+    $pdf->MultiCell($this->largeur-18, 2, pdf_reduceStringTo($pdf,$carac_client_name,round(($this->largeur-23)*1.6,0)), 0, 'L');
 
-    $pdf->SetXY($curX+20,$curY+11);
+    $pdf->SetXY($curX+18,$curY+11);
     $pdf->SetFont('','B', $default_font_size*2);
-    $pdf->MultiCell($this->largeur-20, 3, $num, 0, 'L');
+    $pdf->MultiCell($this->largeur-18, 3, $num, 0, 'L');
 
 
     $X=20+$pdf->GetStringWidth($num);
 
-    $pdf->setXY($curX+1+$X,$curY+14);
-    $pdf->SetFont('','', $default_font_size);
+    $pdf->setXY($curX+1+$X,$curY+14.5);
+    $pdf->SetFont('','', $default_font_size*0.9);
     $pdf->MultiCell($this->largeur-$X-1, 3, '/'.$tot, 0, 'L');
 
-    $pdf->SetXY($curX+20,$curY+8);
-    $pdf->SetFont('','', $default_font_size);
+    $pdf->SetXY($curX+18,$curY+8);
+    $pdf->SetFont('','', $default_font_size*0.9);
     //$pdf->MultiCell($this->largeur-22, 3, $qty.'x '.(!empty($product->array_options['options_codecarton'])?$product->array_options['options_codecarton']:$product->ref), 0, 'L');
-    $pdf->MultiCell($this->largeur-22, 3, $qty.'x '.$product_name, 0, 'L');
+    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product->ref, 0, 'L');
 
   }
 
-  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
-    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size);
+  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
+    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size);
     $this->pos++;
   }
 
@@ -388,7 +391,9 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
 				$pagenb++;
 
 
-        // Loop on each lines
+        $url=str_replace("tourneeunique_card.php","livraison_card.php",(!empty($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"]);
+
+				// Loop on each lines
 				for ($i = 0; $i < $nblignes; $i++) {
 
           $thirdparty = new Societe($this->db);
@@ -398,12 +403,6 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
           dol_syslog("_write_file()->thirdparty:$thirdparty->name i:$i nbLignes:$nblignes");
 
           if(empty($object->lines[$i]->etiquettes) || $object->lines[$i]->etiquettes ==0 ) continue;
-
-          if( !empty($object->lines[$i]->fk_adresselivraison)){
-            $contact = new Contact($this->db);
-            $contact->fetch($object->lines[$i]->fk_adresselivraison);
-            $contact->fetch_optionals();
-          }
 
           $expedition=array();
           foreach($object->lines[$i]->lines_cmde as $lcmde){
@@ -428,7 +427,7 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
             for ($j=1; $j <= $nbColis ; $j++) {
               $param="?h=".$hash."&le=".$leltid."&c=".$j;
               $carton=$lelt->getCartonNum($j);
-              $this->_add_case($pdf, $url . $param, $thirdparty, $j, $nbColis, $carton->qty, $carton->product_name, $outputlangs, $default_font_size);
+              $this->_add_case($pdf, $url . $param, $thirdparty, $j, $nbColis, $carton->qty, $carton->product_id, $outputlangs, $default_font_size);
             }
           }
 				}

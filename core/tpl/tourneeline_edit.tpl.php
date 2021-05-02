@@ -143,12 +143,6 @@ $domData .= ' data-id="'.$line->id.'"';
 </table>
 </td>
 
-	<td align="right" class="linecoladresselivraison nowrap"><?php $coldisplay++; ?>
-		<?php
-			$ret=$form->select_contacts($line->fk_soc, '', 'adresselivraisonid', 1, '', '',0,'', 0,0,array(), false,'','');
-		?>
-	</td>
-
 	<?php if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
 		<td align="right" class="linecolcontact nowrap"><?php $coldisplay++; ?>
 			<?php

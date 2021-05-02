@@ -102,24 +102,24 @@ class pdf_palette40 extends ModelePdfExpedition
     public $format;
 
 	/**
-     * @var int marge_gauche
+     * @var int marge_imp_gauche
      */
-	public $marge_gauche;
+	public $marge_imp_gauche;
 
 	/**
-     * @var int marge_droite
+     * @var int marge_imp_droite
      */
-	public $marge_droite;
+	public $marge_imp_droite;
 
 	/**
-     * @var int marge_haute
+     * @var int marge_imp_haute
      */
-	public $marge_haute;
+	public $marge_imp_haute;
 
 	/**
-     * @var int marge_basse
+     * @var int marge_imp_basse
      */
-	public $marge_basse;
+	public $marge_imp_basse;
 
 	/**
 	 * Issuer
@@ -161,10 +161,10 @@ class pdf_palette40 extends ModelePdfExpedition
 		$this->page_largeur = $formatarray['width'];
 		$this->page_hauteur = $formatarray['height'];
 		$this->format = array($this->page_largeur,$this->page_hauteur);
-		$this->marge_gauche=isset($conf->global->MAIN_PDF_MARGIN_LEFT)?$conf->global->MAIN_PDF_MARGIN_LEFT:10;
-		$this->marge_droite=isset($conf->global->MAIN_PDF_MARGIN_RIGHT)?$conf->global->MAIN_PDF_MARGIN_RIGHT:10;
-		$this->marge_haute =isset($conf->global->MAIN_PDF_MARGIN_TOP)?$conf->global->MAIN_PDF_MARGIN_TOP:10;
-		$this->marge_basse =isset($conf->global->MAIN_PDF_MARGIN_BOTTOM)?$conf->global->MAIN_PDF_MARGIN_BOTTOM:10;
+		$this->marge_imp_gauche=isset($conf->global->MAIN_PDF_MARGIN_LEFT)?$conf->global->MAIN_PDF_MARGIN_LEFT:10;
+		$this->marge_imp_droite=isset($conf->global->MAIN_PDF_MARGIN_RIGHT)?$conf->global->MAIN_PDF_MARGIN_RIGHT:10;
+		$this->marge_imp_haute =isset($conf->global->MAIN_PDF_MARGIN_TOP)?$conf->global->MAIN_PDF_MARGIN_TOP:10;
+		$this->marge_imp_basse =isset($conf->global->MAIN_PDF_MARGIN_BOTTOM)?$conf->global->MAIN_PDF_MARGIN_BOTTOM:10;
 
 		$this->option_logo = 0;                    // Affiche logo
 		$this->option_tva = 0;                     // Gere option tva FACTURE_TVAOPTION
@@ -182,41 +182,42 @@ class pdf_palette40 extends ModelePdfExpedition
 		if (empty($this->emetteur->country_code)) $this->emetteur->country_code=substr($langs->defaultlang,-2);    // By default, if was not defined
 
 		// Define position of columns
-    $largeur=$this->page_largeur - $this->marge_gauche - $this->marge_droite;
+    $largeur=$this->page_largeur - $this->marge_imp_gauche - $this->marge_imp_droite;
 
     $this->nb_colonne=4;
     $this->nb_ligne=10;
     $this->nb_case=$this->nb_colonne*$this->nb_ligne;
-    $this->marge_g=0; // marge à gauche de la planche
-    $this->marge_d=0; // marge à droite de la planche
-    $this->marge_h=0; // marge en haut de la planche
-    $this->marge_b=0; // marge en bas de la planche
-    $this->marge_v=0; // marge verticale entre les étiquettes
-    $this->marge_h=0; // marge horizontale entre les étiquettes
+    $this->marge_g=8; // marge à gauche de la planche
+    $this->marge_d=8; // marge à droite de la planche
+    $this->marge_h=21.5; // marge en haut de la planche
+    $this->marge_b=21.5; // marge en bas de la planche
+    $this->marge_vt=0; // marge verticale entre les étiquettes
+    $this->marge_hz=0; // marge horizontale entre les étiquettes
 
     // marge d'impression
-    $this->marge_haute=4;
-    $this->marge_basse=4;
-    $this->marge_droite=4;
-    $this->marge_gauche=4;
+    $this->marge_imp_haute=4;
+    $this->marge_imp_basse=4;
+    $this->marge_imp_droite=4;
+    $this->marge_imp_gauche=4;
 
     $this->marge_case=2;
 
-    $this->largeur_case=($this->page_largeur-$this->marge_g-$this->marge_d)/$this->nb_colonne;
-    $this->hauteur_case=($this->page_hauteur-$this->marge_b-$this->marge_h)/$this->nb_ligne;
-    $this->marge_hb=max($this->marge_case, $this->marge_basse-$this->marge_b, $this->marge_haute-$this->marge_h);
-    $this->marge_gd=max($this->marge_case, $this->marge_droite-$this->marge_d, $this->marge_gauche-$this->marge_g);
+    $this->largeur_case=($this->page_largeur-$this->marge_g-$this->marge_d-($this->nb_colonne-1)*$this->marge_vt)/$this->nb_colonne;
+    $this->hauteur_case=($this->page_hauteur-$this->marge_b-$this->marge_h-($this->nb_ligne-1)*$this->marge_hz)/$this->nb_ligne;
+    
+    $this->marge_hb=max($this->marge_case, $this->marge_imp_basse-$this->marge_b, $this->marge_imp_haute-$this->marge_h);
+    $this->marge_gd=max($this->marge_case, $this->marge_imp_droite-$this->marge_d, $this->marge_imp_gauche-$this->marge_g);
 
-    $this->largeur=$this->largeur_case-2*$this->marge_gd;
-    $this->hauteur=$this->hauteur_case-2*$this->marge_hb;
+    $this->largeur=$this->largeur_case-2*$this->marge_case;
+    $this->hauteur=$this->hauteur_case-2*$this->marge_case;
 
     $this->pos=0;
 
 	}
 
   function getXYP($pos){
-    return array( 'X'=>$this->marge_gd+($pos%$this->nb_colonne)*($this->largeur+2*$this->marge_gd),
-                  'Y'=>$this->marge_hb+(floor($pos/$this->nb_colonne)%$this->nb_ligne)*($this->hauteur+2*$this->marge_hb),
+    return array( 'X'=>$this->marge_g+($pos%$this->nb_colonne)*($this->largeur_case+$this->marge_vt)+$this->marge_case,
+                  'Y'=>$this->marge_h+(floor($pos/$this->nb_colonne)%$this->nb_ligne)*($this->hauteur_case+$this->marge_hz)+$this->marge_case,
                   'page'=>floor($pos/$this->nb_case)+1);
   }
 
@@ -226,8 +227,11 @@ class pdf_palette40 extends ModelePdfExpedition
   }
 
 
-  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
+  function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
     global $user,$conf,$langs,$hookmanager;
+    
+    $product=new Product($this->db);
+    $product->fetch($product_id);
 
     $XYP=$this->getXYP($pos);
     $curX=$XYP['X'];
@@ -273,12 +277,12 @@ class pdf_palette40 extends ModelePdfExpedition
     $pdf->SetXY($curX+18,$curY+8);
     $pdf->SetFont('','', $default_font_size*0.9);
     //$pdf->MultiCell($this->largeur-22, 3, $qty.'x '.(!empty($product->array_options['options_codecarton'])?$product->array_options['options_codecarton']:$product->ref), 0, 'L');
-    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product_name, 0, 'L');
+    $pdf->Cell($this->largeur-20, 1, $qty.'x '.$product->ref, 0, 'L');
 
   }
 
-  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size){
-    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product_name, $outputlangs, $default_font_size);
+  function _add_case(&$pdf, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
+    $this->_write_case($pdf, $this->pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size);
     $this->pos++;
   }
 
@@ -351,7 +355,7 @@ class pdf_palette40 extends ModelePdfExpedition
 				$default_font_size = pdf_getPDFFontSize($outputlangs);
 				$heightforinfotot = 8;	// Height reserved to output the info and total part
         $heightforfreetext= (isset($conf->global->MAIN_PDF_FREETEXT_HEIGHT)?$conf->global->MAIN_PDF_FREETEXT_HEIGHT:5);	// Height reserved to output the free text on last page
-        $heightforfooter = $this->marge_basse + 8;	// Height reserved to output the footer (value include bottom margin)
+        $heightforfooter = $this->marge_imp_basse + 8;	// Height reserved to output the footer (value include bottom margin)
         $pdf->SetAutoPageBreak(1,0);
 
         if (class_exists('TCPDF'))
@@ -380,7 +384,7 @@ class pdf_palette40 extends ModelePdfExpedition
 				$pdf->SetKeyWords($outputlangs->convToOutputCharset($object->ref)." ".$outputlangs->transnoentities("Shipment"));
 				if (! empty($conf->global->MAIN_DISABLE_PDF_COMPRESSION)) $pdf->SetCompression(false);
 
-				$pdf->SetMargins($this->marge_gauche, $this->marge_haute, $this->marge_droite);   // Left, Top, Right
+				$pdf->SetMargins($this->marge_imp_gauche, $this->marge_imp_haute, $this->marge_imp_droite);   // Left, Top, Right
 
 				// New page
 				$pdf->AddPage();
@@ -423,12 +427,12 @@ class pdf_palette40 extends ModelePdfExpedition
             $qty=$line->qty_shipped;
             while ($qty > 0){
               $n++;
-              $this->_add_case($pdf, $url, $thirdparty, $n, $nbColis, $product->array_options['options_colisage'], $product->ref, $outputlangs, $default_font_size);
+              $this->_add_case($pdf, $url, $thirdparty, $n, $nbColis, $product->array_options['options_colisage'], $product->id, $outputlangs, $default_font_size);
               $qty -= $product->array_options['options_colisage'];
             }
           } else {
             $n++;
-            $this->_add_case($pdf, $url, $thirdparty, $n, $nbColis, $product->array_options['options_colisage'], $product->ref, $outputlangs, $default_font_size);
+            $this->_add_case($pdf, $url, $thirdparty, $n, $nbColis, $product->array_options['options_colisage'], $product->id, $outputlangs, $default_font_size);
           }
         }
 

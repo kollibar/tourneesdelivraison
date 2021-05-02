@@ -60,16 +60,13 @@ if( $action == 'addline' && !empty($permissiontoadd) ) {
      $infolivraison=GETPOST('infolivraison');
      $tempstheorique=GETPOST('tempstheorique');
 
-     $fk_adresselivraison=GETPOST('adresselivraisonid');
-     if( empty($fk_adresselivraison)) $fk_adresselivraison=0;
-
      $force_email_soc = GETPOST('force_email_soc');
      if( empty($force_email_soc)) $force_email_soc = 0;
 
      $note_public=GETPOST('note_public');
      $note_private=GETPOST('note_private');
 
-     $result = $object->addline($type, $socid, $tourneeincluseid, $BL, $facture, $etiquettes, $tempstheorique, $infolivraison, $fk_adresselivraison, $force_email_soc, $note_public, $note_private);
+     $result = $object->addline($type, $socid, $tourneeincluseid, $BL, $facture, $etiquettes, $tempstheorique, $infolivraison, $force_email_soc, $note_public, $note_private);
 
      if ($result > 0) {
        $ret = $object->fetch($object->id); // Reload to get new records
@@ -197,8 +194,6 @@ else if( ($action == 'updateline'|| substr($action,0,9) == 'editline_') && !empt
       $infolivraison=GETPOST('infolivraison');
       $tempstheorique=GETPOST('tempstheorique');
 
-      $fk_adresselivraison=GETPOST('adresselivraisonid');
-      if( empty($fk_adresselivraison)) $fk_adresselivraison=0;
 
       $note_public=GETPOST('note_public');
       $note_private=GETPOST('note_private');
@@ -208,7 +203,7 @@ else if( ($action == 'updateline'|| substr($action,0,9) == 'editline_') && !empt
 
 
 
-      $result = $object->updateline($lineid, $line->type, $line->fk_soc, $line->fk_tournee_incluse, $BL, $facture, $etiquettes, $tempstheorique, $infolivraison, $fk_adresselivraison, $force_email_soc, $note_public, $note_private, $line->rang);
+      $result = $object->updateline($lineid, $line->type, $line->fk_soc, $line->fk_tournee_incluse, $BL, $facture, $etiquettes, $tempstheorique, $infolivraison, $force_email_soc, $note_public, $note_private, $line->rang);
 
       if ($result > 0) {
         $ret = $object->fetch($object->id); // Reload to get new records

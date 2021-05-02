@@ -111,7 +111,6 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 		'BL' => array('type'=>'integer', 'label'=>'BL', 'enabled'=>1, 'visible'=>1, 'position'=>51, 'notnull'=>1, 'arrayofkeyval'=>array('0'=>'0', '1'=>'1', '2'=>'2')),
 		'facture' => array('type'=>'integer', 'label'=>'facture', 'enabled'=>1, 'visible'=>1, 'position'=>52, 'notnull'=>1, 'arrayofkeyval'=>array('0'=>'0', '1'=>'1')),
 		'etiquettes' => array('type'=>'integer', 'label'=>'etiquettes', 'enabled'=>1, 'visible'=>1, 'position'=>53, 'default'=>1, 'notnull'=>1, 'arrayofkeyval'=>array('0'=>'0', '1'=>'1')),
-		'fk_adresselivraison' => array('type'=>'integer:Contact:contact/class/contact.class.php', 'label'=>'Contact', 'enabled'=>1, 'visible'=>1, 'position'=>54, 'notnull'=>-1,),
 		'rang' => array('type'=>'integer', 'label'=>'Position', 'enabled'=>1, 'visible'=>-1, 'position'=>400, 'notnull'=>1,),
 		'fk_tournee' => array('type'=>'integer:TourneeDeLivraison:tourneesdelivraison/class/tourneedelivraison.class.php', 'label'=>'TourneeDeLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>30, 'notnull'=>1,),
 		'fk_tournee_incluse' => array('type'=>'integer:TourneeDeLivraison:tourneesdelivraison/class/tourneedelivraison.class.php', 'label'=>'TourneeDeLivraisonIncluse', 'enabled'=>1, 'visible'=>1, 'position'=>41, 'notnull'=>-1,),
@@ -137,7 +136,6 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 	public $fk_tournee;
 	public $fk_tournee_incluse;
 	public $fk_soc;
-	public $fk_adresselivraison;
 	public $type;
 	public $tpstheorique;
 	public $infolivraison;
@@ -212,7 +210,6 @@ class TourneeDeLivraison_lines extends TourneeGeneric_lines
 			$object->facture=$this->facture;
 			$object->etiquettes=$this->etiquettes;
 			$object->fk_soc=$this->fk_soc;
-			$object->fk_adresselivraison=$this->fk_adresselivraison;
 			$object->tpstheorique=$this->tpstheorique;
 			$object->infolivraison=$this->infolivraison;
 

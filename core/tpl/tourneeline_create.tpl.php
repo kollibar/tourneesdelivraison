@@ -45,7 +45,6 @@ if ($nolinesbefore) {
 		<td class="linecoletiquettes"><?php echo $langs->trans('Etiquettes'); ?></td>
 		<td class="linecoltpsthoe"><?php echo $langs->trans('TempsTheorique'); ?></td>
 		<td class="linecolinfolivraison"><?php echo $langs->trans('InfoLivraison'); ?></td>
-		<td class="linecoladresselivraison"><?php echo $langs->trans('AdresseLivraison'); ?></td>
 		<td class="linecolcontact"><?php echo $langs->trans('Contact'); ?></td>
 	</tr>
 	</thead>
@@ -173,11 +172,6 @@ $coldisplay=2;
       </tr>
     </table>
   </td>
-
-	<td class="nobottom linecoladresselivraison" id="td_adresselivraisonid" align="right">
-		<?php //remplit par ajax après selection d'une société
-		?>
-	</td>
 
 	<td class="nobottom linecoledit" align="center" valign="middle">
 	<input type="submit" class="button" value="<?php echo $langs->Trans("Add"); ?>" name="addline" id="addline">
@@ -309,27 +303,9 @@ function setfortournee() {
   $("#socid_fournisseur").val("-1").change();
   $("#socid_client").val("-1").change();
 
-  $("#td_adresselivraisonid").html("").change();
 }
 
-function loadAdresseLivraison(fk_soc){
-  if( listeContact.has(fk_soc)){
-    $("#td_adresselivraisonid").html(listeContact.get(fk_soc)).change();
-  } else {
-    <?php
-      $r=explode("/",$_SERVER["PHP_SELF" ]);
-      $r[]=$r[count($r)-1];
-      $r[count($r)-2]="ajax";
-      $url=implode("/",$r);
-    ?>
-    $.get("<?php echo $url."?id=$object->id&action=ajax_actualiseFormAddressLivraison&new_fk_soc=";?>"+fk_soc, function(data, status){
-      if( status=="success"){
-        $("#td_adresselivraisonid").html(data).change();
-        listeContact.set(fk_soc,data);
-      }
-    });
-  }
-}
+
 
 </script>
 

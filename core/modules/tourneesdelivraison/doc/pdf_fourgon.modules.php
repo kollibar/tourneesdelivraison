@@ -372,210 +372,251 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
         $nexP['page']=$pdf->getPage();
 
 				// Loop on each lines
-				for ($i = 0; $i < $nblignes; $i++)
-				{
+				for ($i = 0; $i < $nblignes; $i++) {
 
           $thirdparty = new Societe($this->db);
           $thirdparty->fetch($object->lines[$i]->fk_soc);
           $thirdparty->fetch_optionals();
 
+/*
           if( !empty($object->lines[$i]->fk_adresselivraison)){
             $contact = new Contact($this->db);
             $contact->fetch($object->lines[$i]->fk_adresselivraison);
             $contact->fetch_optionals();
             $usecontact=1;
-          }
+          } else {
+            $usecontact=0;
+            $contact = null;
+          }*/
 
-          $expedition=array();
-          foreach($object->lines[$i]->lines_cmde as $lcmde){
-            if( $lcmde->statut==TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut==TourneeUnique_lines_cmde::DATE_NON_OK){  // si cmde affecté
-              foreach ($lcmde->lines as $lelt) {
-                if( $lelt->type_element == 'shipping' && ($lelt->statut==TourneeUnique_lines_cmde_elt::DATE_OK || $lelt->statut==TourneeUnique_lines_cmde_elt::DATE_NON_OK)){
-                  $exp=new Expedition($this->db);
-                  $exp->fetch($lelt->fk_elt);
-                  $exp->fetch_optionals();
-                  $expedition[]=$exp;
+          $objectLine=0;
+          $lastContact=-5;
+
+          $boucleAdresseDifferente=1;
+          while($boucleAdresseDifferente){  // boucleAdresseDifferente
+            $boucleAdresseDifferente=0;
+
+            $expedition=array();
+            //for($object->lines[$i]->lines_cmde as $lcmde){
+            for(;$objectLine<count($object->lines[$i]->lines_cmde);$objectLine++){
+              $lcmde=$object->lines[$i]->lines_cmde[$objectLine];
+
+              if( $lcmde->statut==TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut==TourneeUnique_lines_cmde::DATE_NON_OK){  // si cmde affecté
+
+                $commande=new Commande($this->db);
+                $commande->fetch($lcmde->fk_commande);
+                $commande->fetch_optionals();
+
+                $listeContact=$commande->liste_contact(-1,'external',1,'SHIPPING');
+
+                if( count($listeContact) != 0 ){
+                  $contactId=$listeContact[0];
+
+                  $contact = new Contact($this->db);
+                  $contact->fetch($contactId);
+                  $contact->fetch_optionals();
+                  $usecontact=1;
+                } else {
+                  $contactId=-1;
+                  $usecontact=0;
+                }
+
+                if( $contactId != $lastContact && $lastContact >= -1) {
+                  break;
+                  $boucleAdresseDifferente=1;
+                }
+                $lastContact=$contactId;
+
+                foreach ($lcmde->lines as $lelt) {
+                  if( $lelt->type_element == 'shipping' && ($lelt->statut==TourneeUnique_lines_cmde_elt::DATE_OK || $lelt->statut==TourneeUnique_lines_cmde_elt::DATE_NON_OK)){
+                    $exp=new Expedition($this->db);
+                    $exp->fetch($lelt->fk_elt);
+                    $exp->fetch_optionals();
+                    $expedition[]=$exp;
+                  }
                 }
               }
             }
-          }
 
-          $categorie=$object->lines[$i]->getCategories();
+            $categorie=$object->lines[$i]->getCategories();
 
-          if( count($expedition)==0 && empty($object->lines[$i]->note_public) && count($categorie)==0) continue;  // si pas de livraison, ni tag ni note -> on passe à la suivante
+            if( count($expedition)==0 && empty($object->lines[$i]->note_public) && count($categorie)==0) continue;  // si pas de livraison, ni tag ni note -> on passe à la suivante
 
-					$curY = $nexP['Y']+4;
-          $pdf->setPage($nexP['page']);
 
-					$pdf->setTopMargin($tab_top_newpage);
-					$pdf->setPageOrientation('', 1, $heightforfooter+$heightforfreetext+$heightforinfotot);	// The only function to edit the bottom margin of current page to set it.
 
-					$showpricebeforepagebreak=1;
-
-					$pdf->startTransaction();
-
-          $boucle=1;
-          $curP=$pdf->getPage();
-
-          while($boucle>0){
-
+  					$curY = $nexP['Y']+4;
             $pdf->setPage($nexP['page']);
 
-            $pdf->SetFont('','', $default_font_size - 1);   // Into loop to work with multipage
-            $pdf->SetTextColor(0,0,0);
-            // DESTINATAIRE
-            $carac_client_name= pdfBuildThirdpartyName($thirdparty, $outputlangs);
+  					$pdf->setTopMargin($tab_top_newpage);
+  					$pdf->setPageOrientation('', 1, $heightforfooter+$heightforfreetext+$heightforinfotot);	// The only function to edit the bottom margin of current page to set it.
 
-            $carac_client=pdf_build_address($outputlangs,$this->emetteur,$thirdparty,($usecontact?$contact:''),$usecontact,'target',$object);
+  					$showpricebeforepagebreak=1;
 
-            // Show recipient name
-            $pdf->SetXY($this->posxdest+2,$curY);
-            $pdf->SetFont('','B', $default_font_size);
-            $pdf->MultiCell($this->largdest-4, 2, $carac_client_name, 0, 'L');
+  					$pdf->startTransaction();
 
-            $posy = $pdf->getY();
+            $boucle=1;
+            $curP=$pdf->getPage();
 
-            // Show recipient information
-            $pdf->SetFont('','', $default_font_size - 1);
-            $pdf->SetXY($this->posxdest+2,$posy);
-            $pdf->MultiCell($this->largdest-4, 4, $carac_client, 0, 'L');
+            while($boucle>0){
 
-            $nexP = $this->_check_pos($pdf, $nexP);
+              $pdf->setPage($nexP['page']);
 
-            // NOTE
-            $txt_note='';
-            if( !empty($object->lines[$i]->note_public)) $txt_note=$object->lines[$i]->note_public;
-            if( $txt_note != '' && count($categorie) != 0) $txt .= "\n\n";
-            foreach ($categorie as $c) {
-              $cat=new Categorie($this->db);
-              $cat->fetch($c);
-              $txt_note .= $cat->label . "\t";
-            }
-            $pdf->SetFont('','', $default_font_size - 1);
-            $pdf->SetXY($this->posxnote+2,$curY);
-            $pdf->MultiCell($this->largnote-4, 4, $outputlangs->convToOutputCharset($txt_note), 0, 'L');
+              $pdf->SetFont('','', $default_font_size - 1);   // Into loop to work with multipage
+              $pdf->SetTextColor(0,0,0);
+              // DESTINATAIRE
+              $carac_client_name= pdfBuildThirdpartyName($thirdparty, $outputlangs);
 
-            $nexP = $this->_check_pos($pdf, $nexP);
+              $carac_client=pdf_build_address($outputlangs,$this->emetteur,$thirdparty,($usecontact?$contact:''),$usecontact,'target',$object);
 
-            // PRODUITS
-            $totalWeight=0;
-            $totalVolume=0;
-            foreach ($expedition as $exp) {
-              if( !empty($conf->global->TOURNEESDELIVRAISON_POIDS_BL)){
-                $tmparray=$exp->getTotalWeightVolume();
-            		$totalWeight+=$tmparray['weight'];
-            		$totalVolume+=$tmparray['volume'];
+              // Show recipient name
+              $pdf->SetXY($this->posxdest+2,$curY);
+              $pdf->SetFont('','B', $default_font_size);
+              $pdf->MultiCell($this->largdest-4, 2, $carac_client_name, 0, 'L');
 
+              $posy = $pdf->getY();
 
-                // Set trueVolume and volume_units not currently stored into database
-                if ($exp->trueWidth && $exp->trueHeight && $exp->trueDepth)
-                {
-                    $exp->trueVolume=price(($exp->trueWidth * $exp->trueHeight * $exp->trueDepth), 0, $outputlangs, 0, 0);
-                    $exp->volume_units=$exp->size_units * 3;
-                }
-
-                if ($totalWeight!='') $totalWeighttoshow=showDimensionInBestUnit($totalWeight, 0, "weight", $outputlangs);
-                if ($totalVolume!='') $totalVolumetoshow=showDimensionInBestUnit($totalVolume, 0, "volume", $outputlangs);
-                if ($exp->trueWeight) $totalWeighttoshow=showDimensionInBestUnit($exp->trueWeight, $exp->weight_units, "weight", $outputlangs);
-                if ($exp->trueVolume) $totalVolumetoshow=showDimensionInBestUnit($exp->trueVolume, $exp->volume_units, "volume", $outputlangs);
-
-                $curY2=$curY;
-
-                // Total Weight
-                if ($totalWeighttoshow)
-                {
-                    $pdf->SetFont('','B', $default_font_size - 1);
-                    $pdf->SetXY($this->posxpoids, $curY2);
-                    $pdf->MultiCell($this->largpoids, $tab2_hl, $totalWeighttoshow, 0, 'C');
-
-                    $curY2=$pdf->getY();
-                    $index++;
-                }
-                if ($totalVolumetoshow)
-                {
-                    $pdf->SetFont('','B', $default_font_size - 1);
-                    $pdf->SetXY($this->posxpoids, $curY2);
-                    $pdf->MultiCell($this->largpoids, $tab2_hl, $totalVolumetoshow, 0, 'C');
-
-                    $index++;
-                }
-                if (! $totalWeighttoshow && ! $totalVolumetoshow) $index++;
-              }
-
-              $curY2=$pdf->getY();
-
-
-
-              $pdf->SetFont('','B', $default_font_size - 1);
-              $pdf->SetXY($this->posxprod+2,$curY);
-              $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($exp->ref), 0, 'C');
-
-              $curY=$pdf->getY();
-              $txt_prod='';
-
-              foreach ($exp->lines as $lexp) {
-                $product = new Product($this->db);
-                $product->fetch($lexp->fk_product);
-                $product->fetch_optionals();
-                if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
-
-                if( $txt_prod != '') $txt_prod.="\n";
-                if( ! empty($product->array_options['options_colisage'])){
-                  $txt_prod .=
-                    ($lexp->qty_shipped/$product->array_options['options_colisage']>=1?intval($lexp->qty_shipped/$product->array_options['options_colisage']).'x'.$product->array_options['options_colisage']:'') .
-                    (($lexp->qty_shipped % $product->array_options['options_colisage']!= 0 && $lexp->qty_shipped/$product->array_options['options_colisage']>=1)?'+':'') .
-                    ($lexp->qty_shipped % $product->array_options['options_colisage']!=0?$lexp->qty_shipped % $product->array_options['options_colisage']:'');
-                } else {
-                  $txt_prod .= $lexp->qty_shipped;
-                }
-                /*if( ! empty($product->array_options['options_codecarton'])){
-                  $txt_prod .= ' '.$product->array_options['options_codecarton'];
-                } else {
-                  $txt_prod .= ' '.$product->ref;
-                }*/
-                $txt_prod .= ' '.$product->ref;
-              }
-
+              // Show recipient information
               $pdf->SetFont('','', $default_font_size - 1);
-              $pdf->SetXY($this->posxprod+2,$curY);
-              $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($txt_prod), 0, 'C');
+              $pdf->SetXY($this->posxdest+2,$posy);
+              $pdf->MultiCell($this->largdest-4, 4, $carac_client, 0, 'L');
 
-              $curY=max($pdf->getY(),$curY2);
-            }
+              $nexP = $this->_check_pos($pdf, $nexP);
 
-
-            $nexP = $this->_check_pos($pdf, $nexP);
-
-
-            if ($i != ($nblignes-1)){
-              $pdf->line($this->marge_gauche, $nexP['Y']+2, $this->page_largeur-$this->marge_droite, $nexP['Y']+2);
-            }
-
-            if( $boucle == 1 ){ // 1er passage
-              if( $nexP['page'] > $curP || $nexP['Y'] > $this->page_hauteur - $heightforfooter - 4 - $heightforinfotot - $heightforinfotot){ // si saut de page on refait un passage
-                $pdf->rollbackTransaction(true);
-                $boucle=2;
-                if( $pdf->getPage()==1 ){
-                  $this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 1);
-                } else {
-                  $this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 1, 1);
-                }
-                $this->_pagefoot($pdf,$object,$outputlangs,1);
-                $pdf->AddPage();
-                $pagenb++;
-                $pdf->setPage($pagenb);
-                $pdf->setPageOrientation('', 1, 0);
-                if (! empty($tplidx)) $pdf->useTemplate($tplidx);
-                $this->_pagehead($pdf, $object, 1, $outputlangs);
-                $nexP['Y']=$tab_top+4;
-                $curY=$nexP['Y'];
-                $nexP['page']=$pdf->getPage();
-                continue;
+              // NOTE
+              $txt_note='';
+              if( !empty($object->lines[$i]->note_public)) $txt_note=$object->lines[$i]->note_public;
+              if( $txt_note != '' && count($categorie) != 0) $txt .= "\n\n";
+              foreach ($categorie as $c) {
+                $cat=new Categorie($this->db);
+                $cat->fetch($c);
+                $txt_note .= $cat->label . "\t";
               }
+              $pdf->SetFont('','', $default_font_size - 1);
+              $pdf->SetXY($this->posxnote+2,$curY);
+              $pdf->MultiCell($this->largnote-4, 4, $outputlangs->convToOutputCharset($txt_note), 0, 'L');
+
+              $nexP = $this->_check_pos($pdf, $nexP);
+
+              // PRODUITS
+              $totalWeight=0;
+              $totalVolume=0;
+              foreach ($expedition as $exp) {
+                if( !empty($conf->global->TOURNEESDELIVRAISON_POIDS_BL)){
+                  $tmparray=$exp->getTotalWeightVolume();
+              		$totalWeight+=$tmparray['weight'];
+              		$totalVolume+=$tmparray['volume'];
+
+
+                  // Set trueVolume and volume_units not currently stored into database
+                  if ($exp->trueWidth && $exp->trueHeight && $exp->trueDepth)
+                  {
+                      $exp->trueVolume=price(($exp->trueWidth * $exp->trueHeight * $exp->trueDepth), 0, $outputlangs, 0, 0);
+                      $exp->volume_units=$exp->size_units * 3;
+                  }
+
+                  if ($totalWeight!='') $totalWeighttoshow=showDimensionInBestUnit($totalWeight, 0, "weight", $outputlangs);
+                  if ($totalVolume!='') $totalVolumetoshow=showDimensionInBestUnit($totalVolume, 0, "volume", $outputlangs);
+                  if ($exp->trueWeight) $totalWeighttoshow=showDimensionInBestUnit($exp->trueWeight, $exp->weight_units, "weight", $outputlangs);
+                  if ($exp->trueVolume) $totalVolumetoshow=showDimensionInBestUnit($exp->trueVolume, $exp->volume_units, "volume", $outputlangs);
+
+                  $curY2=$curY;
+
+                  // Total Weight
+                  if ($totalWeighttoshow)
+                  {
+                      $pdf->SetFont('','B', $default_font_size - 1);
+                      $pdf->SetXY($this->posxpoids, $curY2);
+                      $pdf->MultiCell($this->largpoids, $tab2_hl, $totalWeighttoshow, 0, 'C');
+
+                      $curY2=$pdf->getY();
+                      $index++;
+                  }
+                  if ($totalVolumetoshow)
+                  {
+                      $pdf->SetFont('','B', $default_font_size - 1);
+                      $pdf->SetXY($this->posxpoids, $curY2);
+                      $pdf->MultiCell($this->largpoids, $tab2_hl, $totalVolumetoshow, 0, 'C');
+
+                      $index++;
+                  }
+                  if (! $totalWeighttoshow && ! $totalVolumetoshow) $index++;
+                }
+
+                $curY2=$pdf->getY();
+
+
+
+                $pdf->SetFont('','B', $default_font_size - 1);
+                $pdf->SetXY($this->posxprod+2,$curY);
+                $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($exp->ref), 0, 'C');
+
+                $curY=$pdf->getY();
+                $txt_prod='';
+
+                foreach ($exp->lines as $lexp) {
+                  $product = new Product($this->db);
+                  $product->fetch($lexp->fk_product);
+                  $product->fetch_optionals();
+                  if( !empty($product->array_options['options_est_cache_bordereau_livraison'])) continue;
+
+                  if( $txt_prod != '') $txt_prod.="\n";
+                  if( ! empty($product->array_options['options_colisage'])){
+                    $txt_prod .=
+                      ($lexp->qty_shipped/$product->array_options['options_colisage']>=1?intval($lexp->qty_shipped/$product->array_options['options_colisage']).'x'.$product->array_options['options_colisage']:'') .
+                      (($lexp->qty_shipped % $product->array_options['options_colisage']!= 0 && $lexp->qty_shipped/$product->array_options['options_colisage']>=1)?'+':'') .
+                      ($lexp->qty_shipped % $product->array_options['options_colisage']!=0?$lexp->qty_shipped % $product->array_options['options_colisage']:'');
+                  } else {
+                    $txt_prod .= $lexp->qty_shipped;
+                  }
+                  /*if( ! empty($product->array_options['options_codecarton'])){
+                    $txt_prod .= ' '.$product->array_options['options_codecarton'];
+                  } else {
+                    $txt_prod .= ' '.$product->ref;
+                  }*/
+                  $txt_prod .= ' '.$product->ref;
+                }
+
+                $pdf->SetFont('','', $default_font_size - 1);
+                $pdf->SetXY($this->posxprod+2,$curY);
+                $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($txt_prod), 0, 'C');
+
+                $curY=max($pdf->getY(),$curY2);
+              }
+
+
+              $nexP = $this->_check_pos($pdf, $nexP);
+
+
+              if ($i != ($nblignes-1)){
+                $pdf->line($this->marge_gauche, $nexP['Y']+2, $this->page_largeur-$this->marge_droite, $nexP['Y']+2);
+              }
+
+              if( $boucle == 1 ){ // 1er passage
+                if( $nexP['page'] > $curP || $nexP['Y'] > $this->page_hauteur - $heightforfooter - 4 - $heightforinfotot - $heightforinfotot){ // si saut de page on refait un passage
+                  $pdf->rollbackTransaction(true);
+                  $boucle=2;
+                  if( $pdf->getPage()==1 ){
+                    $this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 1);
+                  } else {
+                    $this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 1, 1);
+                  }
+                  $this->_pagefoot($pdf,$object,$outputlangs,1);
+                  $pdf->AddPage();
+                  $pagenb++;
+                  $pdf->setPage($pagenb);
+                  $pdf->setPageOrientation('', 1, 0);
+                  if (! empty($tplidx)) $pdf->useTemplate($tplidx);
+                  $this->_pagehead($pdf, $object, 1, $outputlangs);
+                  $nexP['Y']=$tab_top+4;
+                  $curY=$nexP['Y'];
+                  $nexP['page']=$pdf->getPage();
+                  continue;
+                }
+              }
+              $boucle=0;
+              $pdf->commitTransaction();
             }
-            $boucle=0;
-            $pdf->commitTransaction();
-          }
+          } // boucleAdresseDifferente
 				}
 
 				// Show square
