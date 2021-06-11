@@ -378,19 +378,8 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
           $thirdparty->fetch($object->lines[$i]->fk_soc);
           $thirdparty->fetch_optionals();
 
-/*
-          if( !empty($object->lines[$i]->fk_adresselivraison)){
-            $contact = new Contact($this->db);
-            $contact->fetch($object->lines[$i]->fk_adresselivraison);
-            $contact->fetch_optionals();
-            $usecontact=1;
-          } else {
-            $usecontact=0;
-            $contact = null;
-          }*/
-
           $objectLine=0;
-          $lastContact=-5;
+          $contactId=-5;
 
           $boucleAdresseDifferente=1;
           while($boucleAdresseDifferente){  // boucleAdresseDifferente
@@ -409,23 +398,27 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
 
                 $listeContact=$commande->liste_contact(-1,'external',1,'SHIPPING');
 
+                $lastContact=$contactId;
                 if( count($listeContact) != 0 ){
                   $contactId=$listeContact[0];
-
-                  $contact = new Contact($this->db);
-                  $contact->fetch($contactId);
-                  $contact->fetch_optionals();
-                  $usecontact=1;
                 } else {
-                  $contactId=-1;
-                  $usecontact=0;
+                  $contactId = -1;
                 }
 
                 if( $contactId != $lastContact && $lastContact >= -1) {
                   break;
                   $boucleAdresseDifferente=1;
                 }
-                $lastContact=$contactId;
+
+                if( $contactId > 0 ){
+                  $contact = new Contact($this->db);
+                  $contact->fetch($contactId);
+                  $contact->fetch_optionals();
+                  $usecontact=1;
+                } else {
+                  $usecontact=0;
+                }
+
 
                 foreach ($lcmde->lines as $lelt) {
                   if( $lelt->type_element == 'shipping' && ($lelt->statut==TourneeUnique_lines_cmde_elt::DATE_OK || $lelt->statut==TourneeUnique_lines_cmde_elt::DATE_NON_OK)){
@@ -500,6 +493,8 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
               // PRODUITS
               $totalWeight=0;
               $totalVolume=0;
+              $totalNb=0;
+              $totalNbColis=0;
               foreach ($expedition as $exp) {
                 if( !empty($conf->global->TOURNEESDELIVRAISON_POIDS_BL)){
                   $tmparray=$exp->getTotalWeightVolume();
@@ -565,8 +560,12 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
                       ($lexp->qty_shipped/$product->array_options['options_colisage']>=1?intval($lexp->qty_shipped/$product->array_options['options_colisage']).'x'.$product->array_options['options_colisage']:'') .
                       (($lexp->qty_shipped % $product->array_options['options_colisage']!= 0 && $lexp->qty_shipped/$product->array_options['options_colisage']>=1)?'+':'') .
                       ($lexp->qty_shipped % $product->array_options['options_colisage']!=0?$lexp->qty_shipped % $product->array_options['options_colisage']:'');
+
+                      $totalNbColis += intval($lexp->qty_shipped/$product->array_options['options_colisage']);
+                      $totalNb += $lexp->qty_shipped % $product->array_options['options_colisage'];
                   } else {
                     $txt_prod .= $lexp->qty_shipped;
+                    $totalNb += $lexp->qty_shipped;
                   }
                   /*if( ! empty($product->array_options['options_codecarton'])){
                     $txt_prod .= ' '.$product->array_options['options_codecarton'];
@@ -579,6 +578,16 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
                 $pdf->SetFont('','', $default_font_size - 1);
                 $pdf->SetXY($this->posxprod+2,$curY);
                 $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($txt_prod), 0, 'C');
+
+                $curY=max($pdf->getY(),$curY2);
+
+                $pdf->SetFont('','B', $default_font_size - 1);
+                $pdf->SetXY($this->posxprod+2,$curY);
+                $pdf->MultiCell($this->largprod-4, 4, $outputlangs->convToOutputCharset($outputlangs->transnoentities("Total") ." : ".
+                  (($totalNbColis!=0)?($totalNbColis." ".$outputlangs->transnoentities("Colis")):'').
+                  (($totalNb != 0 && $totalNbColis !=0 )?' + ':'').
+                  (($totalNb != 0  )?$totalNb.' ':'')
+                ), 0, 'C');
 
                 $curY=max($pdf->getY(),$curY2);
               }
