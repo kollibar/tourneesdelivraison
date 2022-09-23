@@ -79,7 +79,7 @@ dol_include_once('/tourneesdelivraison/lib/tournee.lib.php');
 
 $r=addCategorieData();
 
-dol_include_once('/tourneesdelivraison/class/categorie.class.php');
+dol_include_once('/tourneesdelivraison/class/categorieExtended.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("tourneesdelivraison@tourneesdelivraison","other","orders","sendings","bills","main"));
@@ -175,8 +175,10 @@ if (empty($reshook)) {
 	$triggermodname = 'TOURNEESDELIVRAISON_'.strtoupper($typetournee).'_MODIFY';	// Name of trigger action code to execute when we modify record
 
 
+	$date=getdate();
+
 	if( $typetournee == 'tourneeunique'){
-		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee > time()) {
+		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
 		// si date tournée unique non dépassé, cherche les nouvelles commandes
 			$object->checkCommande($user);
 		} else {

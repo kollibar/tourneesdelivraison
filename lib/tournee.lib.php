@@ -88,6 +88,7 @@ function tourneePrepareHead($object)
 */
 
 function addCategorieData(){
+	/*
 	$path=DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
 
 	$data=file_get_contents($path);
@@ -103,4 +104,82 @@ function addCategorieData(){
 	} else $result=true;
 
 	return $result;
+	*/
+	return 1;
+}
+
+/**
+* Function used to check if an object support tags
+*
+* @param $type : string type d'object ('tournee', 'product',...)
+* @return bool
+*/
+
+function checkCategoriePourObjet($type){
+	// ne fonctionne pas. a refaire....
+	global $db;
+	dol_include_once('/categorie/class/categorie.class.php');
+	$c=new Categorie($db);
+
+	if (! is_numeric($type) && ! array_key_exists($type,$c->MAP_ID)
+		|| ! array_key_exists($type,$c->MAP_CAT_TABLE)
+		) return false ;
+
+	return true;
+}
+
+
+function cloneCategorieToAnotherObject(User $user, $categorie, $new_type){
+	if( !empty($categorie->fk_parent)){
+		$parent=new Categorie($categorie->db);
+		$parent->fetch($categorie->fk_parent);
+		$parent->fetch_optionals();
+		$new_fk_parent = cloneCategorieToAnotherObject($user, $parent, $new_type);
+		if( $new_fk_parent < 0 ) return $new_fk_parent;  // erreur
+	} else {
+		$new_fk_parent = 0;
+	}
+
+	// recherche si déjà existant
+	$sql = "SELECT c.rowid";
+	$sql.= " FROM ".MAIN_DB_PREFIX."categorie as c ";
+	$sql.= " WHERE c.entity IN (".getEntity('category').")";
+	$sql.= " AND c.type = ".$new_type;
+	$sql.= " AND c.fk_parent = ".$new_fk_parent;
+	$sql.= " AND c.label = '".$categorie->db->escape($categorie->label)."'";
+
+
+	dol_syslog("cloneCategorieToAnotherObject", LOG_DEBUG);
+	$resql = $categorie->db->query($sql);
+	if ($resql)
+	{
+		if ($categorie->db->num_rows($resql) > 0)						// Checking for empty resql
+		{
+			$obj = $categorie->db->fetch_array($resql);
+
+			if($obj[0] > 0 )
+			{
+				// cette catégorie existe déjà, on retourne son id
+				return $obj[0];
+			}
+		}
+	}
+	else
+	{
+		$categorie->error=$categorie->db->error();
+		return -1;
+	}
+
+	// cette catégorie n'existe pas, on la crée
+
+	$newCat=new Categorie($categorie->db);
+	$newCat->fetchCommon($categorie->id);
+	$newCat->fetch_optionals();
+
+	unset($newCat->id);
+	$newCat->type=$new_type;
+	$newCat->fk_parent = $new_fk_parent;
+
+	return $newCat->create($user);
+
 }

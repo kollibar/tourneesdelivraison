@@ -42,7 +42,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
-dol_include_once('/tourneesdelivraison/class/tourneesdelivraison.class.php');
+dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
 
 /**
  *	Class to manage PDF invoice template Crabe
@@ -228,7 +228,7 @@ class pdf_palette21 extends ModelePdfExpedition
 
   function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
     global $user,$conf,$langs,$hookmanager;
-    
+
     $product=new Product($this->db);
     $product->fetch($product_id);
 

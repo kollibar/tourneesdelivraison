@@ -42,7 +42,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
-dol_include_once('/tourneesdelivraison/class/tourneesdelivraison.class.php');
+dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
 
 /**
  *	Class to manage PDF invoice template Crabe
@@ -204,7 +204,7 @@ class pdf_cartons40 extends ModelePdfExpedition
 
     $this->largeur_case=($this->page_largeur-$this->marge_g-$this->marge_d-($this->nb_colonne-1)*$this->marge_vt)/$this->nb_colonne;
     $this->hauteur_case=($this->page_hauteur-$this->marge_b-$this->marge_h-($this->nb_ligne-1)*$this->marge_hz)/$this->nb_ligne;
-    
+
     $this->marge_hb=max($this->marge_case, $this->marge_imp_basse-$this->marge_b, $this->marge_imp_haute-$this->marge_h);
     $this->marge_gd=max($this->marge_case, $this->marge_imp_droite-$this->marge_d, $this->marge_imp_gauche-$this->marge_g);
 
@@ -229,7 +229,7 @@ class pdf_cartons40 extends ModelePdfExpedition
 
   function _write_case(&$pdf, $pos, $url, $thirdparty, $num, $tot, $qty, $product_id, $outputlangs, $default_font_size){
     global $user,$conf,$langs,$hookmanager;
-    
+
     $product=new Product($this->db);
     $product->fetch($product_id);
 
@@ -254,12 +254,12 @@ class pdf_cartons40 extends ModelePdfExpedition
     if( ! empty($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN) && ! empty ($conf->global->TOURNEESDELIVRAISON_URL_REPLACE)){
       $url=str_replace($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN, $conf->global->TOURNEESDELIVRAISON_URL_REPLACE, $url);
     }
-    
+
     $pdf->SetFont('','B', $default_font_size*2);
     $pdf->SetXY($curX,$curY);
-    
+
     $pdf->MultiCell($this->largeur, 1, $product->label, 0, 'L');
-    
+
     $pdf->SetFont('','B', $default_font_size);
 
 /*

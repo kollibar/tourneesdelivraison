@@ -112,7 +112,7 @@ class tourneesdelivraisonwidget1 extends ModeleBoxes
 		// Use configuration value for max lines count
 		$this->max = $max;
 
-		//include_once DOL_DOCUMENT_ROOT . "/tourneesdelivraison/class/tourneesdelivraison.class.php";
+		//include_once DOL_DOCUMENT_ROOT . "/tourneesdelivraison/class/tourneedelivraison.class.php";
 
 		// Populate the head at runtime
 		$text = $langs->trans("TourneesDeLivraisonBoxDescription", $max);

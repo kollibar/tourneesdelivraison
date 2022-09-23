@@ -1,0 +1,25 @@
+[16-Jul-2019 06:40:17 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/class/tourneedelivraison.class.php on line 196
+[16-Jul-2019 06:41:02 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/class/tourneedelivraison.class.php on line 196
+[18-Jul-2019 11:41:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method TourneeDeLivraison::checkElt() in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php:176
+Stack trace:
+#0 /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tourneedelivraison_card.php(24): include()
+#1 {main}
+  thrown in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php on line 176
+[18-Jul-2019 11:42:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method TourneeDeLivraison::checkElt() in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php:176
+Stack trace:
+#0 /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tourneedelivraison_card.php(24): include()
+#1 {main}
+  thrown in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php on line 176
+[22-Jul-2019 07:33:26 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method TourneeDeLivraison::checkElt() in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php:176
+Stack trace:
+#0 /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tourneedelivraison_card.php(24): include()
+#1 {main}
+  thrown in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php on line 176
+[22-Jul-2019 07:39:59 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method TourneeDeLivraison::checkElt() in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php:176
+Stack trace:
+#0 /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tourneedelivraison_card.php(24): include()
+#1 {main}
+  thrown in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/tournee_card.php on line 176
+[29-Jul-2019 07:57:17 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/class/tourneegeneric_lines.class.php on line 733
+[29-Jul-2019 08:00:42 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/class/tourneegeneric_lines.class.php on line 733
+[12-Sep-2019 08:27:42 UTC] PHP Parse error:  syntax error, unexpected '.', expecting function (T_FUNCTION) or const (T_CONST) in /home/earldubruzon/dolibarr.brasserieteddybeer.fr/custom/tourneesdelivraison/class/tourneeunique_lines_cmde.class.php on line 523

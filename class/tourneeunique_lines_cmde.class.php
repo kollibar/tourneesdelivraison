@@ -726,18 +726,18 @@ class TourneeUnique_lines_cmde extends TourneeObject
 
 		$this->elt->fetchObjectLinked();
 
-		if(!empty($this->elt->linkedObjectsIds['tourneesdelivraison'])
-			&& in_array($this->parent->id,$this->elt->linkedObjectsIds['tourneesdelivraison'])) {
+		if(!empty($this->elt->linkedObjectsIds['tourneedelivraison'])
+			&& in_array($this->parent->id,$this->elt->linkedObjectsIds['tourneedelivraison'])) {
 				$liaison=1;
 		}
 
 		if(($affectation == self::DATE_OK || $affectation == self::DATE_NON_OK) && empty($liaison)){	// si affectation à cette tournée et pas de liaison
-			$this->elt->add_object_linked('tourneesdelivraison',$this->parent->id); // on crée une liaison
+			$this->elt->add_object_linked('tourneedelivraison',$this->parent->id); // on crée une liaison
 		}
 
 		if($affectation != self::DATE_OK && $affectation != self::DATE_NON_OK && !empty($liaison)){ // si plus affecté à cet objet et liaison
 			// on supprime la liaison
-			$this->elt->deleteObjectLinked($this->parent->id, 'tourneesdelivraison');
+			$this->elt->deleteObjectLinked($this->parent->id, 'tourneedelivraison');
 		}
 
 		if( $changeDate ){

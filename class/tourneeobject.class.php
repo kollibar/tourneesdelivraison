@@ -2,7 +2,8 @@
 
 require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
 require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
-dol_include_once('/tourneesdelivraison/class/categorie.class.php');
+dol_include_once('/categories/class/categorie.class.php');
+dol_include_once('/tourneesdelivraison/lib/tournee.lib.php');
 
 class TourneeObject extends CommonObject
 {
@@ -171,7 +172,6 @@ class TourneeObject extends CommonObject
 					$record->id = $obj->rowid;
 					// TODO Get other fields
 
-					//var_dump($record->id);
 					$records[$record->id] = $record;
 				}
 				$this->db->free($resql);
@@ -510,6 +510,8 @@ class TourneeObject extends CommonObject
 	 */
 	public function setCategories($categories)
 	{
+		if( empty($conf->categorie->enabled)  || empty($user->rights->categorie->lire) ) return 1;
+
 		require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
 
 		$type=$this->element;
@@ -525,8 +527,7 @@ class TourneeObject extends CommonObject
 
 
 		// Get current categories
-		$c = new Categorie($this->db);
-		if( ! $c->checkCategoriePourObjet($type)) return 1;
+		// if( ! checkCategoriePourObjet($type)) return 1;
 
 		$existing = $c->containing($this->id, $type_id, 'id');
 
@@ -575,11 +576,12 @@ class TourneeObject extends CommonObject
  */
 public function getCategories()
 {
+	if( empty($conf->categorie->enabled)  || empty($user->rights->categorie->lire) ) return 1;
+
 	require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
 
 	// Get current categories
-	$c = new Categorie($this->db);
-	if( ! $c->checkCategoriePourObjet($type)) return array();
+	// if( ! checkCategoriePourObjet($type)) return array();
 
 	$existing = $c->containing($this->id, $this->element, 'id');
 
@@ -625,7 +627,7 @@ public function copyCategorieFromObject(User $user, $object){
 		$cat->fetch($c);
 		$cat->fetch_optionals();
 
-		$nc=$cat->cloneToAnotherObject($user, $new_type);
+		$nc=cloneCategorieToAnotherObject($user, $cat, $new_type);
 		if( $nc>0){
 			$new_categories[]=$nc;
 		}
@@ -705,7 +707,6 @@ public function copyCategorieFromObject(User $user, $object){
 				$shortkey = preg_replace('/options_/', '', $key);
 				if (! empty($extrafields->attributes[$this->element]['unique'][$shortkey]))
 				{
-					//var_dump($key); var_dump($clonedObj->array_options[$key]); exit;
 					unset($object->array_options[$key]);
 				}
 			}

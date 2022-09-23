@@ -42,7 +42,11 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
-dol_include_once('/tourneesdelivraison/class/tourneesdelivraison.class.php');
+dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
+
+if( array_key_exists('qrcodescanneur', $conf) && $conf->qrcodescanneur->enabled ){ // si le module qrcodescanneur est activé
+  dol_include_once('/qrcodescanneur/core/qrcodescanneur_actions.php');
+}
 
 /**
  *	Class to manage PDF invoice template Crabe
@@ -250,11 +254,19 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
       'module_height' => 1 // height of a single module in points
     );
 
+    /*
     if( ! empty($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN) && ! empty ($conf->global->TOURNEESDELIVRAISON_URL_REPLACE)){
       $url=str_replace($conf->global->TOURNEESDELIVRAISON_URL_ORIGIN, $conf->global->TOURNEESDELIVRAISON_URL_REPLACE, $url);
+    }*/
+
+    if( array_key_exists('qrcodescanneur', $conf) && $conf->qrcodescanneur->enabled ){ // si le module qrcodescanneur est activé
+      $url_mod=qrcodescanneur_makeQRcodeData('etiquette_TDL', $url, $this->db);
+    } else {
+      $url_mod=$url;
     }
 
-    $pdf->write2DBarcode($url, 'QRCODE,L', $curX, $curY, 18, 18, $style, 'N');
+
+    $pdf->write2DBarcode($url_mod, 'QRCODE,L', $curX, $curY, 18, 18, $style, 'N');
 
     $carac_client_name = pdfBuildThirdpartyName($thirdparty, $outputlangs);
     $pdf->SetXY($curX+18,$curY);
@@ -425,7 +437,7 @@ class pdf_palette21 extends ModelePDFTourneesdelivraison
             $hash=$lelt->getHash();
             $nbColis=$lelt->getNbColis();
             for ($j=1; $j <= $nbColis ; $j++) {
-              $param="?h=".$hash."&le=".$leltid."&c=".$j;
+              $param="?hash=".$hash."&leltid=".$leltid."&carton=".$j."&fromqrcode=1";
               $carton=$lelt->getCartonNum($j);
               $this->_add_case($pdf, $url . $param, $thirdparty, $j, $nbColis, $carton->qty, $carton->product_id, $outputlangs, $default_font_size);
             }

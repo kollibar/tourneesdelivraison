@@ -241,4 +241,44 @@ class ActionsTourneesDeLivraison
 	}
 
 	/* Add here any other hooked methods... */
+
+
+  public function constructCategory(&$parameters, &$object){
+
+    global $hookmanager;
+
+	if( empty($hookmanager->resArray) ) $hookmanager->resArray=[];
+
+	$hookmanager->resArray[]=array(
+			'id'=>445409, // 110
+			'code'=>'tourneeunique',
+			'cat_fk'=>'tourneeunique',
+			'cat_table'=>'tourneeunique',
+			'obj_class'=>'TourneeUnique',
+			'obj_table'=>'tourneeunique');
+	$hookmanager->resArray[]=array(
+			'id'=>445410, // 111
+			'code'=>'tourneeunique_lines',
+			'cat_fk'=>'tourneeunique_lines',
+			'cat_table'=>'tourneeunique_lines',
+			'obj_class'=>'TourneeUnique_lines',
+			'obj_table'=>'tourneeunique_lines');
+	$hookmanager->resArray[]=array(
+			'id'=>445405, // 112
+			'code'=>'tourneedelivraison',
+			'cat_fk'=>'tourneedelivraison',
+			'cat_table'=>'tourneedelivraison',
+			'obj_class'=>'TourneeDeLivraison',
+			'obj_table'=>'tourneedelivraison');
+	$hookmanager->resArray[]=array(
+			'id'=>445406, // 113
+			'code'=>'tourneedelivraison_lines',
+			'cat_fk'=>'tourneedelivraison_lines',
+			'cat_table'=>'tourneedelivraison_lines',
+			'obj_class'=>'TourneeDeLivraison_lines',
+			'obj_table'=>'tourneedelivraison_lines');
+
+    return 1;
+
+  }
 }

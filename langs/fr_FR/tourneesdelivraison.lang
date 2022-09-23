@@ -128,6 +128,7 @@ ConfirmChangeStatutElt = Êtes-vous sur de vouloir changer le statut de le/la %s
 ConfirmChangeDateEltToDateTournee = Êtes-vous sur de vouloir changer la date de le/la %s et de la fixer à la date de la tournée ?
 ConfirmGenererDocs = Êtes-vous sur de vouloir générer tous les documents de la %s ?
 SupprimerTousLesTags = Supprimer tous les tags
+BackToTourneeUnique = Retour Tournée
 
 #
 # Erreurs

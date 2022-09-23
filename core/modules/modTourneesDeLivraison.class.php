@@ -92,7 +92,8 @@ class modTourneesDeLivraison extends DolibarrModules
 			'models' => 1,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 			'css' => array('/tourneesdelivraison/css/tourneesdelivraison.css.php'),	// Set this to relative path of css file if module has its own css file
 	 		'js' => array('/tourneesdelivraison/js/tourneesdelivraison.js.php'),          // Set this to relative path of js file if module must load a js on all pages
-			'hooks' => array('data'=>array('hookcontext1','hookcontext2'), 'entity'=>'0'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
+			'hooks' => array('category'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
+			//'hooks' => array('data'=>array('constructCategory'), 'entity'=>'0'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
 			'moduleforexternal' => 0							// Set this to 1 if feature of module are opened to external users
 		);
 
@@ -107,12 +108,12 @@ class modTourneesDeLivraison extends DolibarrModules
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module
-		$this->depends = array();		// List of module class names as string that must be enabled if this module is enabled. Example: array('always1'=>'modModuleToEnable1','always2'=>'modModuleToEnable2', 'FR1'=>'modModuleToEnableFR'...)
+		$this->depends = array("QRcodeScanneur"=>"QRcodeScanneur");		// List of module class names as string that must be enabled if this module is enabled. Example: array('always1'=>'modModuleToEnable1','always2'=>'modModuleToEnable2', 'FR1'=>'modModuleToEnableFR'...)
 		$this->requiredby = array();	// List of module class names as string to disable if this one is disabled. Example: array('modModuleToDisable1', ...)
 		$this->conflictwith = array();	// List of module class names as string this module is in conflict with. Example: array('modModuleToDisable1', ...)
 		$this->langfiles = array("tourneesdelivraison@tourneesdelivraison");
 		//$this->phpmin = array(5,4);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(4,0);		// Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(14,0);		// Minimum version of Dolibarr required by module
 		$this->warnings_activation = array();			// Warning to show when we activate module. array('always'='text') or array('FR'='textfr','ES'='textes'...)
 		$this->warnings_activation_ext = array();		// Warning to show when we activate an external module. array('always'='text') or array('FR'='textfr','ES'='textes'...)
 		//$this->automatic_activation = array('FR'=>'TourneesDeLivraisonWasAutomaticallyActivatedBecauseOfYourCountryChoice');
@@ -224,9 +225,9 @@ class modTourneesDeLivraison extends DolibarrModules
 		$this->const[$r]=array('TOURNEESDELIVRAISON_FREE_TEXT', 'chaine', '', 'Texte libre sur les bordereau de tournées de livraison', 1, 'allentities', 1);
 		$r++;
 
-		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_REPLACE', 'chaine', '', 'à remplacer par:', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_REPLACE', 'chaine', '', 'à remplacer par:', 0); // à retirer // A FAIRE
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_ORIGIN', 'chaine', '', 'élément de l\'url à remplacer', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_ORIGIN', 'chaine', '', 'élément de l\'url à remplacer', 0);	// A retirer // A FAIRE
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'chaine', '1', 'désactive l\'autoupdate des documents', 0);
 		$r++;
@@ -299,7 +300,7 @@ class modTourneesDeLivraison extends DolibarrModules
         // Boxes/Widgets
 		// Add here list of php file(s) stored in tourneesdelivraison/core/boxes that contains class to show a widget.
         $this->boxes = array(
-        	0=>array('file'=>'tourneesdelivraisonwidget1.php@tourneesdelivraison','note'=>'Widget provided by TourneesDeLivraison','enabledbydefaulton'=>'Home'),
+        	//0=>array('file'=>'tourneesdelivraisonwidget1.php@tourneesdelivraison','note'=>'Widget provided by TourneesDeLivraison','enabledbydefaulton'=>'Home'),
         	//1=>array('file'=>'tourneesdelivraisonwidget2.php@tourneesdelivraison','note'=>'Widget provided by TourneesDeLivraison'),
         	//2=>array('file'=>'tourneesdelivraisonwidget3.php@tourneesdelivraison','note'=>'Widget provided by TourneesDeLivraison')
         );

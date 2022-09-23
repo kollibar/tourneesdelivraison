@@ -42,7 +42,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
-dol_include_once('/tourneesdelivraison/class/tourneesdelivraison.class.php');
+dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
 
 
 
