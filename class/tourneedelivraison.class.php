@@ -274,12 +274,18 @@ class TourneeDeLivraison extends TourneeGeneric
 
 	public function createLineTourneeUnique($user, $tourneeunique, $tabFait, $fk_parent_line=0){
 		foreach($this->lines as $line){
-			if($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
+			if($line->type == TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT || $line->type == TourneeGeneric_lines::TYPE_THIRDPARTY_FOURNISSEUR){
 				if( ! in_array($line->fk_soc,$tabFait['soc'])) {
-					$line->createLineTourneeUnique($user,$tourneeunique,$fk_parent_line);
+
+					$soc = new Societe($this->db);
+					$soc->fetch($line->fk_soc);
+
+					if( $soc->status != 0){	//si le compte n'est pas clos
+						$line->createLineTourneeUnique($user,$tourneeunique,$fk_parent_line);
+					}
 					$tabFait['soc'][$line->fk_soc]=$line->fk_soc;
 				}
-			} else if($line->type==TourneeGeneric_lines::TYPE_TOURNEE){
+			} else if( $line->type == TourneeGeneric_lines::TYPE_TOURNEE ){
 				if( ! in_array($line->fk_tournee_incluse,$tabFait['tournee']) ){
 					$tab['tournee'][$line->fk_tournee_incluse]=$line->tournee_incluse;
 

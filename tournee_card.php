@@ -204,7 +204,7 @@ if (empty($reshook)) {
 	 if (class_exists($class)) {
 		 $modellist=call_user_func($class.'::liste_modeles',$object->db);
 	 } else {
-		 dol_print_error($this->db,'Bad value for modulepart');
+		 dol_print_error($db,'Bad value for modulepart');
 		 return -1;
 	 }
 
