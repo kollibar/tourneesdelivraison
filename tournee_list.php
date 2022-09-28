@@ -108,6 +108,13 @@ $extralabels = $extrafields->fetch_name_optionals_label($typetournee);	// Load $
 $search_array_options = $extrafields->getOptionalsFromPost($object->table_element,'','search_');
 
 // Default sort order (if not yet defined by previous GETPOST)
+if( $typetournee == 'tourneeunique'){
+	if( ! $sortfield && ! $sortorder){
+		$sortfield="t.date_tournee";   // Set here default search field. By default 1st field in definition.
+		$sortorder="DESC";
+	}
+}
+
 if (! $sortfield) $sortfield="t.".key($object->fields);   // Set here default search field. By default 1st field in definition.
 if (! $sortorder) $sortorder="ASC";
 
@@ -495,10 +502,10 @@ while ($i < min($num, $limit))
 	    $cssforfield='';
 	    if (in_array($val['type'], array('date','datetime','timestamp'))) $cssforfield.=($cssforfield?' ':'').'center';
 	    elseif ($key == 'status') $cssforfield.=($cssforfield?' ':'').'center';
-	    
+
 	    if (in_array($val['type'], array('timestamp'))) $cssforfield.=($cssforfield?' ':'').'nowrap';
 	    elseif ($key == 'ref') $cssforfield.=($cssforfield?' ':'').'nowrap';
-	    
+
 	    if (! empty($arrayfields['t.'.$key]['checked']))
 		{
 			print '<td';

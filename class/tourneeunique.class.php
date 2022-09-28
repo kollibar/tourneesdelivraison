@@ -117,16 +117,16 @@ class TourneeUnique extends TourneeGeneric
 		'fk_user_modif' => array('type'=>'integer', 'label'=>'UserModif', 'enabled'=>1, 'visible'=>-2, 'position'=>511, 'notnull'=>-1,),
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'enabled'=>1, 'visible'=>-2, 'position'=>1000, 'notnull'=>-1,),
 		'statut' => array('type'=>'integer', 'label'=>'Status', 'enabled'=>1, 'visible'=>-1, 'position'=>1000, 'notnull'=>1, 'index'=>1, 'default'=>'0', 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Actif', '2'=>'Clos', '-1'=>'Annul&eacute;')),
-		'km' => array('type'=>'integer', 'label'=>'DistanceTotale', 'enabled'=>1, 'visible'=>1, 'position'=>50, 'notnull'=>-1,),
-		'dureeTrajet' => array('type'=>'integer', 'label'=>'DureeTrajet', 'enabled'=>1, 'visible'=>1, 'position'=>51, 'notnull'=>-1,),
+		'km' => array('type'=>'integer', 'label'=>'DistanceTotale', 'enabled'=>1, 'visible'=>1, 'position'=>80, 'notnull'=>-1,),
+		'dureeTrajet' => array('type'=>'integer', 'label'=>'DureeTrajet', 'enabled'=>1, 'visible'=>1, 'position'=>81, 'notnull'=>-1,),
 		'fk_tourneedelivraison' => array('type'=>'integer:TourneeDeLivraison:tourneesdelivraison/class/tourneedelivraison.class.php', 'label'=>'TourneeDeLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>30, 'notnull'=>-1,),
 		'date_tournee' => array('type'=>'date', 'label'=>'DateTournee', 'enabled'=>1, 'visible'=>1, 'position'=>70, 'notnull'=>1,),
 		'date_prochaine' => array('type'=>'date', 'label'=>'DateProchaineTournee', 'enabled'=>1, 'visible'=>1, 'position'=>71, 'notnull'=>-1,),
-		'ae_datelivraisonidentique' => array('type'=>'integer', 'label'=>'AffecteAutoDateLivraisonOK', 'enabled'=>1, 'visible'=>1, 'position'=>80, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'ae_1ere_future_cmde' => array('type'=>'integer', 'label'=>'AffecteAuto1ereFutureCmde', 'enabled'=>1, 'visible'=>1, 'position'=>81, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'ae_1elt_par_cmde' => array('type'=>'integer', 'label'=>'AffectationAutoSi1EltParCmde', 'enabled'=>1, 'visible'=>1, 'position'=>82, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
-		'change_date_affectation' => array('type'=>'integer', 'label'=>'ChangeAutoDateLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>83, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Manuelle seulement', '4'=>'manuelle et automatique',)),
-		'masque_ligne' => array('type'=>'integer', 'label'=>'MasquerLesLignes', 'enabled'=>1, 'visible'=>1, 'position'=>85, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'AucunMasquage','1'=>'MarqueSansCommande', '2'=>'SansCmde', '3' => 'SansCmdeAffOuInc','4'=>'SansCmdeAffecte',)),
+		'ae_datelivraisonidentique' => array('type'=>'integer', 'label'=>'AffecteAutoDateLivraisonOK', 'enabled'=>1, 'visible'=>1, 'position'=>90, 'notnull'=>-1,'default'=>'1','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
+		'ae_1ere_future_cmde' => array('type'=>'integer', 'label'=>'AffecteAuto1ereFutureCmde', 'enabled'=>1, 'visible'=>1, 'position'=>91, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
+		'ae_1elt_par_cmde' => array('type'=>'integer', 'label'=>'AffectationAutoSi1EltParCmde', 'enabled'=>1, 'visible'=>1, 'position'=>92, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Oui',)),
+		'change_date_affectation' => array('type'=>'integer', 'label'=>'ChangeAutoDateLivraison', 'enabled'=>1, 'visible'=>1, 'position'=>93, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'Defaut','1'=>'Non', '2'=>'Manuelle seulement', '4'=>'manuelle et automatique',)),
+		'masque_ligne' => array('type'=>'integer', 'label'=>'MasquerLesLignes', 'enabled'=>1, 'visible'=>1, 'position'=>95, 'notnull'=>-1,'default'=>'0','arrayofkeyval'=>array('0'=>'AucunMasquage','1'=>'MarqueSansCommande', '2'=>'SansCmde', '3' => 'SansCmdeAffOuInc','4'=>'SansCmdeAffecte',)),
 	);
 	public $rowid;
 	public $ref;
