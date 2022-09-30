@@ -510,6 +510,7 @@ class TourneeObject extends CommonObject
 	 */
 	public function setCategories($categories)
 	{
+		global $conf, $user;
 		if( empty($conf->categorie->enabled)  || empty($user->rights->categorie->lire) ) return 1;
 
 		require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
@@ -518,17 +519,15 @@ class TourneeObject extends CommonObject
 		$type_id=$this->element;
 		$type_text=$this->element;
 
-
-
 		// Handle single category
 		if (!is_array($categories)) {
 			$categories = array($categories);
 		}
 
-
 		// Get current categories
 		// if( ! checkCategoriePourObjet($type)) return 1;
 
+		$c=new Categorie($this->db);
 		$existing = $c->containing($this->id, $type_id, 'id');
 
 		// Diff
@@ -576,13 +575,14 @@ class TourneeObject extends CommonObject
  */
 public function getCategories()
 {
+	global $conf, $user;
 	if( empty($conf->categorie->enabled)  || empty($user->rights->categorie->lire) ) return 1;
 
 	require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
 
 	// Get current categories
 	// if( ! checkCategoriePourObjet($type)) return array();
-
+	$c=new Categorie($this->db);
 	$existing = $c->containing($this->id, $this->element, 'id');
 
 	return $existing;

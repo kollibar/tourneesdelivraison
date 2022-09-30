@@ -810,7 +810,7 @@ public function LibStatut($status, $mode=0)
 	 *	@return	void
 	 */
 
-	function printTourneeLines($action, $seller, $selected=0, $dateSelector=0)
+	function printTourneeLines($action, $seller, $selected=0, $dateSelector=0, $ligneVide=false)
 	{
 		global $conf, $hookmanager, $langs, $user;
 
@@ -905,7 +905,8 @@ public function LibStatut($status, $mode=0)
 		{
 			// masquage des lignes suivant $this->masque_ligne
 			$c=$line->getCategories();
-			if( empty($line->note_public) && count($c)==0){ // si pas de note plublic ni de tag
+
+			if( empty($line->note_public) && ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag
 				if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
 				 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
 							|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
@@ -945,7 +946,7 @@ public function LibStatut($status, $mode=0)
 			}
 			if (empty($reshook))
 			{
-				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline);
+				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
 			}
 
 			$i++;
@@ -971,7 +972,7 @@ public function LibStatut($status, $mode=0)
 	 *	@return	void
 	 */
 
-	function printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected=0,$extrafieldsline=0)
+	function printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected=0,$extrafieldsline=0, $ligneVide=false)
 	{
 		global $conf,$langs,$user,$object,$hookmanager;
 		global $form,$formtournee,$bc,$bcdd, $mysoc, $db;

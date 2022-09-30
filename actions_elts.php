@@ -66,7 +66,10 @@ else if ($action == 'unsetnocmde_elt' && ! empty($permissiontonote) && ! GETPOST
 		{
 			// Categories association
 			$categories = GETPOST( 'cats_line', 'array' );
+
 			$result3 = $line->setCategories($categories, $object->element);
+			//$result3 = $line->setCategories($categories);
+
 			if ($result3 < 0) {
 				$error++;
 				setEventMessages($object->error, $object->errors, 'errors');

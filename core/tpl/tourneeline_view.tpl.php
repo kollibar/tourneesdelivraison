@@ -51,6 +51,7 @@ $domData .= ' data-id="'.$line->id.'"';
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
 <tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
+	<?php if( $ligneVide == false ) { ?>
 
 	<td class="linecolselect" align="center"><?php $coldisplay++; ?>
 	</td>
@@ -476,7 +477,8 @@ $domData .= ' data-id="'.$line->id.'"';
 	<td class="linecolcheck" align="center"><input type="checkbox" class="linecheckbox" name="line_checkbox[<?php echo $i+1; ?>]" value="<?php echo $line->id; ?>" ></td>
 	<?php } ?>
 
-</tr>
+<?php } ?>
+</tr><!-- row-<?php echo $line->id ?> -->
 
 <?php
 //Line extrafield

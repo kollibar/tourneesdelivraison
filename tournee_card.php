@@ -79,7 +79,7 @@ dol_include_once('/tourneesdelivraison/lib/tournee.lib.php');
 
 $r=addCategorieData();
 
-dol_include_once('/tourneesdelivraison/class/categorieExtended.class.php');
+dol_include_once('/categorie/class/categorie.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("tourneesdelivraison@tourneesdelivraison","other","orders","sendings","bills","main"));
