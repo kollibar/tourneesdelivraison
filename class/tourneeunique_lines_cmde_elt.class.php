@@ -411,7 +411,7 @@ public function LibStatut($status, $mode=0)
 		if( $this->type_element=='shipping' && $date_livraison_elt != $tournee->date_tournee ) {
 			$out .= $langs->trans('MsgAttentionDateDifferente');
 			$out .= '<div class="inline-block divButAction tourneeBoutons">
-			<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+			<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 				'?id=' . $this->getTournee()->id .
 				'&amp;action=ask_changedateelt' .
 				'&amp;elt_type=' . $this->type_element .
@@ -428,7 +428,7 @@ public function LibStatut($status, $mode=0)
 		if( $this->statut != self::AUTRE_AFFECTATION) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .
@@ -442,7 +442,7 @@ public function LibStatut($status, $mode=0)
 		if( $this->statut!=self::DATE_OK && $this->statut != self::DATE_NON_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .
@@ -456,7 +456,7 @@ public function LibStatut($status, $mode=0)
 		if( $this->statut!=self::NON_AFFECTE && $this->statut != self::NON_AFFECTE_DATE_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .

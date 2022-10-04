@@ -120,5 +120,3 @@ else if ($action == 'unsetnocmde_elt' && ! empty($permissiontonote) && ! GETPOST
 			$action = 'view';
 		}
 	}
-
- ?>

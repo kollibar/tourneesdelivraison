@@ -434,5 +434,3 @@ if( $typetournee=='tourneeunique' && $action == 'confirm_affectationauto' && $co
   }
   $action='';
 }
-
- ?>

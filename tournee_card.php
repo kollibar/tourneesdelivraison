@@ -459,92 +459,24 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	$head = tourneePrepareHead($object);
 	dol_fiche_head($head, 'card', $langs->trans($typenom), -1, $typetournee.'@tourneesdelivraison');
 
-	$formconfirm = '';
 
-	// Confirmation to delete
-	if ($action == 'ask_delete')
-	{
-	    $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('DeleteTourneeDeLivraison'), $langs->trans('ConfirmDeleteTourneeDeLivraison'), 'confirm_delete', '', 0, 1);
-	}
+	$includes=array('/tourneesdelivraison/actions_confirmations.php',
+								);
 
-	else if ($action == 'ask_cancel') {
-		// Create an array for form
-		$formquestion = array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('CancelTourneeDeLivraison'), $langs->trans('ConfirmCancelTourneeDeLivraison', $object->ref), 'confirm_cancel', $formquestion, 'yes', 1);
-	}
+	foreach($includes as $tpl){
+		$tpl=dol_buildpath($tpl);
 
-	// Clone confirmation
-	else if ($action == 'ask_clone') {
-		// Create an array for form
-		$formquestion = array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('CloneTourneeDeLivraison'), $langs->trans('ConfirmCloneTourneeDeLivraison', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
+		if (empty($conf->file->strict_mode)) {
+			@include $tpl;
+		} else {
+			include $tpl; // for debug
+		}
 	}
-	else if ($action == 'ask_close') {
-		// Create an array for form
-		$formquestion = array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('CloseTourneeDeLivraison'), $langs->trans('ConfirmCloseTourneeDeLivraison', $object->ref), 'confirm_close', $formquestion, 'yes', 1);
-	}
-
-	else if( $action == 'ask_validate'){
-		$formquestion=array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ValidateTourneeDeLivraison'), $langs->trans('ConfirmValidateTourneeDeLivraison', $object->ref), 'confirm_validate', $formquestion, 'yes', 1);
-	}
-	else if( $action == 'ask_genererdocs'){
-		$formquestion=array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('GenererDocs'), $langs->trans('ConfirmGenererDocs', $object->ref), 'confirm_genererdocs', $formquestion, 'yes', 1);
-	}
-
-	else if( $action == 'ask_unvalidate'){
-		$formquestion=array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('UnvalidateTourneeDeLivraison'), $langs->trans('ConfirmUnvalidateTourneeDeLivraison', $object->ref), 'confirm_unvalidate', $formquestion, 'yes', 1);
-	}
-	else if( $action == 'ask_affectationauto'){
-		$formquestion=array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('AffectationAutoTourneeUnique'), $langs->trans('ConfirmAffectationAutoTourneeUnique', $object->ref), 'confirm_affectationauto', $formquestion, 'yes', 1);
-	}
-	else if( $action == 'ask_reopen'){
-		$formquestion=array();
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ReopenTourneeDeLivraison'), $langs->trans('ConfirmReopenTourneeDeLivraison', $object->ref), 'confirm_reopen', $formquestion, 'yes', 1);
-	}
-	else if( $action == 'ask_changestatutelt'){
-		$formquestion=array();
-		$statut=GETPOST('statut','int');
-		$elt_type=GETPOST('elt_type','aZ09');
-		$elt_id=GETPOST('elt_id','int');
-		$elt_lineid=GETPOST('elt_lineid','int');
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id . "&lineid=$lineid&elt_id=$elt_id&elt_lineid=$elt_lineid&elt_type=$elt_type&statut=$statut", $langs->trans('ChangeStatutElt'), $langs->trans('ConfirmChangeStatutElt', $langs->trans($type_elt) . ' '), 'confirm_changestatutelt', $formquestion, 'yes', 1);
-	}
-
-	else if($action == 'ask_changedateelt'){
-		$formquestion=array();
-		$elt_type=GETPOST('elt_type','aZ09');
-		$elt_id=GETPOST('elt_id','int');
-		$elt_lineid=GETPOST('elt_lineid','int');
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id . "&lineid=$lineid&elt_id=$elt_id&elt_lineid=$elt_lineid&elt_type=$elt_type", $langs->trans('ChangeDateElt'), $langs->trans('ConfirmChangeDateEltToDateTournee', $langs->trans($type_elt) . ' '), 'confirm_changedateelt', $formquestion, 'yes', 1);
-	}
-
-	// Confirmation to delete line
-	else if ($action == 'ask_deleteline')
-	{
-		$formconfirm=$form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id.'&lineid='.$lineid, $langs->trans('DeletelineTourneeDeLivraison'), $langs->trans('ConfirmDeletelineTourneeDeLivraison'), 'confirm_deleteline', '', 0, 1);
-	}
-
-		// Confirmation to delete line
-	else if ($action == 'ask_deletecontact')
-	{
-		$formconfirm=$form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id.'&contactid='.$contactid, $langs->trans('DeletecontactTourneeDeLivraison'), $langs->trans('ConfirmDeletecontactTourneeDeLivraison'), 'confirm_deletecontact', '', 0, 1);
-	}
-
-
-	// Call Hook formConfirm
-	$parameters = array('lineid' => $lineid);
-	$reshook = $hookmanager->executeHooks('formConfirm', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
-	if (empty($reshook)) $formconfirm.=$hookmanager->resPrint;
-	elseif ($reshook > 0) $formconfirm=$hookmanager->resPrint;
 
 	// Print form confirm
+	echo '<div id="formulaireConfirm">';
 	print $formconfirm;
-
+	echo '</div>';
 
 	// Object card
 	// ------------------------------------------------------------
@@ -683,6 +615,19 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	//if (! empty($conf->use_javascript_ajax) && $object->statut == TourneeGeneric::STATUS_DRAFT) {
 	if (! empty($conf->use_javascript_ajax)) {
 		include DOL_DOCUMENT_ROOT . '/core/tpl/ajaxrow.tpl.php';
+
+		// Output template part (modules that overwrite templates must declare this into descriptor)
+		$dirtpls=array_merge($conf->modules_parts['tpl'],array('/core/tpl'));
+		foreach($dirtpls as $reldir)
+		{
+			$tpl = dol_buildpath($reldir.'/tournee_ajax.tpl.php');
+			if (empty($conf->file->strict_mode)) {
+				$res=@include $tpl;
+			} else {
+				$res=include $tpl; // for debug
+			}
+			if ($res) break;
+		}
 	}
 
 	print '<div class="div-table-responsive-no-min">';
@@ -740,7 +685,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 			if( $object->statut==TourneeGeneric::STATUS_VALIDATED ){
 				if(!empty($permissiontoadd)){
-					print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_affectationauto">' . $langs->trans("AffectationAuto") . '</a></div>';
+					print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_affectationauto">' . $langs->trans("AffectationAuto") . '</a></div>';
 				} else {
 					print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('AffectationAuto').'</a>'."\n";
 				}
@@ -752,7 +697,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 			}
 
 			if($user->rights->tourneesdelivraison->{$typetournee}->lire){
-				print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_genererdocs">' . $langs->trans("GenererDocs") . '</a></div>';
+				print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_genererdocs">' . $langs->trans("GenererDocs") . '</a></div>';
 			} else {
 				print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('GenererDocs').'</a>'."\n";
 			}
@@ -778,7 +723,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 		if( $object->statut==TourneeGeneric::STATUS_DRAFT ){
 			if (!empty($permissiontoadd))
 			{
-				print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_validate">' . $langs->trans("Validate") . '</a></div>';
+				print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;action=ask_validate">' . $langs->trans("Validate") . '</a></div>';
 			}
 			else
 			{
@@ -791,7 +736,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 			// Modifier
 			if (!empty($permissiontoadd))
 			{
-				print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_unvalidate">'.$langs->trans("Modify").'</a>'."\n";
+				print '<a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_unvalidate">'.$langs->trans("Modify").'</a>'."\n";
 			}
 			else
 			{
@@ -813,11 +758,11 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     		// Clore / Cloner / Annuler
     		if (!empty($permissiontoadd))
     		{
-			if($object->statut!=TourneeGeneric::STATUS_CLOSED) print '<div class="inline-block divButAction"><a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_close">'.$langs->trans('Close').'</a></div>'."\n";
-			else print '<div class="inline-block divButAction"><a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_reopen">'.$langs->trans('Reopen').'</a></div>'."\n";
+			if($object->statut!=TourneeGeneric::STATUS_CLOSED) print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_close">'.$langs->trans('Close').'</a></div>'."\n";
+			else print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_reopen">'.$langs->trans('Reopen').'</a></div>'."\n";
 
-			print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;socid=' . $object->socid . '&amp;action=ask_clone&amp;object=order">' . $langs->trans("ToClone") . '</a></div>';
-			print '<a class="butActionDelete" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_cancel">'.$langs->trans('Cancel').'</a>'."\n";
+			print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;socid=' . $object->socid . '&amp;action=ask_clone&amp;object=order">' . $langs->trans("ToClone") . '</a></div>';
+			print '<a class="butActionDelete askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_cancel">'.$langs->trans('Cancel').'</a>'."\n";
     		}
 		else
 		{
@@ -829,7 +774,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 		// effacer
     		if ($permissiontodelete)
     		{
-    			print '<a class="butActionDelete" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_delete">'.$langs->trans('Delete').'</a>'."\n";
+    			print '<a class="butActionDelete askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_delete">'.$langs->trans('Delete').'</a>'."\n";
     		}
     		else
     		{

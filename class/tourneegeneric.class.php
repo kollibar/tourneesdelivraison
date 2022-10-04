@@ -796,6 +796,55 @@ public function LibStatut($status, $mode=0)
 	 return $rights;
 	}
 
+	function miniLoad($tourneeid, $statutTournee){
+		$this->id = $tourneeid;
+		$this->statut = $statutTournee;
+
+		/* à ajouter
+		$this->masque_ligne
+		*/
+
+		$this->minifetch_lines();
+	}
+
+	public function minifetch_lines()
+	{
+		$this->lines=array();
+
+		$sql = 'SELECT l.rowid, l.rang, l.'.$this->fk_element.'  FROM '.MAIN_DB_PREFIX.$this->table_element_line.' as l';
+		$sql.= ' WHERE l.'.$this->fk_element.' = '.$this->id;
+		$sql .= ' ORDER BY l.rang, l.rowid';
+
+		dol_syslog(get_class($this)."::fetch_lines", LOG_DEBUG);
+		$result = $this->db->query($sql);
+		if ($result)
+		{
+			$num = $this->db->num_rows($result);
+
+			$i = 0;
+			while ($i < $num)
+			{
+				$objp = $this->db->fetch_object($result);
+				$line = $this->getNewLine($this);
+				$line->fetch($objp->rowid);
+				$line->fetch_optionals();
+
+				$this->lines[$i] = $line;
+
+				$i++;
+			}
+
+			$this->db->free($result);
+
+			return 1;
+		}
+		else
+		{
+			$this->error=$this->db->error();
+			return -3;
+		}
+	}
+
 
 	/**
 	 *	Return HTML table for object lines
@@ -807,6 +856,7 @@ public function LibStatut($status, $mode=0)
 	 *	@param  string		$seller            	Object of seller third party
 	 *	@param	int			$selected		   	Object line selected
 	 *	@param  int	    	$dateSelector      	1=Show also date range input fields
+	 *  @param  bool		$ligneVide		si les lignes doivent être vides (ne pas être écrites)
 	 *	@return	void
 	 */
 
@@ -904,27 +954,30 @@ public function LibStatut($status, $mode=0)
 		foreach ($this->lines as $line)
 		{
 			// masquage des lignes suivant $this->masque_ligne
-			$c=$line->getCategories();
 
-			if( empty($line->note_public) && ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag
-				if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
-				 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
-							|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
-							)){
-					continue;
-				}
-				if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
-					&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
-					$ok=1;
-					foreach ($line->lines_cmde as $lcmde) {
-						if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
-								|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
-							){
-							$ok=0;
-							break;
-						}
+			if( empty($line->note_public) ){
+				$c=$line->getCategories();
+
+				if( ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag
+					if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+					 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
+								|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
+								)){
+						continue;
 					}
-					if(!empty($ok)) continue;
+					if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+						&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
+						$ok=1;
+						foreach ($line->lines_cmde as $lcmde) {
+							if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
+									|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
+								){
+								$ok=0;
+								break;
+							}
+						}
+						if(!empty($ok)) continue;
+					}
 				}
 			}
 			//Line extrafield
@@ -956,6 +1009,129 @@ public function LibStatut($status, $mode=0)
 		print "</tbody>\n";
 	}
 
+
+	/**
+	 *	Return HTML table for object lines
+	 *	TODO Move this into an output class file (htmlline.class.php)
+	 *	If lines are into a template, title must also be into a template
+	 *	But for the moment we don't know if it's possible as we keep a method available on overloaded objects.
+	 *
+	 *	@param	int				$lineid 	ligne à afficher
+	 *	@param	string		$action				Action code
+	 *	@param  string		$seller            	Object of seller third party
+	 *	@param	int			$selected		   	Object line selected
+	 *	@param  int	    	$dateSelector      	1=Show also date range input fields
+	 *  @param  bool		$ligneVide		si les lignes doivent être vides (ne pas être écrites)
+	 *	@return	void
+	 */
+
+	function printTourneeLineUnique_fetchLines($lineid, $action, $seller, $selected=0, $dateSelector=0, $ligneVide=false){
+		global $conf, $hookmanager, $langs, $user;
+
+		$this->fetch_lines();
+
+		// Define usemargins
+		$usemargins=0;
+		if (! empty($conf->margin->enabled) && ! empty($this->element) && in_array($this->element,array('facture','propal','commande'))) $usemargins=1;
+
+		$num = count($this->lines);
+
+		$var = true;
+		$i	 = 0;
+
+		foreach ($this->lines as $line)
+		{
+			// masquage des lignes suivant $this->masque_ligne
+
+			if( empty($line->note_public) ){
+				$c=$line->getCategories();
+
+				if( ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag
+					if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+					 		&& ( $this->masque_ligne >= TourneeUnique::MASQUE_PASDECMDE && $line->aucune_cmde
+								|| $this->masque_ligne >= TourneeUnique::MASQUE_SANSCMDE && count($line->lines_cmde) == 0
+								)){
+						continue;
+					}
+					if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT
+						&& $this->masque_ligne >=TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC){
+						$ok=1;
+						foreach ($line->lines_cmde as $lcmde) {
+							if( $lcmde->statut == TourneeUnique_lines_cmde::DATE_OK || $lcmde->statut == TourneeUnique_lines_cmde::DATE_NON_OK // il y a (au moins) une commande affectée
+									|| $this->masque_ligne == TourneeUnique::MASQUE_SANSCMDEAFF_OU_INC && ($lcmde->statut==TourneeUnique_lines_cmde::NON_AFFECTE || $lcmde->statut == TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK)
+								){
+								$ok=0;
+								break;
+							}
+						}
+						if(!empty($ok)) continue;
+					}
+				}
+			}
+
+
+			if( $lineid == $line->id ){
+				//Line extrafield
+				$line->fetch_optionals();
+
+				if (is_object($hookmanager))   // Old code is commented on preceding line.
+				{
+					if (empty($line->fk_parent_line))
+					{
+						$parameters = array('line'=>$line,'var'=>$var,'num'=>$num,'i'=>$i,'dateSelector'=>$dateSelector,'seller'=>$seller,'selected'=>$selected, 'extrafieldsline'=>$extrafieldsline);
+						$reshook = $hookmanager->executeHooks('printTourneeLine', $parameters, $this, $action);    // Note that $action and $object may have been modified by some hooks
+					}
+					else
+					{
+						$parameters = array('line'=>$line,'var'=>$var,'num'=>$num,'i'=>$i,'dateSelector'=>$dateSelector,'seller'=>$seller,'selected'=>$selected, 'extrafieldsline'=>$extrafieldsline, 'fk_parent_line'=>$line->fk_parent_line);
+						$reshook = $hookmanager->executeHooks('printTourneeSubLine', $parameters, $this, $action);    // Note that $action and $object may have been modified by some hooks
+					}
+				}
+				if (empty($reshook))
+				{
+					$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
+				}
+			}
+
+			$i++;
+			$var=!$var;
+
+		}
+	}
+
+	function printTourneeLineUnique($action, $line, $var, $num, $i, $seller, $selected=0, $dateSelector=0, $ligneVide=false){
+		global $conf, $hookmanager, $langs, $user;
+
+		// Define usemargins
+		$usemargins=0;
+		if (! empty($conf->margin->enabled) && ! empty($this->element) && in_array($this->element,array('facture','propal','commande'))) $usemargins=1;
+
+
+
+		//if( $lineid == $line->id ){
+			//Line extrafield
+			$line->fetch_optionals();
+
+			if (is_object($hookmanager))   // Old code is commented on preceding line.
+			{
+				if (empty($line->fk_parent_line))
+				{
+					$parameters = array('line'=>$line,'var'=>$var,'num'=>$num,'i'=>$i,'dateSelector'=>$dateSelector,'seller'=>$seller,'selected'=>$selected, 'extrafieldsline'=>$extrafieldsline);
+					$reshook = $hookmanager->executeHooks('printTourneeLine', $parameters, $this, $action);    // Note that $action and $object may have been modified by some hooks
+				}
+				else
+				{
+					$parameters = array('line'=>$line,'var'=>$var,'num'=>$num,'i'=>$i,'dateSelector'=>$dateSelector,'seller'=>$seller,'selected'=>$selected, 'extrafieldsline'=>$extrafieldsline, 'fk_parent_line'=>$line->fk_parent_line);
+					$reshook = $hookmanager->executeHooks('printTourneeSubLine', $parameters, $this, $action);    // Note that $action and $object may have been modified by some hooks
+				}
+			}
+			if (empty($reshook))
+			{
+				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
+			}
+		//}
+	}
+
 	/**
 	 *	Return HTML content of a detail line
 	 *	TODO Move this into an output class file (htmlline.class.php)
@@ -969,6 +1145,7 @@ public function LibStatut($status, $mode=0)
 	 *	@param  string	    $seller            	Object of seller third party
 	 *	@param	int			$selected		   	Object line selected
 	 *  @param  int			$extrafieldsline	Object of extrafield line attribute
+	 *  @param  bool		$ligneVide		si la ligne doit être vide (ne pas être écrite)
 	 *	@return	void
 	 */
 
@@ -976,8 +1153,10 @@ public function LibStatut($status, $mode=0)
 	{
 		global $conf,$langs,$user,$object,$hookmanager;
 		global $form,$formtournee,$bc,$bcdd, $mysoc, $db;
-		global $lineid;
+		// global $lineid;
 		//global $permissionnote, $permissiontoadd, $permissioncreate, $permissiontodelete
+
+		$paramsLienLigne = '&amp;var=' . $var . '&amp;num=' . $num . '&amp;i=' . $i;
 
 		$object_rights = $this->getRights();
 

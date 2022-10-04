@@ -6,5 +6,3 @@ if( substr($action,0,4)=='ask_' && $conf->global->{'TOURNEESDELIVRAISON_ASK_'.mb
   $action='confirm_'.substr($action,4);
   $confirm='yes';
 }
-
- ?>

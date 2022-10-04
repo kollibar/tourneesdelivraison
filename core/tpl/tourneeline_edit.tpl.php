@@ -50,10 +50,12 @@ $domData .= ' data-id="'.$line->id.'"';
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE objectline_view.tpl.php -->
-<tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
+<tr  id="row-<?php echo $line->id?>" class="drag drop oddeven tournee-row" <?php echo $domData; ?> >
 	<input type="hidden" name="lineid" id="lineid" value="<?php echo $line->id?>">
 
-
+	<input type="hidden" name="var" id="var" value="<?php echo $var?>">
+	<input type="hidden" name="i" id="i" value="<?php echo $i?>">
+	<input type="hidden" name="num" id="num" value="<?php echo $num?>">
 
 	<td class="linecolselect" align="center" colspan="2"><?php $coldisplay++;$coldisplay++; ?>    </td> <!-- A FAIRE Ajouter case à cocher-->
 
@@ -134,10 +136,10 @@ $domData .= ' data-id="'.$line->id.'"';
 		</td></tr>
 		<tr>
 		<td align="right" class="linecolnote_public nowrap">
-			<textarea id="note_public" name="note_public" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
+			<textarea id="note_public" name="note_public" rows="3" style="margin-top: 5px; width: 98%" class="flat"><?php echo $line->note_public;?></textarea>
 		</td>
 		<td align="right" class="linecolnote_private nowrap"><?php $coldisplay++; ?>
-			<textarea id="note_private" name="note_private" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
+			<textarea id="note_private" name="note_private" rows="3" style="margin-top: 5px; width: 98%" class="flat"><?php echo $line->note_public;?></textarea>
 		</td>
 	</tr>
 </table>
@@ -176,90 +178,13 @@ if (!empty($extrafieldsline))
 
 /* JQuery for product free or predefined select */
 jQuery(document).ready(function() {
-	$("#tournee_line_type_thirdparty").on( "click", function() {
-		setfor3party();
-	});
-	$("#tournee_line_type_tournee").on( "click", function() {
-		setfortournee();
-	});
-
-	$("#BL1").on( "click", function() {
-		BL1choix();
-	});
-	$("#BL2").on( "click", function() {
-		BL1choix();
-	});
-
-	$("#socid").on( "change", function() {
-		changeClient();
-	});
-	$("#tourneeincluseid").on( "change", function() {
-		changeTourneeIncluse();
-	});
-
 	<?php if (GETPOST('tournee_line_type_thirdparty') == 'predef') { // When we submit with a predef product and it fails we must start with predef ?>
 		setfor3party();
 	<?php } ?>
 	<?php if (GETPOST('tournee_line_type_tournee') == 'predef') { // When we submit with a predef product and it fails we must start with predef ?>
 		setfortournee();
 	<?php } ?>
-
-	//jQuery("#infolivraison").val(<?php echo '"'.$line->infolivraison.'"';?>);
-	jQuery("#note_public").val(<?php echo '"'.$line->note_public.'"';?>);
-	jQuery("#note_private").val(<?php echo '"'.$line->note_private.'"';?>);
 });
-
-function changeClient(){
-	if( $("#socid").val()!=-1 && $("#socid").val()!=0){
-		setfor3party();
-	}
-}
-
-function changeTourneeIncluse(){
-	if( $("#tourneeincluseid").val()!=-1 && $("#tourneeincluseid").val()!=0) setfortournee();
-}
-
-function BL1choix(){
-	if( ! jQuery("#BL1").is(':checked') && jQuery("#BL2").is(':checked') ){
-		jQuery("#BL1").prop('checked',true).change();
-		jQuery("#BL2").prop('checked',false).change();
-	}
-}
-
-/* Function to set fields from choice */
-function setfor3party() {
-	console.log("Call set3party. We show most fields");
-	/*jQuery("#search_idprod").val('');
-	jQuery("#idprod").val('');
-	jQuery("#idprodfournprice").val('0');	// Set cursor on not selected product
-	jQuery("#search_idprodfournprice").val('');*/
-	jQuery("#tournee_line_type_thirdparty").prop('checked',true).change();
-	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
-	jQuery("#BL").show();
-	jQuery("#facture").show();
-	jQuery("#etiquettes").show();
-	jQuery("#tempstheorique").show();
-	jQuery("#infolivraison").show();
-}
-function setfortournee() {
-	console.log("Call setfortournee. We hide some fields and show dates");
-	jQuery("#tournee_line_type_thirdparty").prop('checked',false).change();
-	jQuery("#tournee_line_type_tournee").prop('checked',true).change();
-
-	/*jQuery("#price_ht").val('').hide();
-	jQuery("#multicurrency_price_ht").hide();
-	jQuery("#price_ttc").hide();	// May no exists
-	jQuery("#fourn_ref").hide();
-	jQuery("#tva_tx").hide();
-	jQuery("#buying_price").show();
-	jQuery("#title_vat").hide();*/
-	jQuery("#BL").hide();
-	jQuery("#facture").hide();
-	jQuery("#etiquettes").hide();
-	jQuery("#tempstheorique").hide();
-	jQuery("#infolivraison").hide();
-}
-
 </script>
 
 <!-- END PHP TEMPLATE tourneeline_edit.tpl.php -->

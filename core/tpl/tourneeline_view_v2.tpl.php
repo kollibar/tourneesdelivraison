@@ -47,11 +47,10 @@ if (empty($dateSelector)) $dateSelector=0;
 $domData  = ' data-element="'.$line->element.'"';
 $domData .= ' data-id="'.$line->id.'"';
 
-
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
-<tr id="row-<?php echo $line->id?>" class="drag drop oddeven tournee-row" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
+<tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
 	<?php if( $ligneVide == false ) { ?>
 
 	<td class="linecolselect" align="center"><?php $coldisplay++; ?>
@@ -106,7 +105,7 @@ $domData .= ' data-id="'.$line->id.'"';
 								print $contactline->getBannerContact();
 								print '</td><td>';
 								if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
-									print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . $paramsLienLigne . '" class="ajaxable">';
+									print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . '">';
 									print img_delete();
 									print '</a>';
 								}
@@ -189,38 +188,56 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	<?php
 
-	if( $line->element=='tourneeunique_lines' && $parent->statut != STATUS_DRAFT){ ?>
+	if( $line->element == 'tourneeunique_lines' && $parent->statut != STATUS_DRAFT){ ?>
 	  <td class="linecolcmde">
-			<?php if( $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) { ?>
+			<?php if( $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT ) { ?>
 
 			<table class="noborderbottom">
 				<?php foreach ($line->lines_cmde as $lcmde) {
-					$cmde=$lcmde->loadElt();
+					$cmde=$lcmde->loadElt();	// objet Commande($db)
+
 					if( $lcmde->statut!=TourneeUnique_lines_cmde::DATE_OK
 						&& $lcmde->statut!=TourneeUnique_lines_cmde::DATE_NON_OK
 						&& $cmde->statut==Commande::STATUS_CLOSED) continue;
 					// $cmde=new Commande($this->db);
 					// $cmde->fetch($lcmde->fk_commande);
 					$numshipping = $cmde->nb_expedition();
-					$numinvoice=0;
-					?>
-				<tr><td>
-					<?php
+					$nb_exp_aff = 0;
+					$numinvoice = 0;
+
+					foreach ($lcmde->lines as $lelt) {
+						if( $lelt->type_element == 'shipping' ){
+							$nb_exp += 1;
+							if( $lelt->statut == 2 || $lelt->statut == 3 ){ // 2: affecté date OK, 3: affecté date non OK
+								$nb_exp_aff += 1;
+							}
+						}
+						if($lelt->type_element == 'facture'){
+							$numinvoice+=1;
+						}
+
+					}
+					$nbligne=max( ($lcmde->estLivreCompletement()?0:1)+$nb_exp, $numinvoice);
+
+					echo '<tr id="line_cmde_id_' . $cmde->id . '">';
+					echo '<td rowspan="' . $nbligne . '">';
+
 					$morehtml=$cmde->getNomUrl();
 					echo $lcmde->getMenuStatut(false,$morehtml); ?>
+
 				</td>
 				<td>
+
 					<?php
 					if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK) continue;
 					if( $numshipping!=0){
 						echo '<table class="noborderbottom">';
 						foreach ($lcmde->lines as $lelt) {
-							if($lelt->type_element == 'shipping'){
+							if( $lelt->type_element == 'shipping' ){
 								//$elt=$lelt->loadElt();
 								echo '<tr><td>';
 								echo $lelt->getMenuStatut();
 								echo '</td></tr>';
-								$nb_exp+=1;
 							}
 						}
 						echo '</table>';
@@ -246,7 +263,6 @@ $domData .= ' data-id="'.$line->id.'"';
 						<?php foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'facture'){
 								//$elt=$lelt->loadElt();
-								$numinvoice+=1;
 								echo '<tr><td>';
 								echo $lelt->getMenuStatut();
 								echo '</td></tr>';
@@ -262,7 +278,7 @@ $domData .= ' data-id="'.$line->id.'"';
 								print '<div class="inline-block divButAction"><a class="butAction tourneeBoutons" href="' . DOL_URL_ROOT . '/compta/facture/card.php?action=create&amp;origin=' . $cmde->element . '&amp;originid=' . $cmde->id . '&amp;socid=' . $cmde->socid . '">' . $langs->trans("CreateBill") . '</a></div>';
 							}
 							if (1==0 && $user->rights->commande->creer && $cmde->statut >= Commande::STATUS_VALIDATED && empty($conf->global->WORKFLOW_DISABLE_CLASSIFY_BILLED_FROM_ORDER) && empty($conf->global->WORKFLOW_BILL_ON_SHIPMENT)) {
-								print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $cmde->id . '&amp;action=classifybilled'.$paramsLienLigne.'" class="ajaxable">' . $langs->trans("ClassifyBilled") . '</a></div>';
+								print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $cmde->id . '&amp;action=classifybilled">' . $langs->trans("ClassifyBilled") . '</a></div>';
 							}
 						}
 					} ?>
@@ -277,12 +293,12 @@ $domData .= ' data-id="'.$line->id.'"';
 						print '<tr><td>'.$langs->Trans('PasDeCmde').' :';
 						if (!empty($line->aucune_cmde))
 						{
-							print '<a href="'.$_SERVER['PHP_SELF'].'?action=unsetnocmde_elt&id='.$parent->id.'&lineid='.$line->id.$paramsLienLigne.'" class="ajaxable">';
+							print '<a href="'.$_SERVER['PHP_SELF'].'?action=unsetnocmde_elt&id='.$parent->id.'&lineid='.$line->id.'">';
 							print img_picto($langs->trans("Activated"),'switch_on');
 						}
 						else
 						{
-							print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnocmde_elt&id='.$parent->id.'&lineid='.$line->id.$paramsLienLigne.'" class="ajaxable">';
+							print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnocmde_elt&id='.$parent->id.'&lineid='.$line->id.'">';
 							print img_picto($langs->trans("Disabled"),'switch_off');
 						}
 						print '</a>';
@@ -308,17 +324,14 @@ $domData .= ' data-id="'.$line->id.'"';
 	<td align="right" class="linecoltpstheo nowrap"><?php $coldisplay++; ?><?php echo $line->tpstheorique; ?></td>
 
 
-	<?php if( $this->statut==TourneeGeneric::STATUS_VALIDATED && $action=='edit_note_elt' && $line->id==$selected  && !empty($object_rights->note)){ ?>
+	<?php if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $action=='edit_note_elt' && $line->id==$selected  && !empty($object_rights->note)){ ?>
 		<td align="right" class="linecolnote nowrap"><?php $coldisplay++; ?>
-			<form class="edit_note_elt" name="edit_note_elt-<?php echo $line->id?>" id="edit_note_elt-<?php echo $line->id?>" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $this->id . '#row-'.GETPOST('lineid'); ?>" method="POST">
+			<form name="edit_note_elt" id="edit_note_elt" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=setnote_elt&lineid=' . GETPOST('lineid').'#row-'.GETPOST('lineid'); ?>" method="POST">
 			<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
 			<input type="hidden" name="action" value="setnote_elt">
 			<input type="hidden" name="mode" value="">
-			<input type="hidden" name="var" value="<?php $var;?>">
-			<input type="hidden" name="i" value="<?php $i;?>">
-			<input type="hidden" name="num" value="<?php $num;?>">
 			<input type="hidden" name="lineid" value="<?php echo $line->id; ?>" >
-			<input type="hidden" name="id" value="<?php echo $this->id; ?>">
+			<input type="hidden" name="id" value="<?php echo $object->id; ?>">
 			<table class="noborderbottom">
 				<tr><td colspan="2">
 			<?php
@@ -340,10 +353,10 @@ $domData .= ' data-id="'.$line->id.'"';
 			</td></tr>
 			<tr>
 			<td align="right" class="linecolnote_public nowrap minwidth100">
-				<textarea id="note_public_elt" name="note_public_elt" rows="3" style="margin-top: 5px; width: 98%" class="flat"><?php echo $line->note_public;?></textarea>
+				<textarea id="note_public_elt" name="note_public_elt" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
 			</td>
 			<td align="right" class="linecolnote_private nowrap minwidth100"><?php $coldisplay++; ?>
-				<textarea id="note_private_elt" name="note_private_elt" rows="3" style="margin-top: 5px; width: 98%" class="flat"><?php echo $line->note_private;?></textarea>
+				<textarea id="note_private_elt" name="note_private_elt" rows="3" style="margin-top: 5px; width: 98%" class="flat"></textarea>
 			</td>
 			<td>
 				<input type="submit" class="button" value="<?php echo $langs->Trans("Update"); ?>" name="setnote_elt" id="setnote_elt">
@@ -354,12 +367,20 @@ $domData .= ' data-id="'.$line->id.'"';
 		</form>
 		</td>
 
+		<script type="text/javascript">
+		/* JQuery for product free or predefined select */
+		jQuery(document).ready(function() {
+		jQuery("#note_public_elt").val(<?php echo '"'.$line->note_public.'"';?>);
+		jQuery("#note_private_elt").val(<?php echo '"'.$line->note_private.'"';?>);
+		});
+		</script>
+
 
 	<?php } else { ?>
 	<td align="right" class="linecolnote nowrap"><?php $coldisplay+=2; ?>
 		<?php
-		if($this->statut==TourneeGeneric::STATUS_VALIDATED && !empty($object_rights->note)){
-			print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_note_elt&id='.$parent->id.$paramsLienLigne.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
+		if($object->statut==TourneeGeneric::STATUS_VALIDATED && !empty($object_rights->note)){
+			print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_note_elt&id='.$parent->id.'&lineid='.$line->id.'#row-'.$line->id.'">';
 			print img_edit($langs->trans($val['edit note']), 1);
 			print '</a>';
 		}
@@ -417,7 +438,7 @@ $domData .= ' data-id="'.$line->id.'"';
 						print $contactline->getBannerContact();
 						print '</td><td>';
 						if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
-							print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id .$paramsLienLigne. '" class="ajaxable">';
+							print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . '">';
 							print img_delete();
 							print '</a>';
 						}
@@ -448,7 +469,7 @@ $domData .= ' data-id="'.$line->id.'"';
 			<tr><td class="linecoledit" align="center"><?php // $coldisplay++; ?>
 				<?php if (($line->info_bits & 2) == 2 || ! empty($disableedit)) { ?>
 				<?php } else { ?>
-				<a href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.$paramsLienLigne.'&amp;action=editline&amp;lineid='.$line->id.'#line_'.$line->id; ?>">
+				<a href="<?php echo $_SERVER["PHP_SELF"].'?id='.$this->id.'&amp;action=editline&amp;lineid='.$line->id.'#line_'.$line->id; ?>">
 				<?php echo img_edit(); ?>
 				</a>
 				<?php } ?>
@@ -457,7 +478,7 @@ $domData .= ' data-id="'.$line->id.'"';
 			<tr><td class="linecoldelete" align="center"><?php // $coldisplay++; ?>
 				<?php
 				if (($line->fk_prev_id == null ) && empty($disableremove)) { //La suppression n'est autorisée que si il n'y a pas de ligne dans une précédente situation
-					print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deleteline&amp;lineid=' . $line->id . $paramsLienLigne . '" class="ajaxable">';
+					print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deleteline&amp;lineid=' . $line->id . '">';
 					print img_delete();
 					print '</a>';
 				}

@@ -451,7 +451,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		if( 	$date_livraison_elt != $tournee->date_tournee ) {
 			$out .= $langs->trans('MsgAttentionDateDifferente');
 			$out .= '<div class="inline-block divButAction tourneeBoutons">
-			<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+			<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 				'?id=' . $this->getTournee()->id .
 				'&amp;action=ask_changedateelt' .
 				'&amp;elt_type=commande' .
@@ -468,7 +468,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		if( $this->statut!=self::AUTRE_AFFECTATION) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .
@@ -482,7 +482,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		if( $this->statut!=self::DATE_OK && $this->statut != self::DATE_NON_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .
@@ -496,7 +496,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		if( $this->statut!=self::NON_AFFECTE && $this->statut != self::NON_AFFECTE_DATE_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
-				<a class="butAction" href="' . $_SERVER['PHP_SELF'] .
+				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
 					'?id=' . $this->getTournee()->id .
 					'&amp;action=ask_changestatutelt' .
 					'&amp;elt_lineid='. $this->id .
