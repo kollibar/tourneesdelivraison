@@ -439,7 +439,7 @@ public function LibStatut($status, $mode=0)
 				$langs->trans("NePasAffecterCetteTournee") . '</a>
 				</div></li>';
 		}
-		if( $this->statut!=self::DATE_OK && $this->statut != self::DATE_NON_OK) {
+		if( $this->statut != self::DATE_OK && $this->statut != self::DATE_NON_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
 				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .
@@ -453,7 +453,7 @@ public function LibStatut($status, $mode=0)
 				$langs->trans("AffecterCetteTournee") . '</a>
 				</div></li>';
 		}
-		if( $this->statut!=self::NON_AFFECTE && $this->statut != self::NON_AFFECTE_DATE_OK) {
+		if( $this->statut != self::NON_AFFECTE && $this->statut != self::NON_AFFECTE_DATE_OK) {
 			$out .= '<li>
 				<div class="inline-block divButAction tourneeBoutons">
 				<a class="butAction askActionAjaxable" href="' . $_SERVER['PHP_SELF'] .

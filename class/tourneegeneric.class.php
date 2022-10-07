@@ -860,7 +860,7 @@ public function LibStatut($status, $mode=0)
 	 *	@return	void
 	 */
 
-	function printTourneeLines($action, $seller, $selected=0, $dateSelector=0, $ligneVide=false)
+	function printTourneeLines($action, $seller, $selected=0, $dateSelector=0, $reload=false, $ligneVide=false)
 	{
 		global $conf, $hookmanager, $langs, $user;
 
@@ -999,7 +999,7 @@ public function LibStatut($status, $mode=0)
 			}
 			if (empty($reshook))
 			{
-				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
+				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $reload, $ligneVide);
 			}
 
 			$i++;
@@ -1025,7 +1025,7 @@ public function LibStatut($status, $mode=0)
 	 *	@return	void
 	 */
 
-	function printTourneeLineUnique_fetchLines($lineid, $action, $seller, $selected=0, $dateSelector=0, $ligneVide=false){
+	function printTourneeLineUnique_fetchLines($lineid, $action, $seller, $selected=0, $dateSelector=0, $reload=false, $ligneVide=false){
 		global $conf, $hookmanager, $langs, $user;
 
 		$this->fetch_lines();
@@ -1089,7 +1089,7 @@ public function LibStatut($status, $mode=0)
 				}
 				if (empty($reshook))
 				{
-					$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
+					$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $reload, $ligneVide);
 				}
 			}
 
@@ -1099,7 +1099,7 @@ public function LibStatut($status, $mode=0)
 		}
 	}
 
-	function printTourneeLineUnique($action, $line, $var, $num, $i, $seller, $selected=0, $dateSelector=0, $ligneVide=false){
+	function printTourneeLineUnique($action, $line, $var, $num, $i, $seller, $selected=0, $dateSelector=0, $reload=false, $ligneVide=false){
 		global $conf, $hookmanager, $langs, $user;
 
 		// Define usemargins
@@ -1127,7 +1127,7 @@ public function LibStatut($status, $mode=0)
 			}
 			if (empty($reshook))
 			{
-				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $ligneVide);
+				$this->printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected,$extrafieldsline, $reload, $ligneVide);
 			}
 		//}
 	}
@@ -1149,7 +1149,7 @@ public function LibStatut($status, $mode=0)
 	 *	@return	void
 	 */
 
-	function printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected=0,$extrafieldsline=0, $ligneVide=false)
+	function printTourneeLine($action,$line,$var,$num,$i,$dateSelector,$seller,$selected=0,$extrafieldsline=0, $reload=false, $ligneVide=false)
 	{
 		global $conf,$langs,$user,$object,$hookmanager;
 		global $form,$formtournee,$bc,$bcdd, $mysoc, $db;

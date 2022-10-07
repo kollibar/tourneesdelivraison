@@ -49,7 +49,7 @@ if (GETPOST('action', 'aZ09') != 'editline' && $nboflines > 1 && $conf->browser-
 <script>
 $(document).ready(function(){
 	ajaxrow();
-}
+});
 function ajaxrow(){
 	$(".imgupforline").hide();
 	$(".imgdownforline").hide();
@@ -106,7 +106,7 @@ function ajaxrow(){
     $(".tdlineupdown").hover( function() { $(this).addClass('showDragHandle'); },
     	function() { $(this).removeClass('showDragHandle'); }
     );
-});
+}
 </script>
 <?php } else { ?>
 <script>

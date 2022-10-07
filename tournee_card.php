@@ -177,6 +177,7 @@ if (empty($reshook)) {
 
 	$date=getdate();
 
+/*
 	if( $typetournee == 'tourneeunique'){
 		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
 		// si date tournée unique non dépassé, cherche les nouvelles commandes
@@ -186,7 +187,7 @@ if (empty($reshook)) {
 			$object->checkElt($user);
 		}
 	}
-
+*/
 
 
 	// récupération de la liste de model pdf
@@ -614,7 +615,18 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 	//if (! empty($conf->use_javascript_ajax) && $object->statut == TourneeGeneric::STATUS_DRAFT) {
 	if (! empty($conf->use_javascript_ajax)) {
-		include DOL_DOCUMENT_ROOT . '/core/tpl/ajaxrow.tpl.php';
+		// Output template part (modules that overwrite templates must declare this into descriptor)
+		$dirtpls=array_merge($conf->modules_parts['tpl'],array('/core/tpl'));
+		foreach($dirtpls as $reldir)
+		{
+			$tpl = dol_buildpath($reldir.'/ajaxrow-tournee.tpl.php');
+			if (empty($conf->file->strict_mode)) {
+				$res=@include $tpl;
+			} else {
+				$res=include $tpl; // for debug
+			}
+			if ($res) break;
+		}
 
 		// Output template part (modules that overwrite templates must declare this into descriptor)
 		$dirtpls=array_merge($conf->modules_parts['tpl'],array('/core/tpl'));
@@ -636,7 +648,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// Show object lines
 	if (! empty($object->lines))
 		if( $action=='editline') $lineid=GETPOST('lineid');
-		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0));
+		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true);
 
 	$numlines = count($object->lines);
 

@@ -8,6 +8,9 @@
 
 <!-- scripts pour l'ajaxisation ! -->
 <script>
+
+let listeGET = new Array();
+
 function mettreAjaxPartout(){
   $(".askActionAjaxable").each(function(){
     if( $(this).closest(".tournee-row").length>0 ) $(this).attr("href", $(this).attr("href") + $(this).closest(".tournee-row").attr("data"));
@@ -59,8 +62,36 @@ function valideFormulaire_edit_note_elt(lineid){
     url=url+$('#edit_note_elt-'+lineid).serialize()+suffix;
 
     url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
-    $.get(url,ajaxable_callback);
+
+    console.log("GET :"+url);
+    //$.get(url,ajaxable_callback);
+    getAjaxable(url);
   }
+}
+
+function getAjaxable(url){
+  if( listeGET.includes(url) ) return;
+
+  listeGET.push(url);
+
+  $.ajax({
+    type: 'get',
+    url: url,
+    context: this,
+    success: this.mySuccess,
+    error: this.myError,
+    cache: false,
+    beforeSend: function(jqXHR, settings) {
+      jqXHR.url = settings.url;
+    },
+    error: function(jqXHR, exception) {
+        console.log('erreur GET: '+ jqXHR.url+'   retry');
+        getAjaxable(jqXHR.url);
+    }
+  })
+  .done(function( data, textStatus, jqXHR ) {
+    ajaxable_callback(data, textStatus, jqXHR);
+  });
 }
 
 function ajaxable(){
@@ -73,10 +104,12 @@ function ajaxable(){
 //  rechercheFormulaireOuvert();
   //alert(url);
   //$(this).closest(".tournee-row").parent().load(url+' #'+id);
-  $.get(url, ajaxable_callback);
+  console.log("GET :"+url);
+  //$.get(url, ajaxable_callback);
+  getAjaxable(url);
 }
 
-function ajaxable_callback(data, status){
+function ajaxable_callback(data, status, xhr){
   // recherche de la 1ere balise
   i=-1;
   do{
@@ -107,16 +140,58 @@ function ajaxable_callback(data, status){
   //alert('balise: '+balise+' id: '+id+' m: '+m+' n: '+n+' taille: '+data.length+' taille_slice: '+data.slice(m+1,n).length);
   data=data.slice(m+1,n);
 
+  url=xhr.url;
+
+  i=url.indexOf('&_=');
+  if( i==-1 ) i=url.indexOf('?_=');
+  if( i != -1 ) {
+    j=url.indexOf('#', i+1);
+    k=url.indexOf('&', i+1);
+
+    if( k > 0 && k < j) j=k;
+    if( j < 0 ) url=url.slice(0,i);
+    else url=url.slice(0,i)+url.slice(j);
+  }
+
+  console.log("reception :"+"#"+id+'    '+url);
+  //console.log(status);
+  //alert(xhr.url);
+
+  var ok=false;
+  for (var i = 0; i <= listeGET.length; i++){
+
+    if( listeGET[i] == url ){
+      // console.log(i+': '+listeGET[i]+' <=====');
+      listeGET.splice(i,i);
+      ok=true;
+      break;
+    } else {
+      // console.log(i+': '+listeGET[i]);
+    }
+  }
+  if( ok==false ) {
+    //console.log("erreur");
+    return;
+  }
 
   $("#"+id).html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
 
-  auChargementNouvelleLigne();
+  auChargementNouvelleLigne($("#"+id));
 
+}
+function alertlisteGet(){
+  out='';
+  for (var i = 0; i <= listeGET.length; i++){
+    out =out + i+': '+listeGET[i]+'<br>';
+  }
+  alert(out);
 }
 
 function askAjaxable(elt){
   url=elt.href;
   url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+  console.log("GET :"+url);
   $.get(url, askAjaxable_callback);
 }
 function askAjaxable_callback(data,status){
@@ -129,6 +204,7 @@ function askActionAjaxable(elt){
   url=elt.href;
   url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
+  console.log("GET :"+url);
   $.get(url, askActionAjaxable_callback);
 }
 function askActionAjaxable_callback(data,status){
@@ -217,19 +293,69 @@ function onStartEdition(){
   });
 }
 
+function onStartEdition(){
+  $("#tournee_line_type_thirdparty").on( "click", function() {
+    setfor3party();
+  });
+  $("#tournee_line_type_tournee").on( "click", function() {
+    setfortournee();
+  });
+
+  $("#BL1").on( "click", function() {
+    BL1choix();
+  });
+  $("#BL2").on( "click", function() {
+    BL1choix();
+  });
+
+  $("#socid").on( "change", function() {
+    changeClient();
+  });
+  $("#tourneeincluseid").on( "change", function() {
+    changeTourneeIncluse();
+  });
+}
+
  </script>
 
 
 
 <!--script au chargement -->
  <script>
- function auChargementNouvelleLigne(){
-   mettreAjaxPartout();
-
-   onStartEdition();
+ function auChargementNouvelleLigne(elt){
+   mettreAjaxPartout(elt);
+   ajaxrow(elt);
+   onStartEdition(elt);
  }
+
  $(document).ready(function(){
-   auChargementNouvelleLigne();
+   auChargementNouvelleLigne($('body'));
+
+   $(".tournee-row-reload").each(function(){
+     id=$(this).attr('id');
+     params=$(this).attr('data');
+
+     lineid=id.slice(4);
+     url=$(location).attr('href').slice($(location).attr('href').indexOf($(location).attr('pathname')));
+     if( url.indexOf('#') != -1 ){
+       suffix=url.slice(url.indexOf('#'));
+       url=url.slice(0,url.indexOf('#'));
+     } else {
+       suffix='';
+     }
+     if( url.indexOf('?') != -1 ){
+       url=url+'&';
+     } else {
+       url=url+'?';
+     }
+     url = url + 'lineid='+lineid + '&' + params + suffix;
+     url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+
+     console.log("GET :"+url);
+     //$.get(url, ajaxable_callback);
+     getAjaxable(url);
+   })
  });
 
  </script>

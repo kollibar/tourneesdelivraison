@@ -51,7 +51,7 @@ $domData .= ' data-id="'.$line->id.'"';
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
-<tr id="row-<?php echo $line->id?>" class="drag drop oddeven tournee-row" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
+<tr id="row-<?php echo $line->id?>" class="drag drop oddeven tournee-row <?php echo (($reload || $ligneVide )?'tournee-row-reload':'');?>" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
 	<?php if( $ligneVide == false ) { ?>
 
 	<td class="linecolselect" align="center"><?php $coldisplay++; ?>

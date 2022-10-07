@@ -337,13 +337,16 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	}
 
 
-	public function checkCommande(User $user, $date){
+	public function checkCommande(User $user, $dateTournee=false){
 
 		if( $this->type != TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) return;
 
 		$this->checkCmdeAutodesaffecte($user);
 
-		$parent=$this->getParent();
+		if( $dateTournee === false ) {
+				$parent=$this->getParent();
+				$dateTournee = $parent->date_tournee;
+		}
 
 		// requète de parcours de toutes les commandes concernant la societe indiquée dans la ligne, avec un statut =1 (validé) ou =2(en cours d'expédition)
 		$sql = 'SELECT t.rowid, t.ref, t.fk_soc, t.fk_statut, t.date_livraison, t.facture ';
@@ -370,7 +373,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 						$tulc=$line_cmde;
 						$line_cmde->fait=1;
 
-						if( $objp->date_livraison == date("Y-m-d",$parent->date_tournee)){	// date en correspondance
+						if( $objp->date_livraison == date("Y-m-d",$dateTournee)){	// date en correspondance
 							// si statut sur INUTILE -> on met non affecté
 							//if( $tulc->statut == TourneeUnique_lines_cmde::INUTILE ) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
 							// si statut actuel avec NON date ok -> on le change
@@ -394,7 +397,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 					$tulc->fk_commande=$objp->rowid;
 					$tulc->fk_tournee_lines=$this->rowid;
 					$tulc->fait=1;
-					if( $objp->date_livraison == $parent->date_tournee) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
+					if( $objp->date_livraison == $dateTournee) $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE_DATE_OK;
 					else $tulc->statut=TourneeUnique_lines_cmde::NON_AFFECTE;
 
 					$tulc->create($user);

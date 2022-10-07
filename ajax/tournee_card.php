@@ -94,6 +94,8 @@ $cancel     = GETPOST('cancel', 'aZ09');
 $contextpage= GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):$typetournee.'card';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 
+$noCheck = GETPOST('noCheck','alpha');
+
 $statutTournee = GETPOST('statutTournee', 'int');
 
 // Initialize technical objects
@@ -123,8 +125,8 @@ if( empty($object) && ! empty($lineid) ){
 	}*/
 }
 
-if( empty($statutTournee)){
-	$sql = 'SELECT statut FROM ' . MAIN_DB_PREFIX . $typetournee . ' WHERE `rowid`=' . $tourneeid;
+if( empty($statutTournee) || empty($dateTournee)){
+	$sql = 'SELECT statut, date_tournee FROM ' . MAIN_DB_PREFIX . $typetournee . ' WHERE `rowid`=' . $tourneeid;
 
 	dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
 	$result = $db->query($sql);
@@ -133,6 +135,7 @@ if( empty($statutTournee)){
 		if( $db->num_rows($result) > 0 ){
 			$objp = $db->fetch_object($result);
 			$statutTournee = $objp->statut;
+			$dateTournee = $objp->date_tournee;
 		}
 		$db->free($result);
 	}
@@ -170,7 +173,6 @@ if (empty($action) && empty($id) && empty($ref)) $action='view';
 
 // Load object
 include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
-
 $line=$object;
 unset($object);
 
@@ -178,9 +180,18 @@ if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison($db);
 else $object = new TourneeUnique($db);
 
 $object->miniLoad($tourneeid, $statutTournee);
+$line->tournee=$object;
 
-
-
+/*
+if( $typetournee == 'tourneeunique' ){
+	if( empty($noCheck) || $noCheck != true ){
+		if( $statutTournee == TourneeGeneric::STATUS_VALIDATED && $dateTournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
+			$line->checkCommande($user, $dateTournee);
+		}
+		$line->checkElt($user);
+	}
+}
+*/
 
 /*
 // Initialize array of search criterias
@@ -257,6 +268,6 @@ if( substr($action,0,4) === "ask_" && ! empty($formconfirm) ){
 	$i = GETPOST('i', 'int');
 	$num = GETPOST('num', 'int');
 
-	if( empty($num) || empty($i) ) $object->printTourneeLineUnique_fetchLines($lineid, $action, $seller, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false);
-	else $object->printTourneeLineUnique($action, $line, $var, $num, $i, $mysoc, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false);
+	if( empty($num) || empty($i) ) $object->printTourneeLineUnique_fetchLines($lineid, $action, $seller, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false, false);
+	else $object->printTourneeLineUnique($action, $line, $var, $num, $i, $mysoc, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false, false);
 }
