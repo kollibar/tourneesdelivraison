@@ -92,7 +92,7 @@ class modTourneesDeLivraison extends DolibarrModules
 			'models' => 1,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 			'css' => array('/tourneesdelivraison/css/tourneesdelivraison.css.php'),	// Set this to relative path of css file if module has its own css file
 	 		'js' => array('/tourneesdelivraison/js/tourneesdelivraison.js.php'),          // Set this to relative path of js file if module must load a js on all pages
-			'hooks' => array('category'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
+			'hooks' => array('category', 'rowinterface'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
 			//'hooks' => array('data'=>array('constructCategory'), 'entity'=>'0'), 	// Set here all hooks context managed by module. To find available hook context, make a "grep -r '>initHooks(' *" on source code. You can also set hook context 'all'
 			'moduleforexternal' => 0							// Set this to 1 if feature of module are opened to external users
 		);
