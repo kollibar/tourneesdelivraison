@@ -289,11 +289,12 @@ class ActionsTourneesDeLivraison
 
     if( $parameters["table_element_line"] == "tourneeunique_lines"){
       if( $user->rights->tourneesdelivraison->tourneeunique->ecrire ) $hookmanager->resArray['perm']=1;
+      return 1;
     }
     if( $parameters["table_element_line"] == "tourneedelivraison_lines"){
       if( $user->rights->tourneesdelivraison->tourneedelivraison->ecrire ) $hookmanager->resArray['perm']=1;
+      return 1;
     }
-    return 1;
   }
 
 }

@@ -203,6 +203,15 @@ $domData .= ' data-id="'.$line->id.'"';
 					// $cmde->fetch($lcmde->fk_commande);
 					$numshipping = $cmde->nb_expedition();
 					$numinvoice=0;
+					$nb_exp=0;
+					foreach ($lcmde->lines as $lelt) {
+						if($lelt->type_element == 'shipping'){
+							$nb_exp+=1;
+						}
+						if($lelt->type_element == 'facture'){
+							$numinvoice+=1;
+						}
+					}
 					?>
 				<tr><td>
 					<?php
@@ -212,7 +221,7 @@ $domData .= ' data-id="'.$line->id.'"';
 				<td>
 					<?php
 					if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK) continue;
-					if( $numshipping!=0){
+					if( $nb_exp != 0 ){
 						echo '<table class="noborderbottom">';
 						foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'shipping'){
@@ -220,7 +229,6 @@ $domData .= ' data-id="'.$line->id.'"';
 								echo '<tr><td>';
 								echo $lelt->getMenuStatut();
 								echo '</td></tr>';
-								$nb_exp+=1;
 							}
 						}
 						echo '</table>';
@@ -246,7 +254,7 @@ $domData .= ' data-id="'.$line->id.'"';
 						<?php foreach ($lcmde->lines as $lelt) {
 							if($lelt->type_element == 'facture'){
 								//$elt=$lelt->loadElt();
-								$numinvoice+=1;
+
 								echo '<tr><td>';
 								echo $lelt->getMenuStatut();
 								echo '</td></tr>';

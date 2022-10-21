@@ -50,13 +50,13 @@ if (GETPOST('action', 'aZ09') != 'editline' && $nboflines > 1 && $conf->browser-
 $(document).ready(function(){
 	ajaxrow();
 });
-function ajaxrow(){
-	$(".imgupforline").hide();
-	$(".imgdownforline").hide();
-    $(".lineupdown").removeAttr('href');
-    $(".tdlineupdown").css("background-image",'url(<?php echo DOL_URL_ROOT.'/theme/'.$conf->theme.'/img/grip.png'; ?>)');
-    $(".tdlineupdown").css("background-repeat","no-repeat");
-    $(".tdlineupdown").css("background-position","center center");
+function ajaxrow(elt){
+	elt.find(".imgupforline").hide();
+	elt.find(".imgdownforline").hide();
+    elt.find(".lineupdown").removeAttr('href');
+    elt.find(".tdlineupdown").css("background-image",'url(<?php echo DOL_URL_ROOT.'/theme/'.$conf->theme.'/img/grip.png'; ?>)');
+    elt.find(".tdlineupdown").css("background-repeat","no-repeat");
+    elt.find(".tdlineupdown").css("background-position","center center");
 
     console.log("Prepare tableDnd for #<?php echo $tagidfortablednd; ?>");
     $("#<?php echo $tagidfortablednd; ?>").tableDnD({
@@ -103,7 +103,7 @@ function ajaxrow(){
 		onDragClass: "dragClass",
 		dragHandle: "td.tdlineupdown"
 	});
-    $(".tdlineupdown").hover( function() { $(this).addClass('showDragHandle'); },
+    elt.find(".tdlineupdown").hover( function() { $(this).addClass('showDragHandle'); },
     	function() { $(this).removeClass('showDragHandle'); }
     );
 }

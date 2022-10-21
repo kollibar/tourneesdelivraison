@@ -261,7 +261,9 @@ $form=new Form($db);
 $formtournee=new FormTourneesDeLivraison($db);
 $formfile=new FormFile($db);
 
-llxHeader('',$typenom,'');
+$morejs=array();
+
+llxHeader('',$typenom,'','','','',$morejs,'',0,0);
 
 // Example : Adding jquery code
 print '<script type="text/javascript" language="javascript">

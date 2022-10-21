@@ -257,7 +257,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 	if ($object->ismultientitymanaged == 1) $sql.= " WHERE t.entity IN (".getEntity($object->element).")";
 	else $sql.=" WHERE 1 = 1";
 
-	$sql .= " AND t.date_tournee > NOW()";
+	$sql .= " AND t.date_tournee >= DATE(NOW())";
 
 	foreach($search as $key => $val)
 	{

@@ -63,6 +63,10 @@ function valideFormulaire_edit_note_elt(lineid){
 
     url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
+    if( url.indexOf('cats_linerow-') != -1 ){
+      url=url.replaceAll('cats_linerow-'+lineid,'cats_line');
+    }
+
     console.log("GET :"+url);
     //$.get(url,ajaxable_callback);
     getAjaxable(url);
@@ -82,7 +86,20 @@ function getAjaxable(url){
     error: this.myError,
     cache: false,
     beforeSend: function(jqXHR, settings) {
-      jqXHR.url = settings.url;
+      url=settings.url;
+
+      i=url.indexOf('&_=');
+      if( i==-1 ) i=url.indexOf('?_=');
+      if( i != -1 ) {
+        j=url.indexOf('#', i+1);
+        k=url.indexOf('&', i+1);
+
+        if( k > 0 && k < j) j=k;
+        if( j < 0 ) url=url.slice(0,i);
+        else url=url.slice(0,i)+url.slice(j);
+      }
+
+      jqXHR.url = url;
     },
     error: function(jqXHR, exception) {
         console.log('erreur GET: '+ jqXHR.url+'   retry');
@@ -174,6 +191,10 @@ function ajaxable_callback(data, status, xhr){
     return;
   }
 
+  if( data.indexOf('id="cats_line"') != -1 ){
+    data=data.replaceAll('cats_line','cats_line'+id);
+  }
+
   $("#"+id).html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
 
   auChargementNouvelleLigne($("#"+id));
@@ -208,7 +229,12 @@ function askActionAjaxable(elt){
   $.get(url, askActionAjaxable_callback);
 }
 function askActionAjaxable_callback(data,status){
-  $('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
+  // data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee')
+
+  data=data.replace('after location.href','after form validation');
+
+  $('#formulaireConfirm').html(data.replace('location.href = urljump;','getAjaxable(urljump)'));
+  //$('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
 }
 
 </script>
