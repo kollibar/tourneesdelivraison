@@ -74,6 +74,7 @@ SansCmdeAffecte = Sans commandes affectées
 SansCmde = Sans commandes
 SansCmdeAffOuInc = Sans commandes affectés ou non attribuées
 Livraison = Livraison
+EtatFacturation = État de facturation
 
 
 #
@@ -205,8 +206,10 @@ MettreEnPlaceReducQRCode = Mettre en place une réduction des QR-code
 ComportementAjoutCommande = Comportement à l'ajout d'une commande
 CategorieASupprimer = Catégories (ou groupe de catégories) à masquer
 SuppressionNoteEntreCrochet = Note sur ligne de commande : Masquer les éléments entre crochet à l'ajout d'une commande
-ListeCategorieClientANePasAfficher = Liste des catégories (ou groupe de catégories) clients à ne pas afficher dans les tournées
-ListeCategorieFournisseurANePasAfficher = Liste des catégories (ou groupe de catégories) fournisseurs à ne pas afficher dans les tournées
+ListeCategoriecustomerANePasAfficher = Liste des catégories (ou groupe de catégories) clients à ne pas afficher dans les tournées
+ListeCategoriesupplierANePasAfficher = Liste des catégories (ou groupe de catégories) fournisseurs à ne pas afficher dans les tournées
+ListeCategoriecontactANePasAfficher = Liste des catégories (ou groupe de catégories) contact à ne pas afficher dans les tournées
+AffichageInfoFacture = Afficher les infos des factures non réglées.
 
 ParametresDivers = Paramètres divers
 GestionsDesSMS = Gestion des SMS
@@ -241,3 +244,6 @@ PoidsSurBL = Indication du poids sur les bordereaux
 #
 
 aVenir= à venir
+FacturesImpayees = Factures impayées
+
+Impayee = Impayée

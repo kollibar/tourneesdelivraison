@@ -171,6 +171,7 @@ $actions=array(
 	'setpdfautodelete' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE',
 	'setpdfautoupdate' => 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE',
 	'setcontactintegre' => "TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE",
+	'setafficheinfofacture' => 'TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES',
 	'setpoidsbl' => "TOURNEESDELIVRAISON_POIDS_BL",
 	'setaffectautodateok' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK",
 	'setaffectautosi1eltparcmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE",
@@ -278,32 +279,28 @@ if ($action == 'updateoptions') {
 		}
 	}
 
-	if (GETPOSTISSET('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE') || GETPOSTISSET('TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER')) {
+	$listeParam=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER', 'TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER', 'TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER');
 
-		$listeParam=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER');
+	foreach ($listeParam as $param) {
+		if( ! GETPOSTISSET($param)) continue;
 
-		foreach ($listeParam as $param) {
-			if( ! GETPOSTISSET($param)) continue;
+		$cats = GETPOST('cats_' . $param, 'array');
 
-			$cats = GETPOST('cats_' . $param, 'array');
+		$r=getListeCategoriesDependant($cats);
 
-			$r=getListeCategoriesDependant($cats);
-
-			if( $r != -1 ) $data = implode(',',$cats) . '|' . implode(',',$r);
-			else $data=implode(',',$cats);
+		if( $r != -1 ) $data = implode(',',$cats) . '|' . implode(',',$r);
+		else $data=implode(',',$cats);
 
 
-			$res = dolibarr_set_const($db, $param, $data,'chaine',0,'',$conf->entity);
-			if (! $res > 0) $error++;
-			if (! $error)
-			{
-					setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
-			}
-			else
-			{
-					setEventMessages($langs->trans("Error"), null, 'errors');
-			}
-
+		$res = dolibarr_set_const($db, $param, $data,'chaine',0,'',$conf->entity);
+		if (! $res > 0) $error++;
+		if (! $error)
+		{
+				setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+		}
+		else
+		{
+				setEventMessages($langs->trans("Error"), null, 'errors');
 		}
 	}
 }
@@ -867,8 +864,60 @@ else
 print '</a></td>';
 print '</tr>';
 
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("AffichageInfoFacture").'</td>';
+print '<td>&nbsp</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setafficheinfofacture&value=0#divaff">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setafficheinfofacture&value=1#divaff">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+print '</a></td>';
+print '</tr>';
+
+
 if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
 
+	$liste=array(
+		'customer' => "TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER",
+		'supplier' => "TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER",
+		'contact' => "TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER",
+	);
+
+	foreach ($liste as $key => $value) {
+		$arrayselected=array();
+		$cate_arbo = $form->select_all_categories($key, null, null, null, null, 1);
+
+		$c = new Categorie($db);
+
+		if ( ! empty($conf->global->{$value})){
+			if( strpos($conf->global->{$value}, '|') === false ){
+					$arrayselected = explode(',', $conf->global->{$value});
+			} else {
+				$arrayselected = explode(',', substr($conf->global->{$value}, 0, strpos($conf->global->{$value}, '|')));
+			}
+		}
+
+		print '<tr class="oddeven">';
+		print '<td width="80%">'.$langs->trans("ListeCategorie".$key."ANePasAfficher").'</td>';
+		print '<td>&nbsp</td>';
+		print '<td align="center">';
+
+		print $form->multiselectarray('cats_'.$value, $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+
+		print '</td><td align="right">';
+		print '<input type="submit" class="button" name="'.$value.'" value="'.$langs->trans("Modify").'">';
+		print "</td>";
+		print '</tr>';
+	}
+/*
 	$arrayselected=array();
 	$cate_arbo = $form->select_all_categories('customer', null, null, null, null, 1);
 
@@ -893,6 +942,7 @@ if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lir
 	print '<input type="submit" class="button" name="TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER" value="'.$langs->trans("Modify").'">';
 	print "</td>";
 	print '</tr>';
+*/
 }
 
 print '</table></div>';

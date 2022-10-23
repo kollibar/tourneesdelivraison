@@ -146,8 +146,8 @@ $isdraft = (($object->statut == TourneeGeneric::STATUS_DRAFT) ? 1 : 0);
 //$result = restrictedArea($user, 'tourneesdelivraison', $object->id, '', '', 'fk_soc', 'rowid', $isdraft);
 
 // activer ajax (ou pas)
-if( $typetournee == 'tourneeunique') $ajaxActif = true;
-else $ajaxActif = false;
+$ajaxActif = true;
+if( GETPOSTISSET('noAjax') || $typetournee == 'tourneedelivraison') $ajaxActif = false;
 
 
 
@@ -217,7 +217,8 @@ if (empty($reshook)) {
 
 // préparation des tags clients/fournisseur à exclure
 $listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER"=>'categoriesClientExclure',
-									// "TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'$categoriesFournisseurExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'$categoriesFournisseurExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER"=>'$categoriesContactExclure',
 									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" => 'categoriesLineCmdeExclure',
 								);
 foreach($listeParam as $param => $cat){
@@ -665,13 +666,14 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 	print '<div class="div-table-responsive-no-min">';
 	print '<table id="tablelines" class="noborder noshadow" width="100%">';
+	//print '<div style="transform: scale(0.8,0.8);">';
 
 	// Show object lines
 	if (! empty($object->lines))
 		if( $action=='editline') $lineid=GETPOST('lineid');
 		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true);
 
-	$numlines = count($object->lines);
+		$numlines = count($object->lines);
 
 	/*
 	 * Form to add new line
@@ -692,6 +694,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 	$object->printRecap();
 
+	//print '</div>';
 	print '</table>';
 	print '</div>';
 	if( $object->statut != TourneeGeneric::STATUS_VALIDATED) print '</form>';

@@ -881,7 +881,7 @@ public function LibStatut($status, $mode=0)
 		if (empty($reshook))
 		{
 			// Title line
-		    print "<thead>\n";
+		  print "<thead>\n";
 
 			print '<tr class="liste_titre nodrag nodrop">';
 
@@ -895,6 +895,10 @@ public function LibStatut($status, $mode=0)
 
 			// Client
 			print '<td class="linecolclient">'.$langs->trans('Customer').' // '.$langs->trans($this->nomelement).'</td>';
+
+			if ($this->statut == TourneeGeneric::STATUS_VALIDATED && !empty($conf->facture->enabled) && $user->rights->facture->lire && !empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES)){
+				print '<td class="linecolfacture">'.$langs->trans('EtatFacturation').'</td>';
+			}
 
 
 			// BL, facture, etiquettes
@@ -928,6 +932,7 @@ public function LibStatut($status, $mode=0)
 			if( empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){
 				print '<td class="linecolcontact">'.$langs->trans('Contact').'</td>';
 			}
+
 
 
 			/*print '<td class="linecoledit"></td>';  // No width to allow autodim
@@ -1155,7 +1160,7 @@ public function LibStatut($status, $mode=0)
 		global $form,$formtournee,$bc,$bcdd, $mysoc, $db;
 		// global $lineid;
 		//global $permissionnote, $permissiontoadd, $permissioncreate, $permissiontodelete
-		global $categoriesClientExclure,$categoriesFournisseurExclure, $categoriesLineCmdeExclure;
+		global $categoriesClientExclure,$categoriesFournisseurExclure, $categoriesLineCmdeExclure, $categoriesContactExclure;
 		global $ajaxActif;
 
 
@@ -2086,6 +2091,9 @@ public function LibStatut($status, $mode=0)
 
 	// Client
 	print '<td class="linecolclient">'.$langs->trans('Total').'</td>';
+	if ($this->statut == TourneeGeneric::STATUS_VALIDATED && !empty($conf->facture->enabled) && $user->rights->facture->lire && !empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES)){
+		print '<td class="linecolfacture"></td>';
+	}
 
 
 	// BL, facture, etiquettes

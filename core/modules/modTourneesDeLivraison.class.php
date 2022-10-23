@@ -242,7 +242,12 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE', 'ouinon', '1', 'Supprimer les éléments entre crochet à l\'ajout d\'une commande ', 0);
 		$r++;
-
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER', 'chaine', '1', 'liste de catégories fournisseurs à afficher (dans l\'affichage des tournées)', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER', 'chaine', '1', 'liste de catégories contact à afficher (dans l\'affichage des tournées)', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'ouinon', '1', 'Afficher des infos sur l\'état des factures', 0);
+		$r++;
 
 		// Some keys to add into the overwriting translation tables
 		/*$this->overwrite_translation = array(

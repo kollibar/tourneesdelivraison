@@ -116,6 +116,7 @@ $domData .= ' data-id="'.$line->id.'"';
 								$liste[]=$contactline->fk_socpeople;
 								print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
 								print $contactline->getBannerContact();
+								print $form->showCategoriesExcluding($contactline->fk_socpeople, 'contact', $categoriesContactExclure,1, 1);
 								print '</td><td>';
 								if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
 									print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . $paramsLienLigne . '" class="ajaxable">';
@@ -197,6 +198,191 @@ $domData .= ' data-id="'.$line->id.'"';
 	<?php } ?>
 	</td>
 <?php } ?>
+
+<?php if ($this->statut == TourneeGeneric::STATUS_VALIDATED && !empty($conf->facture->enabled) && $user->rights->facture->lire && !empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES)) {
+	print '<td align="right" class="linecolfacture nowrap" >';
+	// print '<div style="transform: scale(0.9,0.9);">';
+
+	$coldisplay++;
+
+	$boxstat = '';
+
+	$client = new Client($this->db);
+	$client->fetch($line->fk_soc);
+	$tmp = $client->getOutstandingBills('customer', 0); // toutes factures
+	$outstandingOpened = $tmp['opened'];
+
+	$montantFactureNonDelivre=0;
+	$factureNonDelivre=array();
+	$nbFactureNonDelivre=0;
+
+	$listeFactureImpayees=$tmp["refsopened"];
+
+	// recherche de facture non délivrées
+	foreach ($listeFactureImpayees as $facture_id => $facture_nom) {
+		foreach ($line->lines_cmde as $lcmde) {
+			foreach ($lcmde->lines as $lelt) {
+				if($lelt->type_element == 'facture'){
+					if( $lelt->fk_elt == $facture_id ){
+						$facture=$lelt->loadElt();
+						$montantFactureNonDelivre += floatval($facture->total_ttc);
+						$factureNonDelivre[]=$facture_id;
+						$nbFactureNonDelivre++;
+					}
+				}
+			}
+		}
+	}
+
+	$outstandingOpened -= $montantFactureNonDelivre;
+
+	// Box outstanding bill
+	$warn = '';
+	if ($client->outstanding_limit != '' && $client->outstanding_limit < $outstandingOpened) {
+		$warn = ' '.img_warning($langs->trans("OutstandingBillReached"));
+	}
+	$text = $langs->trans("CurrentOutstandingBill");
+	$link = DOL_URL_ROOT.'/compta/recap-compta.php?socid='.$client->id;
+	$icon = 'bill';
+	if ($link) $boxstat .= '<a href="'.$link.'" class="boxstatsindicator thumbstat nobold nounderline">';
+	$boxstat .= '<div class="boxstats" title="'.dol_escape_htmltag($text).'">';
+	$boxstat .= '<span class="boxstatstext">'.img_object("", $icon).' <span>'.$text.'</span></span><br>';
+	$boxstat .= '<span class="boxstatsindicator'.($outstandingOpened > 0 ? ' amountremaintopay' : '').'">'.price($outstandingOpened, 1, $langs, 1, -1, -1, $conf->currency).$warn.'</span>';
+	$boxstat .= '</div>';
+	if ($link) $boxstat .= '</a>';
+
+	$tmp = $client->getOutstandingBills('customer', 1);	// en retard
+	$outstandingOpenedLate = $tmp['opened'];
+
+	if ($outstandingOpened != $outstandingOpenedLate && !empty($outstandingOpenedLate)) {
+		$warn = '';
+		if ($client->outstanding_limit != '' && $client->outstanding_limit < $outstandingOpenedLate) {
+			$warn = ' '.img_warning($langs->trans("OutstandingBillReached"));
+		}
+		$text = $langs->trans("CurrentOutstandingBillLate");
+		$link = DOL_URL_ROOT.'/compta/recap-compta.php?socid='.$client->id;
+		$icon = 'bill';
+		if ($link) $boxstat .= '<a href="'.$link.'" class="boxstatsindicator thumbstat nobold nounderline">';
+		$boxstat .= '<div class="boxstats" title="'.dol_escape_htmltag($text).'">';
+		$boxstat .= '<span class="boxstatstext">'.img_object("", $icon).' <span>'.$text.'</span></span><br>';
+		$boxstat .= '<span class="boxstatsindicator'.($outstandingOpenedLate > 0 ? ' amountremaintopay' : '').'">'.price($outstandingOpenedLate, 1, $langs, 1, -1, -1, $conf->currency).$warn.'</span>';
+		$boxstat .= '</div>';
+		if ($link) $boxstat .= '</a>';
+
+
+	}
+	print $boxstat;
+
+
+	$sql = 'SELECT f.rowid as facid, f.ref, f.type';
+	$sql .= ', f.total_ht as total_ht';
+	$sql .= ', f.total_tva as total_tva';
+	$sql .= ', f.total_ttc';
+	$sql .= ', f.datef as df, f.datec as dc, f.paye as paye, f.fk_statut as statut';
+	$sql .= ', f.date_lim_reglement';
+	$sql .= ', s.nom, s.rowid as socid';
+	$sql .= ', SUM(pf.amount) as am';
+	$sql .= " FROM ".MAIN_DB_PREFIX."societe as s,".MAIN_DB_PREFIX."facture as f";
+	$sql .= ' LEFT JOIN '.MAIN_DB_PREFIX.'paiement_facture as pf ON f.rowid=pf.fk_facture';
+	$sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = ".$client->id;
+	$sql .= " AND f.paye = 0";
+	$sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
+	$sql .= ' GROUP BY f.rowid, f.ref, f.type, f.total_ht, f.total_tva, f.total_ttc,';
+	$sql .= ' f.datef, f.datec, f.paye, f.fk_statut,';
+	$sql .= ' s.nom, s.rowid';
+	$sql .= " ORDER BY f.datef DESC, f.datec DESC";
+
+	$resql = $db->query($sql);
+
+
+
+	if($resql){
+
+		$facturestatic = new Facture($db);
+
+		$num = $db->num_rows($resql);
+
+		if( $num - $nbFactureNonDelivre > 0 ){
+			print '<div class="div-table-responsive-no-min">';
+			print '<table class="noborder centpercent lastrecordtable">';
+
+			print '<tr class="liste_titre">';
+			print '<td colspan="5">';
+			print '<table width="100%" class="nobordernopadding">';
+			print '<tr>';
+			print '<td>'.$langs->trans("FacturesImpayees").'</td><td class="right"></td>';
+			print '<td width="20px" class="right"><a href="'.DOL_URL_ROOT.'/compta/facture/stats/index.php?socid='.$client->id.'">'.img_picto($langs->trans("Statistics"), 'stats').'</a></td>';
+			print '</tr>';
+			print '</table>';
+			print '</td></tr>';
+		}
+
+
+		$i = 0;
+		while ($i < $num - $nbFactureNonDelivre) {
+
+			$objp = $db->fetch_object($resql);
+
+			if( in_array($objp->facid, $factureNonDelivre) )continue;
+
+			$facturestatic->id = $objp->facid;
+			$facturestatic->ref = $objp->ref;
+			$facturestatic->type = $objp->type;
+			$facturestatic->total_ht = $objp->total_ht;
+			$facturestatic->total_tva = $objp->total_tva;
+			$facturestatic->total_ttc = $objp->total_ttc;
+			$facturestatic->paye = $objp->paye;
+			$facturestatic->date_lim_reglement = $objp->date_lim_reglement;
+
+
+			print '<tr class="oddeven">';
+			print '<td class="nowrap">';
+			print $facturestatic->getNomUrl(1);
+			print '</td>';
+
+/*
+			if ($objp->date_lim_reglement > 0) {
+				print '<td class="right" width="80px">'.dol_print_date($db->jdate($objp->date_lim_reglement), 'day').'</td>';
+			} else {
+				print '<td class="right"><b>!!!</b></td>';
+			}*/
+
+			print '<td class="right" style="min-width: 60px">';
+			print price($objp->total_ttc, 1, $langs, 1, -1, -1, $conf->currency);
+			print '</td>';
+
+/*
+			var_dump($objp->date_lim_reglement);
+
+			mktime(0,0,0, substr($objp->date_lim_reglement, 5,2), substr($objp->date_lim_reglement, 8,2), substr($objp->date_lim_reglement, 0,4));
+			// 2022-11-20
+			substr($objp->date_lim_reglement, 5,2);
+			substr($objp->date_lim_reglement, 8,2);
+			substr($objp->date_lim_reglement, 0,4);*/
+
+			if( mktime(0,0,0, substr($objp->date_lim_reglement, 5,2), substr($objp->date_lim_reglement, 8,2), substr($objp->date_lim_reglement, 0,4)) < time()) $retard=true;
+			else $retard=false;
+
+			print '<td class="nowrap right" style="min-width: 60px"><span class="badge  badge-status'.($retard?8:1).' badge-status" title="'.$langs->trans("DateDue").': '.dol_print_date($objp->date_lim_reglement, 'day').'">'.($retard?$langs->trans("Late"):$langs->trans("Impayee")).'</span></td>';
+			// $langs->trans("CurrentOutstandingBill");
+			print "</tr>\n";
+
+			$i++;
+		}
+
+		$db->free($resql);
+
+		if( $num - $nbFactureNonDelivre > 0) {
+			print "</table>";
+			print '</div>';
+		}
+	} else {
+		dol_print_error($db);
+	}
+
+	print '</td>';
+
+} ?>
 
 
 	<?php
@@ -441,6 +627,7 @@ $domData .= ' data-id="'.$line->id.'"';
 						$liste[]=$contactline->fk_socpeople;
 						print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
 						print $contactline->getBannerContact();
+						print $form->showCategoriesExcluding($contactline->fk_socpeople, 'contact', $categoriesContactExclure,1, 1);
 						print '</td><td>';
 						if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
 							print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id .$paramsLienLigne. '" class="ajaxable">';
