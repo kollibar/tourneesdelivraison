@@ -1155,6 +1155,9 @@ public function LibStatut($status, $mode=0)
 		global $form,$formtournee,$bc,$bcdd, $mysoc, $db;
 		// global $lineid;
 		//global $permissionnote, $permissiontoadd, $permissioncreate, $permissiontodelete
+		global $categoriesClientExclure,$categoriesFournisseurExclure, $categoriesLineCmdeExclure;
+		global $ajaxActif;
+
 
 		$paramsLienLigne = '&amp;var=' . $var . '&amp;num=' . $num . '&amp;i=' . $i;
 

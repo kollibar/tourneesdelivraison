@@ -27,6 +27,7 @@ else if ($action == 'setnocmde_elt' && ! empty($permissiontonote) && ! GETPOST('
     if( count($line->lines_cmde == 0)){
       $line->aucune_cmde=1;
       $line->update($user);
+      $line->ALAffectationCommande($user);
     } else { // A FAIRE -> générer erreur car déjà une commande sur la ligen on ne peut donc pas mettre Pas de Commande
 
     }

@@ -300,8 +300,9 @@ class pdf_cargo extends ModelePDFTourneesdelivraison
 				{
 
           foreach($object->lines[$i]->lines_cmde as $lcmde){
+            if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK ) continue;
             foreach( $lcmde->lines as $lelt){
-
+              if( $lelt->statut != TourneeUnique_lines_cmde_elt::DATE_OK && $lelt->statut != TourneeUnique_lines_cmde_elt::DATE_NON_OK ) continue;
 
               $path=$lelt->getPDF();
 

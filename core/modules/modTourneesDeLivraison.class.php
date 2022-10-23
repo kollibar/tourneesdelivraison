@@ -229,11 +229,18 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_URL_ORIGIN', 'chaine', '', 'élément de l\'url à remplacer', 0);	// A retirer // A FAIRE
 		$r++;
+
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'chaine', '1', 'désactive l\'autoupdate des documents', 0);
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE', 'chaine', '0', 'désactive l\'autoupdate des documents', 0);
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_OPENROUTESERVICE_APIKEY', 'chaine', '', 'Openrouteservice.org API KEY', 1, 'allentities', 1);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'chaine', '1', 'liste de catégories à supprimer après ajout de commande sur une ligne de tournée', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER', 'chaine', '1', 'liste de catégories clients à afficher (dans l\'affichage des tournées)', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE', 'ouinon', '1', 'Supprimer les éléments entre crochet à l\'ajout d\'une commande ', 0);
 		$r++;
 
 

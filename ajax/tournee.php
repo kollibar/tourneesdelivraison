@@ -42,6 +42,9 @@ $action=GETPOST('action', 'alpha');
 $id=GETPOST('id', 'int');
 $showtype=GETPOST('showtype','int');
 
+// activer ajax 
+$ajaxActif = true; // of course !
+
 
 /*
  * View

@@ -60,3 +60,350 @@ else header('Cache-Control: no-cache');
 /* Javascript library of module TourneesDeLivraison */
 
 
+
+
+
+
+
+
+
+function afficheLigne(rowid){
+
+}
+
+function masqueLigne(rowid){
+
+}
+
+function nouvelleLigne(rowid){
+
+}
+function supprimeLigne(rowid){
+
+}
+
+
+/*
+Fonction pour l'ajaxisation
+*/
+let listeGET = new Array();
+
+function auChargementNouvelleLigne(elt){
+  mettreAjaxPartout(elt);
+  ajaxrow(elt);
+  onStartEdition(elt);
+}
+
+function mettreAjaxPartout(){
+  $(".askActionAjaxable").each(function(){
+    if( $(this).closest(".tournee-row").length>0 ) $(this).attr("href", $(this).attr("href") + $(this).closest(".tournee-row").attr("data"));
+    $(this).attr('onclick', "askActionAjaxable(this);return false;");
+  });
+  $(".askAjaxable").each(function(){
+    if( $(this).closest(".tournee-row").length>0 ) $(this).attr("href", $(this).attr("href") + $(this).closest(".tournee-row").attr("data"));
+    $(this).attr('onclick', "askAjaxable(this);return false;");
+  });
+
+  $(".ajaxable").each(function(){
+    if( $(this).closest(".tournee-row").length>0){
+      //$(this).attr('onclick', 'ajaxable(this);return false;');
+      $(this).attr('onclick', 'return false;');
+      $(this).click(ajaxable);
+    }
+  });
+
+  $(".edit_note_elt").submit(function(event){
+    id=$(this).closest(".tournee-row").attr('id');
+    lineid=id.slice(4);
+    valideFormulaire_edit_note_elt(lineid);
+    event.preventDefault();
+  });
+
+
+  $('.edit_note_elt').find("input[name='']").click(function(){
+    id=$(this).closest(".tournee-row").attr('id');
+    $('#'+id).find("input[name='action']").attr('value',''); // met l'action à 0
+  });
+}
+
+function valideFormulaire_edit_note_elt(lineid){
+  if( $('#edit_note_elt-'+lineid).length != 0){
+    url=$('#edit_note_elt-'+lineid).attr('action');
+
+    if( url.indexOf('#') != -1 ){
+      suffix=url.slice(url.indexOf('#'));
+      url=url.slice(0,url.indexOf('#'));
+    } else {
+      suffix='';
+    }
+    if( url.indexOf('?') != -1 ){
+      url=url+'&';
+    } else {
+      url=url+'?';
+    }
+
+    url=url+$('#edit_note_elt-'+lineid).serialize()+suffix;
+
+    url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+    if( url.indexOf('cats_linerow-') != -1 ){
+      url=url.replaceAll('cats_linerow-'+lineid,'cats_line');
+    }
+
+    console.log("GET :"+url);
+    //$.get(url,ajaxable_callback);
+    getAjaxable(url);
+  }
+}
+
+function getAjaxable(url){
+  if( listeGET.includes(url) ) return;
+
+  listeGET.push(url);
+
+  $.ajax({
+    type: 'get',
+    url: url,
+    context: this,
+    success: this.mySuccess,
+    error: this.myError,
+    cache: false,
+    beforeSend: function(jqXHR, settings) {
+      url=settings.url;
+
+      i=url.indexOf('&_=');
+      if( i==-1 ) i=url.indexOf('?_=');
+      if( i != -1 ) {
+        j=url.indexOf('#', i+1);
+        k=url.indexOf('&', i+1);
+
+        if( k > 0 && k < j) j=k;
+        if( j < 0 ) url=url.slice(0,i);
+        else url=url.slice(0,i)+url.slice(j);
+      }
+
+      jqXHR.url = url;
+    },
+    error: function(jqXHR, exception) {
+        console.log('erreur GET: '+ jqXHR.url+'   retry');
+        getAjaxable(jqXHR.url);
+    }
+  })
+  .done(function( data, textStatus, jqXHR ) {
+    ajaxable_callback(data, textStatus, jqXHR);
+  });
+}
+
+/* fonction à appeller pour les modifications d'éléments qui pevent être ajaxés */
+function ajaxable(){
+  id=$(this).closest(".tournee-row").attr('id');
+
+  url=$(this).attr('href');
+  url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+  console.log("GET :"+url);
+
+  getAjaxable(url);
+}
+
+function ajaxable_callback(data, status, xhr){
+  // recherche de la 1ere balise
+  i=-1;
+  do{
+    i++;
+    i=data.indexOf('<',i);
+  } while( data[i+1]=='!');
+  do{
+    i++;
+  } while( data[i]==' ' );
+  j=data.indexOf(' ',i);
+
+  balise=data.slice(i,j);
+
+  k=data.indexOf("id=\"", i);
+  if( k == -1 ) {
+    k=data.indexOf("id=\'", i);
+    l=data.indexOf("'", k+4);
+  } else {
+    l=data.indexOf("\"",k+4);
+  }
+  id=data.slice(k+4,l);
+
+  m=data.indexOf('>',l);
+  n=data.lastIndexOf('</'+balise+'>');
+
+  data=data.slice(m+1,n);
+
+  url=xhr.url;
+
+  i=url.indexOf('&_=');
+  if( i==-1 ) i=url.indexOf('?_=');
+  if( i != -1 ) {
+    j=url.indexOf('#', i+1);
+    k=url.indexOf('&', i+1);
+
+    if( k > 0 && k < j) j=k;
+    if( j < 0 ) url=url.slice(0,i);
+    else url=url.slice(0,i)+url.slice(j);
+  }
+
+  console.log("reception :"+"#"+id+'    '+url);
+
+  var ok=false;
+  for (var i = 0; i <= listeGET.length; i++){
+
+    if( listeGET[i] == url ){
+      // console.log(i+': '+listeGET[i]+' <=====');
+      listeGET.splice(i,i);
+      ok=true;
+      break;
+    } else {
+      // console.log(i+': '+listeGET[i]);
+    }
+  }
+  if( ok==false ) {
+    //console.log("erreur");
+    return;
+  }
+
+  if( id.slice(0,4) == "row-"){
+    if( data.indexOf('id="cats_line"') != -1 ){
+      data=data.replaceAll('cats_line','cats_line'+id);
+    }
+  }
+
+  $("#"+id).html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
+
+  auChargementNouvelleLigne($("#"+id));
+
+}
+
+/* fonction à appeller sur les formulaires pour lesquels le formulaire est ajaxé mais pas sa validation (élément .askAjaxable) */
+function askAjaxable(elt){
+  url=elt.href;
+  url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+  console.log("GET :"+url);
+  $.get(url, askAjaxable_callback);
+}
+function askAjaxable_callback(data,status){
+  $('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
+}
+
+
+/* fonction à appeller sur les formulaires pour lesquels le formulaire est ajaxé ET la validation de ce formulaire (élément .askActionAjaxable) */
+function askActionAjaxable(elt){
+  url=elt.href;
+  url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+  console.log("GET :"+url);
+  $.get(url, askActionAjaxable_callback);
+}
+
+function askActionAjaxable_callback(data,status){
+  data=data.replace('after location.href','after form validation');
+
+  $('#formulaireConfirm').html(data.replace('location.href = urljump;','getAjaxable(urljump)'));
+  //$('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
+}
+
+
+/*
+   Fonctions pour l'édition
+*/
+function changeClient(){
+	if( $("#socid").val()!=-1 && $("#socid").val()!=0){
+		setfor3party();
+	}
+}
+
+function changeTourneeIncluse(){
+	if( $("#tourneeincluseid").val()!=-1 && $("#tourneeincluseid").val()!=0) setfortournee();
+}
+
+function BL1choix(){
+	if( ! jQuery("#BL1").is(':checked') && jQuery("#BL2").is(':checked') ){
+		jQuery("#BL1").prop('checked',true).change();
+		jQuery("#BL2").prop('checked',false).change();
+	}
+}
+
+/* Function to set fields from choice */
+function setfor3party() {
+	console.log("Call set3party. We show most fields");
+	/*jQuery("#search_idprod").val('');
+	jQuery("#idprod").val('');
+	jQuery("#idprodfournprice").val('0');	// Set cursor on not selected product
+	jQuery("#search_idprodfournprice").val('');*/
+	jQuery("#tournee_line_type_thirdparty").prop('checked',true).change();
+	jQuery("#tournee_line_type_tournee").prop('checked',false).change();
+	jQuery("#BL").show();
+	jQuery("#facture").show();
+	jQuery("#etiquettes").show();
+	jQuery("#tempstheorique").show();
+	jQuery("#infolivraison").show();
+}
+function setfortournee() {
+	console.log("Call setfortournee. We hide some fields and show dates");
+	jQuery("#tournee_line_type_thirdparty").prop('checked',false).change();
+	jQuery("#tournee_line_type_tournee").prop('checked',true).change();
+
+	/*jQuery("#price_ht").val('').hide();
+	jQuery("#multicurrency_price_ht").hide();
+	jQuery("#price_ttc").hide();	// May no exists
+	jQuery("#fourn_ref").hide();
+	jQuery("#tva_tx").hide();
+	jQuery("#buying_price").show();
+	jQuery("#title_vat").hide();*/
+	jQuery("#BL").hide();
+	jQuery("#facture").hide();
+	jQuery("#etiquettes").hide();
+	jQuery("#tempstheorique").hide();
+	jQuery("#infolivraison").hide();
+}
+
+function onStartEdition(){
+  $("#tournee_line_type_thirdparty").on( "click", function() {
+    setfor3party();
+  });
+  $("#tournee_line_type_tournee").on( "click", function() {
+    setfortournee();
+  });
+
+  $("#BL1").on( "click", function() {
+    BL1choix();
+  });
+  $("#BL2").on( "click", function() {
+    BL1choix();
+  });
+
+  $("#socid").on( "change", function() {
+    changeClient();
+  });
+  $("#tourneeincluseid").on( "change", function() {
+    changeTourneeIncluse();
+  });
+}
+
+function onStartEdition(){
+  $("#tournee_line_type_thirdparty").on( "click", function() {
+    setfor3party();
+  });
+  $("#tournee_line_type_tournee").on( "click", function() {
+    setfortournee();
+  });
+
+  $("#BL1").on( "click", function() {
+    BL1choix();
+  });
+  $("#BL2").on( "click", function() {
+    BL1choix();
+  });
+
+  $("#socid").on( "change", function() {
+    changeClient();
+  });
+  $("#tourneeincluseid").on( "change", function() {
+    changeTourneeIncluse();
+  });
+}

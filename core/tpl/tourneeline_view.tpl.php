@@ -90,6 +90,18 @@ $domData .= ' data-id="'.$line->id.'"';
 					<label for="force_email_soc_"<?php echo $line->id;?> > <?php echo $langs->trans('ajoutMailAuto'); ?> </label>
 				<?php } ?>
 
+				<?php if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+
+						print '<div id="view_tag_soc_'.$line->fk_soc.'">';
+						//print '<tr><td>' .
+						// print $langs->trans($line->nomelement . "CategoriesShort");
+						// . '</td>';
+						//print '<td>';
+						print $form->showCategoriesExcluding($line->fk_soc, (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier'), (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure),1, 1);
+						//print "</td></tr>";
+						print '</div>';
+				} ?>
+
 				<?php if( !empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE)){ ?>
 
 
@@ -383,7 +395,13 @@ $domData .= ' data-id="'.$line->id.'"';
 					print $langs->trans($line->nomelement . "CategoriesShort");
 					// . '</td>';
 					//print '<td>';
-					print $form->showCategories($line->id, $line->element, 1);
+
+					if( $line->element == 'tourneeunique_lines' && ( $line->aucune_cmde == 1 || $nb[TourneeUnique_lines_cmde::DATE_NON_OK] != 0 || $nb[TourneeUnique_lines_cmde::DATE_OK] != 0)){
+						print $form->showCategoriesExcluding($line->id, $line->element, $categoriesLineCmdeExclure,1,1);
+					} else {
+						print $form->showCategories($line->id, $line->element, 1, 1);
+					}
+
 					//print "</td></tr>";
 					print '</div>';
 					print '<div id="edit_tag_line_'.$line->id.'" style="display:none;">';
@@ -401,8 +419,8 @@ $domData .= ' data-id="'.$line->id.'"';
 				}?>
 			</td></tr>
 			<tr>
-				<td align="right" class="linecolnote_public nowrap"><?php echo $line->note_public; ?></td>
-				<td align="right" class="linecolnote_private nowrap"><?php echo $line->note_private; ?></td>
+				<td align="right" class="linecolnote_public nowrap"><?php echo (( $line->element == 'tourneeunique_lines' && ($line->aucune_cmde == 1 || $nb[TourneeUnique_lines_cmde::DATE_NON_OK]!=0 || $nb[TourneeUnique_lines_cmde::DATE_OK]!=0))?preg_replace('/(\[.*?\])/m', '', $line->note_public):$line->note_public); ?></td>
+				<td align="right" class="linecolnote_private nowrap"><?php echo (( $line->element == 'tourneeunique_lines' && ($line->aucune_cmde == 1 || $nb[TourneeUnique_lines_cmde::DATE_NON_OK]!=0 || $nb[TourneeUnique_lines_cmde::DATE_OK]!=0))?preg_replace('/(\[.*?\])/m', '', $line->note_private):$line->note_private); ?></td>
 			</tr>
 		</table>
 	</td>

@@ -183,3 +183,95 @@ function cloneCategorieToAnotherObject(User $user, $categorie, $new_type){
 	return $newCat->create($user);
 
 }
+
+
+function getListeCategoriesDependant($cats){
+	global $db;
+
+	if( empty($cats) ) return array();
+
+	$new=$cats;
+
+	while( count($new) > 0 ){
+		$sql = "SELECT c.rowid";
+		$sql .= " FROM ".MAIN_DB_PREFIX."categorie as c ";
+		$sql .= ' WHERE c.fk_parent IN (' . implode(',',$new) . ')';
+
+		dol_syslog("getListeCategoriesDependant", LOG_DEBUG);
+		$resql = $db->query($sql);
+		if ($resql)
+		{
+			$new=array();
+
+			$num = $db->num_rows($resql);
+
+			$i = 0;
+			while ($i < $num) {
+				$obj = $db->fetch_array($resql);
+				$new[]=$obj[0];
+
+				$i++;
+			}
+		} else {
+			// $categorie->error=$categorie->db->error();
+			return -1;
+		}
+		$cats=array_merge($cats,$new);
+	}
+	return $cats;
+}
+
+function updateParametreListeCategories(){
+
+	$listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE","TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER");
+
+	foreach($listeParam as $param){
+		$value=$conf->global->{$param};
+		if( strpos($value, '|') === false ){
+				$cats = explode(',', $value);
+		} else {
+			$cats = explode(',', substr($value, 0, strpos($value, '|')));
+		}
+		if( count($cats) == 0 ) continue;
+
+		$r=getListeCategoriesDependant($cats);
+
+		if( $r != -1 ) $data = implode(',',$cats) . '|' . implode(',',$r);
+		else $data=implode(',',$cats);
+
+		$res = dolibarr_set_const($db, $param, $data,'chaine',0,'',$conf->entity);
+		if (! $res > 0) $error++;
+		if (! $error)
+		{
+				setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+		}
+		else
+		{
+				setEventMessages($langs->trans("Error"), null, 'errors');
+		}
+	}
+}
+
+/** récupère la liste des catégories d'un objet ($type et $id)
+	* retoune une liste d'id de catégories
+*/
+function getListeCategories($id, $type){
+	global $db;
+
+	$cat = new Categorie($db);
+	$categories = $cat->containing($id, $type);
+
+	$arrayselected = array();
+
+	foreach ($categories as $c) {
+		$arrayselected[] = $c->id;
+	}
+
+	return $arrayselected;
+}
+
+
+function suppressionDataEntreCrochet($texte){
+	$texte=preg_replace('/(\[.*?\])/m', '', $texte);
+	return $texte;
+}

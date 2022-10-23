@@ -34,7 +34,7 @@ if (empty($object) || !is_object($object))
 
 ?>
 
-<!-- BEGIN PHP TEMPLATE AJAXROW.TPL.PHP - Script to enable drag and drop on lines of a table -->
+<!-- BEGIN PHP TEMPLATE AJAXROW-tournee.TPL.PHP - Script to enable drag and drop on lines of a table -->
 <?php
 $id = $object->id;
 $fk_element = empty($object->fk_element) ? $fk_element : $object->fk_element;
@@ -43,13 +43,8 @@ $nboflines = (isset($object->lines) ?count($object->lines) : (isset($tasksarray)
 $forcereloadpage = empty($conf->global->MAIN_FORCE_RELOAD_PAGE) ? 0 : 1;
 $tagidfortablednd = (empty($tagidfortablednd) ? 'tablelines' : $tagidfortablednd);
 $filepath = (empty($filepath) ? '' : $filepath);
-
-
-if (GETPOST('action', 'aZ09') != 'editline' && $nboflines > 1 && $conf->browser->layout != 'phone') { ?>
+?>
 <script>
-$(document).ready(function(){
-	ajaxrow();
-});
 function ajaxrow(elt){
 	elt.find(".imgupforline").hide();
 	elt.find(".imgdownforline").hide();
@@ -108,6 +103,14 @@ function ajaxrow(elt){
     );
 }
 </script>
+
+<?php
+if (GETPOST('action', 'aZ09') != 'editline' && $nboflines > 1 && $conf->browser->layout != 'phone') { ?>
+<script>
+$(document).ready(function(){
+	ajaxrow($('body'));
+});
+</script>
 <?php } else { ?>
 <script>
 $(document).ready(function(){
@@ -117,4 +120,4 @@ $(document).ready(function(){
 });
 </script>
 <?php } ?>
-<!-- END PHP TEMPLATE AJAXROW.TPL.PHP -->
+<!-- END PHP TEMPLATE AJAXROW-tournee.TPL.PHP -->

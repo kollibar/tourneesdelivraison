@@ -72,6 +72,8 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 
+dol_include_once('/tourneesdelivraison/class/html.formexp.class.php');
+
 dol_include_once('/tourneesdelivraison/class/html.formtourneesdelivraison.class.php');
 dol_include_once('/tourneesdelivraison/class/'.$typetournee.'.class.php');
 dol_include_once('/tourneesdelivraison/class/tourneegeneric.class.php');
@@ -235,7 +237,21 @@ $permissiontodelete = $user->rights->tourneesdelivraison->{$typetournee}->efface
 $permissiontonote = $user->rights->tourneesdelivraison->{$typetournee}->ecrire;
 $permissioncreate = $permissiontoadd;
 
-$form=new Form($db);
+// préparation des tags clients/fournisseur à exclure
+$listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER"=>'categoriesClientExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'$categoriesFournisseurExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" => 'categoriesLineCmdeExclure',
+								);
+foreach($listeParam as $param => $cat){
+	if(strpos($conf->global->{$param},'|' === false )){
+		$data=$conf->global->{$param};
+	} else {
+		$data=substr($conf->global->{$param}, strpos($conf->global->{$param},'|')+1);
+	}
+	$$cat=explode(',',$data);
+}
+
+$form=new FormExp($db);
 $formtournee=new FormTourneesDeLivraison($db);
 $formfile=new FormFile($db);
 

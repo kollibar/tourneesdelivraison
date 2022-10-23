@@ -41,11 +41,14 @@ global $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/tourneesdelivraison.lib.php';
+require_once '../lib/tournee.lib.php';
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
+dol_include_once('/categorie/class/categorie.class.php');
 //require_once "../class/myclass.class.php";
 
 // Translations
 $langs->loadLangs(array("admin", "tourneesdelivraison@tourneesdelivraison","other"));
+$langs->load('categories');
 
 // Access control
 if (! $user->admin) accessforbidden();
@@ -173,6 +176,7 @@ $actions=array(
 	'setaffectautosi1eltparcmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE",
 	'setaffectauto1erecmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE",
 	'setsms' => "TOURNEESDELIVRAISON_SMS",
+	'setnotesupprimerentrecrochet' => 'TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE',
 );
 
 
@@ -271,6 +275,35 @@ if ($action == 'updateoptions') {
 		else
 		{
 				setEventMessages($langs->trans("Error"), null, 'errors');
+		}
+	}
+
+	if (GETPOSTISSET('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE') || GETPOSTISSET('TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER')) {
+
+		$listeParam=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER');
+
+		foreach ($listeParam as $param) {
+			if( ! GETPOSTISSET($param)) continue;
+
+			$cats = GETPOST('cats_' . $param, 'array');
+
+			$r=getListeCategoriesDependant($cats);
+
+			if( $r != -1 ) $data = implode(',',$cats) . '|' . implode(',',$r);
+			else $data=implode(',',$cats);
+
+
+			$res = dolibarr_set_const($db, $param, $data,'chaine',0,'',$conf->entity);
+			if (! $res > 0) $error++;
+			if (! $error)
+			{
+					setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+			}
+			else
+			{
+					setEventMessages($langs->trans("Error"), null, 'errors');
+			}
+
 		}
 	}
 }
@@ -694,6 +727,70 @@ print '</tr>';
 print '</table>';
 print '</div>';
 
+print load_fiche_titre($langs->trans("Comportement"),'','');
+
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
+
+print '<div id="comportementajoutcommande" class="div-table-responsive-no-min">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print '<td>'.$langs->trans("ComportementAjoutCommande")."</td>";
+print "<td width=\"120\">&nbsp;</td>";
+print '<td align="right" width="120">'.$langs->trans("Value").'</td>';
+print '<td width="80">&nbsp;</td></tr>';
+
+if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+
+	$arrayselected=array();
+	$cate_arbo = $form->select_all_categories('tourneeunique_lines', null, null, null, null, 1);
+
+	$c = new Categorie($db);
+
+	if ( ! empty($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE)){
+		if( strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, '|') === false ){
+				$arrayselected = explode(',', $conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE);
+		} else {
+			$arrayselected = explode(',', substr($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, 0, strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, '|')));
+		}
+	}
+
+	print '<tr class="oddeven">';
+	print '<td width="80%">'.$langs->trans("CategorieASupprimer").'</td>';
+	print '<td>&nbsp</td>';
+	print '<td align="center">';
+
+	print $form->multiselectarray('cats_'."TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE", $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+
+	print '</td><td align="right">';
+	print '<input type="submit" class="button" name="TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" value="'.$langs->trans("Modify").'">';
+	print "</td>";
+	print '</tr>';
+}
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("SuppressionNoteEntreCrochet").'</td>';
+print '<td>&nbsp</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnotesupprimerentrecrochet&value=0#comportementajoutcommande">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnotesupprimerentrecrochet=1#comportementajoutcommande">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+print '</a></td>';
+print '</tr>';
+
+print '</table>';
+print '</div>';
+
+print '</form>';
+
 
 /*
 print '<div id="urlqrcode" class="div-table-responsive-no-min">';
@@ -738,7 +835,67 @@ print '</tr>';
 print '</table>';
 print '</form>';
 */
+print load_fiche_titre($langs->trans("ParametresDAffichage"),'','');
 
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
+
+print '<div class="div-table-responsive-no-min" id="divaff">';
+print '<table class="noborder" width="100%">';
+print '<tr class="liste_titre">';
+print "<td>".$langs->trans("Parameters")."</td>\n";
+print "<td width=\"120\">&nbsp;</td>";
+print '<td align="right" width="120">'.$langs->trans("Value").'</td>'."\n";
+print '<td width="80">&nbsp;</td></tr>'."\n";
+
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("AffichageContactIntegre").'</td>';
+print '<td>&nbsp</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=0#divaff">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=1#divaff">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+print '</a></td>';
+print '</tr>';
+
+if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+
+	$arrayselected=array();
+	$cate_arbo = $form->select_all_categories('customer', null, null, null, null, 1);
+
+	$c = new Categorie($db);
+
+	if ( ! empty($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER)){
+		if( strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, '|') === false ){
+				$arrayselected = explode(',', $conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER);
+		} else {
+			$arrayselected = explode(',', substr($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, 0, strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, '|')));
+		}
+	}
+
+	print '<tr class="oddeven">';
+	print '<td width="80%">'.$langs->trans("ListeCategorieClientANePasAfficher").'</td>';
+	print '<td>&nbsp</td>';
+	print '<td align="center">';
+
+	print $form->multiselectarray('cats_'."TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER", $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+
+	print '</td><td align="right">';
+	print '<input type="submit" class="button" name="TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER" value="'.$langs->trans("Modify").'">';
+	print "</td>";
+	print '</tr>';
+}
+
+print '</table></div>';
 
 print load_fiche_titre($langs->trans("ParametresDivers"),'','');
 
@@ -767,6 +924,7 @@ print '</a></td>';
 print '</tr>';
 
 print '</table></div>';
+print '</form>';
 
 
 
@@ -830,33 +988,7 @@ print '</table></div>';
 
 
 
-print load_fiche_titre($langs->trans("ParametresDAffichage"),'','');
 
-print '<div class="div-table-responsive-no-min" id="divaff">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("Parameters")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffichageContactIntegre").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=0#divaff">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=1#divaff">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-
-print '</table></div>';
 
 // Page end
 dol_fiche_end();

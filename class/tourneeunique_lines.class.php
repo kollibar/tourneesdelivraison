@@ -548,6 +548,7 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	}
 
 	public function affecteElt(User $user, $elt, $notrigger = 0){
+		dol_syslog(get_class($this)."::affecteElt ".$elt->element.' '.$elt->id, LOG_DEBUG);
 		$this->getTournee();
 		if( $elt->element == 'commande'){
 			$lcmde=$this->getCmdelineByFk_cmde($elt->id);
@@ -561,11 +562,13 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 				$tulc->create($user);
 
 				$this->lines_cmde[]=$tulc;
+
 			} else {
 				if( $lcmde->statut != TourneeUnique_lines_cmde::DATE_OK && $lcmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK){
 					$lcmde->changeAffectation($user, TourneeUnique_lines_cmde::DATE_NON_OK, $this->parent->date_tournee, false, $notrigger);
 				}
 			}
+			$this->ALAffectationCommande($user, $elt->id);
 		}
 	}
 
@@ -659,6 +662,49 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 			$this->thirdparty->fetch_optionals();
 		}
 		return $this->thirdparty;
+	}
+
+
+	public function ALAffectationCommande(User $user, $fk_order=0){
+		global $conf;
+
+
+/*
+		if( ! empty($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE) ){
+
+			// récupération des listes
+			$listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE"=>'categoriesClientExclure');
+			foreach($listeParam as $param => $cat){
+				if(strpos($conf->global->{$param},'|' === false )){
+					$data=$conf->global->{$param};
+				} else {
+					$data=substr($conf->global->{$param}, strpos($conf->global->{$param},'|')+1);
+				}
+				$$cat=explode(',',$data);
+			}
+
+			$cats=getListeCategories($this->id, $this->element);
+			$cats=array_diff($cats, $categoriesClientExclure);
+
+			$this->setCategories($cats);
+		}*/
+		if( $conf->global->TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE ){ // suppression des notes entre crochet
+			/*$this->note_public=suppressionDataEntreCrochet($this->note_public);
+			$this->note_private=suppressionDataEntreCrochet($this->note_private);
+
+			$result = $this->update($user);
+			if( $result < 0 ) return -1;	// erreur lors de l'update*/
+
+			$cmde=new Commande($this->db);
+			$cmde->fecth($fk_order);
+
+			$cmde->note_public=suppressionDataEntreCrochet($cmde->note_public);
+			$cmde->note_private=suppressionDataEntreCrochet($cmde->note_private);
+
+			$result = $cmde->update($user);
+			if( $result <0 ) return -1;	// erreur lors de l'update
+		}
+
 	}
 
 }

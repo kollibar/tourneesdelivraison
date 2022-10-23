@@ -68,7 +68,10 @@ if($typetournee == 'tourneedelivraison'){
 
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
+
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+
+dol_include_once('/tourneesdelivraison/class/html.formexp.class.php');
 
 dol_include_once('/tourneesdelivraison/class/html.formtourneesdelivraison.class.php');
 dol_include_once('/tourneesdelivraison/class/'.$typetournee.'.class.php');
@@ -142,6 +145,9 @@ foreach($object->lines as $line){
 $isdraft = (($object->statut == TourneeGeneric::STATUS_DRAFT) ? 1 : 0);
 //$result = restrictedArea($user, 'tourneesdelivraison', $object->id, '', '', 'fk_soc', 'rowid', $isdraft);
 
+// activer ajax (ou pas)
+if( $typetournee == 'tourneeunique') $ajaxActif = true;
+else $ajaxActif = false;
 
 
 
@@ -177,8 +183,8 @@ if (empty($reshook)) {
 
 	$date=getdate();
 
-/*
-	if( $typetournee == 'tourneeunique'){
+
+	if( $typetournee == 'tourneeunique' && ! $ajaxActif){
 		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
 		// si date tournée unique non dépassé, cherche les nouvelles commandes
 			$object->checkCommande($user);
@@ -187,7 +193,7 @@ if (empty($reshook)) {
 			$object->checkElt($user);
 		}
 	}
-*/
+
 
 
 	// récupération de la liste de model pdf
@@ -209,7 +215,20 @@ if (empty($reshook)) {
 		 return -1;
 	 }
 
-
+// préparation des tags clients/fournisseur à exclure
+$listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER"=>'categoriesClientExclure',
+									// "TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'$categoriesFournisseurExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" => 'categoriesLineCmdeExclure',
+								);
+foreach($listeParam as $param => $cat){
+	if(strpos($conf->global->{$param},'|' === false )){
+		$data=$conf->global->{$param};
+	} else {
+		$data=substr($conf->global->{$param}, strpos($conf->global->{$param},'|')+1);
+	}
+	$$cat=explode(',',$data);
+}
+// $categoriesFournisseurExclure
 
 	// Actions when printing a doc from card
 	include DOL_DOCUMENT_ROOT.'/core/actions_printing.inc.php';
@@ -257,7 +276,7 @@ if (empty($reshook)) {
  * Put here all code to build page
  */
 
-$form=new Form($db);
+$form=new FormExp($db);
 $formtournee=new FormTourneesDeLivraison($db);
 $formfile=new FormFile($db);
 

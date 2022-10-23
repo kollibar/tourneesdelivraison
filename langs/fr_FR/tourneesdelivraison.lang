@@ -202,6 +202,11 @@ GenerationAutoDocs = Génération automatique des documents à chaque modificati
 SuppressionAutoDocs = Génération automatique des documents à chaque modification de la tournée
 SimplificationURLQrCode = Simplification des urls des QR-code
 MettreEnPlaceReducQRCode = Mettre en place une réduction des QR-code
+ComportementAjoutCommande = Comportement à l'ajout d'une commande
+CategorieASupprimer = Catégories (ou groupe de catégories) à masquer
+SuppressionNoteEntreCrochet = Note sur ligne de commande : Masquer les éléments entre crochet à l'ajout d'une commande
+ListeCategorieClientANePasAfficher = Liste des catégories (ou groupe de catégories) clients à ne pas afficher dans les tournées
+ListeCategorieFournisseurANePasAfficher = Liste des catégories (ou groupe de catégories) fournisseurs à ne pas afficher dans les tournées
 
 ParametresDivers = Paramètres divers
 GestionsDesSMS = Gestion des SMS
