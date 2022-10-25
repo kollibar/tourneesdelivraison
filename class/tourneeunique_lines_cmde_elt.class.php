@@ -115,7 +115,7 @@ class TourneeUnique_lines_cmde_elt extends TourneeObject
 	public $fk_parent_line;
 	// END MODULEBUILDER PROPERTIES
 
-
+	public $tourneeLine;
 
 
 	/**
@@ -289,22 +289,22 @@ public function LibStatut($status, $mode=0)
 		$result = $this->update($user);
 		if( $result <0 ) return -1;
 
-		$this->getParent();
+		$this->getTourneeLine();
 
 		$this->elt->fetchObjectLinked();
 
 		if(!empty($this->elt->linkedObjectsIds['tourneesdelivraison'])
-			&& in_array($this->parent->id,$this->elt->linkedObjectsIds['tourneesdelivraison'])) {
+			&& in_array($this->tourneeLine->id,$this->elt->linkedObjectsIds['tourneesdelivraison'])) {
 				$liaison=1;
 		}
 
 		if(($affectation == self::DATE_OK || $affectation == self::DATE_NON_OK) && empty($liaison)){	// si affectation à cette tournée et pas de liaison
-			$this->elt->add_object_linked('tourneesdelivraison',$this->parent->id); // on crée une liaison
+			$this->elt->add_object_linked('tourneesdelivraison',$this->tourneeLine->id); // on crée une liaison
 		}
 
 		if($affectation != self::DATE_OK && $affectation != self::DATE_NON_OK && !empty($liaison)){ // si plus affecté à cet objet et liaison
 			// on supprime la liaison
-			$this->elt->deleteObjectLinked($this->parent->id, 'tourneesdelivraison');
+			$this->elt->deleteObjectLinked($this->tourneeLine->id, 'tourneesdelivraison');
 		}
 
 
@@ -481,6 +481,14 @@ public function LibStatut($status, $mode=0)
 			$this->tournee=$parent->getTournee();
 		}
 		return $this->tournee;
+	}
+
+	public function getTourneeLine(){
+		if( empty($this->tourneeLine)){
+			$parent = $this->getParent();
+			$this->tourneeLine = $parent->getTourneeLine();
+		}
+		return $this->tourneeLine;
 	}
 
 	public function getParent(){

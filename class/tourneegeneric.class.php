@@ -960,8 +960,10 @@ public function LibStatut($status, $mode=0)
 		{
 			// masquage des lignes suivant $this->masque_ligne
 
-			if( empty($line->note_public) ){
+			if( empty(preg_replace('/(\[.*?\])/m', '', $line->note_public) ) ){
+
 				$c=$line->getCategories();
+				if( is_array($c) ) $c = array_intersect($c, $categoriesContactExclure);
 
 				if( ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag
 					if( $this->element == 'tourneeunique' && $this->statut != TourneeGeneric::STATUS_DRAFT

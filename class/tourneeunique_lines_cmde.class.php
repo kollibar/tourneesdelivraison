@@ -973,4 +973,8 @@ class TourneeUnique_lines_cmde extends TourneeObject
 		}
 		return $n;
 	}
+
+	public function getTourneeLine(){
+		return $this->getParent();
+	}
 }
