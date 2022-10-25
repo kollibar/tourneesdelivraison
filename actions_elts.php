@@ -45,10 +45,61 @@ else if ($action == 'unsetnocmde_elt' && ! empty($permissiontonote) && ! GETPOST
   $action='view';
 }
 
+else if ($action == 'settag_contact' && !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG)
+        && ! empty($user->rights->societe->contact->creer) && !empty($user->rights->categorie->lire)
+        && ! GETPOST('cancel','alpha')) {
+
+  $line=$object->getLineById($lineid);
+  $linecontact=$line->getContactLineById(GETPOSTINT('contactlineid'));
+  if( $linecontact==null) setEventMessages($object->error, $object->errors, 'errors');
+  else {
+    $c=new Categorie($db);
+    $existing = $c->containing($line->fk_soc, 'contact', 'id');
+    $existing = array_intersect($existing, $categoriesContactExclure);
+
+  //Catégories
+    // Categories association
+    $categories = GETPOST( 'cats', 'array' );
+
+    $contact = new Contact($line->db);
+    $contact->fetch($linecontact->fk_socpeople);
+
+    $categories = array_merge($categories, $existing);
+
+    $result3 = $contact->setCategories($categories,'contact');
+    //$result3 = $line->setCategories($categories);
+
+    if ($result3 < 0) {
+      $error++;
+      setEventMessages($object->error, $object->errors, 'errors');
+    }
 
 
 
-  else if ($action == 'settag_tiers' && ! empty($user->rights->societe->creer) && !empty($user->rights->categorie->lire)  && ! GETPOST('cancel','alpha')) {
+  if ($result3 >= 0){
+    if( empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE)){
+      $object->deleteAllDocuments();
+    }
+
+    if (empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE)) {	// génération de pdf désactivé
+      // Define output language
+      $outputlangs = $langs;
+      $newlang = GETPOST('lang_id', 'alpha');
+      if (! empty($newlang)) {
+        $outputlangs = new Translate("", $conf);
+        $outputlangs->setDefaultLang($newlang);
+      }
+
+      $object->generateAllDocuments($modellist, $outputlangs, $hidedetails, $hidedesc, $hideref);
+    }
+  }
+}
+}
+
+
+  else if ($action == 'settag_tiers' && !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG)
+        && ! empty($user->rights->societe->creer) && !empty($user->rights->categorie->lire)
+        && ! GETPOST('cancel','alpha')) {
 
     $line=$object->getLineById($lineid);
     if( $line==null) setEventMessages($object->error, $object->errors, 'errors');

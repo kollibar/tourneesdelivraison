@@ -263,5 +263,3 @@ else if( ($action == 'updateline'|| substr($action,0,9) == 'editline_') && !empt
   unset($_POST['tempstheorique']);
   unset($_POST['cats_line']);
 }
-
- ?>

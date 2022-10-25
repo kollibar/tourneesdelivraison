@@ -803,6 +803,12 @@ class TourneeGeneric_lines extends TourneeObject
 			return -1;
 		}
 	}
+	public function getContactLineById($lineid){
+		foreach ($this->lines as $line) {
+			if( $line->id == $lineid ) return $line;
+		}
+		return null;
+	}
 
 }
 

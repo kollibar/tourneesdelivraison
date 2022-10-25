@@ -125,6 +125,13 @@ function mettreAjaxPartout(){
     event.preventDefault();
   });
 
+  $(".edit_tag_contact").submit(function(event){
+    id=$(this).closest(".tournee-row").attr('id');
+    lineid=id.slice(4);
+    valideFormulaire(lineid,'edit_tag_contact');
+    event.preventDefault();
+  });
+
 
   $('.edit_note_elt').find("input[name='']").click(function(){
     id=$(this).closest(".tournee-row").attr('id');

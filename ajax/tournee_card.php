@@ -239,8 +239,8 @@ $permissioncreate = $permissiontoadd;
 
 // préparation des tags clients/fournisseur à exclure
 $listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER"=>'categoriesClientExclure',
-									"TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'$categoriesFournisseurExclure',
-									"TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER"=>'$categoriesContactExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'categoriesFournisseurExclure',
+									"TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER"=>'categoriesContactExclure',
 									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" => 'categoriesLineCmdeExclure',
 								);
 foreach($listeParam as $param => $cat){

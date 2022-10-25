@@ -178,6 +178,7 @@ $actions=array(
 	'setaffectauto1erecmde' => "TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE",
 	'setsms' => "TOURNEESDELIVRAISON_SMS",
 	'setnotesupprimerentrecrochet' => 'TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE',
+	'setautorisereditiontag' => 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG',
 );
 
 
@@ -877,6 +878,24 @@ if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES))
 else
 {
 	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setafficheinfofacture&value=1#divaff">';
+	print img_picto($langs->trans("Disabled"),'switch_off');
+}
+print '</a></td>';
+print '</tr>';
+
+print '<tr class="oddeven">';
+print '<td width="80%">'.$langs->trans("AutoriserEditionTagsClientContact").'</td>';
+print '<td>&nbsp</td>';
+print '<td>&nbsp</td>';
+print '<td align="center">';
+if (!empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG))
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setautorisereditiontag&value=0#divaff">';
+	print img_picto($langs->trans("Activated"),'switch_on');
+}
+else
+{
+	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setautorisereditiontag&value=1#divaff">';
 	print img_picto($langs->trans("Disabled"),'switch_off');
 }
 print '</a></td>';

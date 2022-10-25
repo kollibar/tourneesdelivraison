@@ -98,9 +98,9 @@ $domData .= ' data-id="'.$line->id.'"';
 						// print $langs->trans($line->nomelement . "CategoriesShort");
 						// . '</td>';
 						//print '<td>';
-						if( $action != 'edit_tag_tiers' || $lineid != $selected || empty($user->rights->societe->creer)) {
+						if( $action != 'edit_tag_tiers' || $lineid != $selected || empty($user->rights->societe->contact->creer)) {
 							print '<div>';
-							if( !empty($user->rights->categorie->lire)){
+							if( !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG) ){
 								print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_tiers&id='.$this->id.$paramsLienLigne.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
 								print img_edit($langs->trans($val['edit note']), 1);
 								print '</a>';
@@ -151,12 +151,53 @@ $domData .= ' data-id="'.$line->id.'"';
 							echo '<tr><td style="font-weight:bold;">'.$langs->trans('Contact').':</td></tr>';
 						}
 						if( count($line->lines) >0 ){
+							$contactlineid=GETPOSTINT('contactlineid');
 							foreach($line->lines as $contactline){
 								$liste[]=$contactline->fk_socpeople;
 								print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
 								print $contactline->getBannerContact();
-								print $form->showCategoriesExcluding($contactline->fk_socpeople, 'contact', $categoriesContactExclure,1, 1);
-								print '</td><td>';
+								if( $action != 'edit_tag_contact' || $lineid != $selected || $contactline->rowid != $contactlineid || empty($user->rights->societe->creer)) {
+									print '<div>';
+									if( !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG) ){
+										print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_contact&id='.$this->id.$paramsLienLigne.'&contactlineid='.$contactline->rowid.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
+										print img_edit($langs->trans($val['edit note']), 1);
+										print '</a>';
+									}
+									print $form->showCategoriesExcluding($contactline->fk_socpeople, 'contact', $categoriesContactExclure,1, 1);
+									print '</div>';
+								} else {
+									$langs->load('categories');?>
+									<form class="edit_tag_contact" name="edit_tag_contact-<?php echo $line->id?>" id="edit_tag_contact-<?php echo $line->id?>" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $this->id . '#row-'.GETPOST('lineid'); ?>" method="POST">
+									<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
+									<input type="hidden" name="action" value="settag_contact">
+									<input type="hidden" name="mode" value="">
+									<input type="hidden" name="var" value="<?php echo $paramsLienLigne_var;?>">
+									<input type="hidden" name="i" value="<?php echo $paramsLienLigne_i;?>">
+									<input type="hidden" name="num" value="<?php echo $paramsLienLigne_num;?>">
+									<input type="hidden" name="lineid" value="<?php echo $line->id; ?>" >
+									<input type="hidden" name="contactlineid" value="<?php echo $contactline->rowid; ?>" >
+									<input type="hidden" name="id" value="<?php echo $this->id; ?>">
+
+									<?php
+									$cate_arbo = suppressionCategories($form->select_all_categories('contact', null, null, null, null, 1),$categoriesContactExclure);
+
+									$c = new Categorie($db);
+									$cats = $c->containing($contactline->fk_socpeople, 'contact');
+									$arrayselected=array();
+									foreach ($cats as $cat) {
+										$arrayselected[] = $cat->id;
+									}
+									print $form->multiselectarray('cats', $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+									//print "</td></tr>";
+									?>
+									<input type="submit" class="button" value="<?php echo $langs->Trans("Update"); ?>" name="setcontact_tiers" id="setcontact_tiers">
+									<input type="submit" class="button" value="<?php echo $langs->Trans("Cancel"); ?>" name="" id="">
+									</form>
+									<?php
+								}
+								print '</td>';
+
+								print '<td>';
 								if($this->statut == 0 && $object_rights->ecrire && $action != 'selectlines'){
 									print '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&amp;action=ask_deletecontact&amp;contactid=' . $contactline->id . $paramsLienLigne . '" class="ajaxable">';
 									print img_delete();
