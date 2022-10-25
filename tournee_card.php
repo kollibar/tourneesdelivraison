@@ -671,7 +671,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// Show object lines
 	if (! empty($object->lines))
 		if( $action=='editline') $lineid=GETPOST('lineid');
-		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true);
+		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true, ($typetournee == 'tourneeunique') && !empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE));
 
 		$numlines = count($object->lines);
 

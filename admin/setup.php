@@ -42,6 +42,9 @@ global $langs, $user;
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/tourneesdelivraison.lib.php';
 require_once '../lib/tournee.lib.php';
+require_once '../lib/tournee_setup.lib.php';
+//dol_include_once('/tourneesdelivraison/lib/tournee_setup.lib.php');
+
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/categorie/class/categorie.class.php');
 //require_once "../class/myclass.class.php";
@@ -65,6 +68,7 @@ $arrayofparameters=array(
 	'TOURNEESDELIVRAISON_MYPARAM1'=>array('css'=>'minwidth200','enabled'=>1),
 	'TOURNEESDELIVRAISON_MYPARAM2'=>array('css'=>'minwidth500','enabled'=>1)
 );
+
 
 /*
  * Actions
@@ -179,6 +183,7 @@ $actions=array(
 	'setsms' => "TOURNEESDELIVRAISON_SMS",
 	'setnotesupprimerentrecrochet' => 'TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE',
 	'setautorisereditiontag' => 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG',
+	'setchargerpagevide' => 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE',
 );
 
 
@@ -847,6 +852,12 @@ print "<td width=\"120\">&nbsp;</td>";
 print '<td align="right" width="120">'.$langs->trans("Value").'</td>'."\n";
 print '<td width="80">&nbsp;</td></tr>'."\n";
 
+
+AfficheLigneOnOff($langs->trans("AffichageContactIntegre"), 'TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE', 'setcontactintegre');
+AfficheLigneOnOff($langs->trans("AffichageInfoFacture"), 'TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'setafficheinfofacture');
+AfficheLigneOnOff($langs->trans("AutoriserEditionTagsClientContact"), 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'setautorisereditiontag');
+
+/*
 print '<tr class="oddeven">';
 print '<td width="80%">'.$langs->trans("AffichageContactIntegre").'</td>';
 print '<td>&nbsp</td>';
@@ -900,7 +911,7 @@ else
 }
 print '</a></td>';
 print '</tr>';
-
+*/
 
 if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
 
@@ -936,6 +947,11 @@ if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lir
 		print "</td>";
 		print '</tr>';
 	}
+
+AfficheLigneOnOff($langs->trans("ChargerPageVideTourneeUnique"), 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'setchargerpagevide');
+
+
+
 /*
 	$arrayselected=array();
 	$cate_arbo = $form->select_all_categories('customer', null, null, null, null, 1);

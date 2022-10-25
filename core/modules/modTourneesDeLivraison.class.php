@@ -250,6 +250,8 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'ouinon', '1', 'Autoriser l\'édition des tags tiers/contact dans les pages tournées', 0);
 		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'ouinon', '1', 'Charger une page vide puis la remplir petit à petit (page tournée unique)', 0);
+		$r++;
 
 		// Some keys to add into the overwriting translation tables
 		/*$this->overwrite_translation = array(

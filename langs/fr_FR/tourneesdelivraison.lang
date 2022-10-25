@@ -211,6 +211,7 @@ ListeCategoriesupplierANePasAfficher = Liste des catégories (ou groupe de caté
 ListeCategoriecontactANePasAfficher = Liste des catégories (ou groupe de catégories) contact à ne pas afficher dans les tournées
 AffichageInfoFacture = Afficher les infos des factures non réglées.
 AutoriserEditionTagsClientContact = Autoriser l'édition des tags clients/contacts dans les pages de tournées
+ChargerPageVideTourneeUnique = Charger une page vide puis la remplir petit à petit (page tournée unique)
 
 ParametresDivers = Paramètres divers
 GestionsDesSMS = Gestion des SMS
