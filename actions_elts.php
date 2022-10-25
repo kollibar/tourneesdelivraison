@@ -46,6 +46,65 @@ else if ($action == 'unsetnocmde_elt' && ! empty($permissiontonote) && ! GETPOST
 }
 
 
+
+
+  else if ($action == 'settag_tiers' && ! empty($user->rights->societe->creer) && !empty($user->rights->categorie->lire)  && ! GETPOST('cancel','alpha')) {
+
+    $line=$object->getLineById($lineid);
+    if( $line==null) setEventMessages($object->error, $object->errors, 'errors');
+    else {
+
+
+      $c=new Categorie($db);
+    	$existing = $c->containing($line->fk_soc, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier', 'id');
+
+      $existing = array_intersect($existing, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure);
+
+
+    //Catégories
+      // Categories association
+      $categories = GETPOST( 'cats', 'array' );
+
+      $societe = new Societe($line->db);
+      $societe->fetch($line->fk_soc);
+
+      $categories = array_merge($categories, $existing);
+
+
+      $result3 = $societe->setCategories($categories, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier');
+      //$result3 = $line->setCategories($categories);
+
+      if ($result3 < 0) {
+        $error++;
+        setEventMessages($object->error, $object->errors, 'errors');
+      }
+
+
+
+    if ($result3 >= 0){
+      if( empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE)){
+        $object->deleteAllDocuments();
+      }
+
+      if (empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE)) {	// génération de pdf désactivé
+        // Define output language
+        $outputlangs = $langs;
+        $newlang = GETPOST('lang_id', 'alpha');
+        if (! empty($newlang)) {
+          $outputlangs = new Translate("", $conf);
+          $outputlangs->setDefaultLang($newlang);
+        }
+
+        $object->generateAllDocuments($modellist, $outputlangs, $hidedetails, $hidedesc, $hideref);
+      }
+    }
+  }
+}
+
+
+
+
+
 	else if ($action == 'setnote_elt' && ! empty($permissiontonote) && ! GETPOST('cancel','alpha')) {
 		$line=$object->getLineById($lineid);
 		if( $line==null) setEventMessages($object->error, $object->errors, 'errors');

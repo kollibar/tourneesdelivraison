@@ -51,10 +51,11 @@ $domData .= ' data-id="'.$line->id.'"';
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
-<tr id="row-<?php echo $line->id?>" class="drag drop oddeven tournee-row <?php echo (($reload || $ligneVide )?'tournee-row-reload':'');?>" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
+<tr id="row-<?php echo $line->id;?>" class="drag drop oddeven tournee-row <?php echo (($reload || $ligneVide )?'tournee-row-reload':'');?>" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
 	<?php if( $ligneVide == false ) { ?>
 
 	<td class="linecolselect" align="center"><?php $coldisplay++; ?>
+		<input type="checkbox" id="line-select-row-<?php echo $line->id;?>" class="line-select">
 	</td>
 
 	<?php
@@ -97,7 +98,45 @@ $domData .= ' data-id="'.$line->id.'"';
 						// print $langs->trans($line->nomelement . "CategoriesShort");
 						// . '</td>';
 						//print '<td>';
-						print $form->showCategoriesExcluding($line->fk_soc, (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier'), (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure),1, 1);
+						if( $action != 'edit_tag_tiers' || $lineid != $selected || empty($user->rights->societe->creer)) {
+							print '<div>';
+							if( !empty($user->rights->categorie->lire)){
+								print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_tiers&id='.$this->id.$paramsLienLigne.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
+								print img_edit($langs->trans($val['edit note']), 1);
+								print '</a>';
+							}
+							print $form->showCategoriesExcluding($line->fk_soc, (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier'), (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure),1, 1);
+							print '</div>';
+						} else {
+							$langs->load('categories');?>
+							<form class="edit_tag_tiers" name="edit_tag_tiers-<?php echo $line->id?>" id="edit_tag_tiers-<?php echo $line->id?>" action="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $this->id . '#row-'.GETPOST('lineid'); ?>" method="POST">
+							<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
+							<input type="hidden" name="action" value="settag_tiers">
+							<input type="hidden" name="mode" value="">
+							<input type="hidden" name="var" value="<?php echo $paramsLienLigne_var;?>">
+							<input type="hidden" name="i" value="<?php echo $paramsLienLigne_i;?>">
+							<input type="hidden" name="num" value="<?php echo $paramsLienLigne_num;?>">
+							<input type="hidden" name="lineid" value="<?php echo $line->id; ?>" >
+							<input type="hidden" name="id" value="<?php echo $this->id; ?>">
+
+							<?php
+							$cate_arbo = suppressionCategories($form->select_all_categories(($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier', null, null, null, null, 1),($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure);
+
+							$c = new Categorie($db);
+							$cats = $c->containing($line->fk_soc, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier');
+							$arrayselected=array();
+							foreach ($cats as $cat) {
+								$arrayselected[] = $cat->id;
+							}
+							print $form->multiselectarray('cats', $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+							//print "</td></tr>";
+							?>
+							<input type="submit" class="button" value="<?php echo $langs->Trans("Update"); ?>" name="settag_tiers" id="settag_tiers">
+							<input type="submit" class="button" value="<?php echo $langs->Trans("Cancel"); ?>" name="" id="">
+							</form>
+							<?php
+						}
+
 						//print "</td></tr>";
 						print '</div>';
 				} ?>
@@ -520,9 +559,9 @@ $domData .= ' data-id="'.$line->id.'"';
 			<input type="hidden" name="token" value="<?php echo $_SESSION ['newtoken']; ?>">
 			<input type="hidden" name="action" value="setnote_elt">
 			<input type="hidden" name="mode" value="">
-			<input type="hidden" name="var" value="<?php $var;?>">
-			<input type="hidden" name="i" value="<?php $i;?>">
-			<input type="hidden" name="num" value="<?php $num;?>">
+			<input type="hidden" name="var" value="<?php echo $paramsLienLigne_var;?>">
+			<input type="hidden" name="i" value="<?php echo $paramsLienLigne_i;?>">
+			<input type="hidden" name="num" value="<?php echo $paramsLienLigne_num;?>">
 			<input type="hidden" name="lineid" value="<?php echo $line->id; ?>" >
 			<input type="hidden" name="id" value="<?php echo $this->id; ?>">
 			<table class="noborderbottom">

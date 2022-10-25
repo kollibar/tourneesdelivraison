@@ -1165,6 +1165,9 @@ public function LibStatut($status, $mode=0)
 
 
 		$paramsLienLigne = '&amp;var=' . $var . '&amp;num=' . $num . '&amp;i=' . $i;
+		$paramsLienLigne_var = $var;
+		$paramsLienLigne_i = $i;
+		$paramsLienLigne_num = $num;
 
 		$object_rights = $this->getRights();
 

@@ -275,3 +275,12 @@ function suppressionDataEntreCrochet($texte){
 	$texte=preg_replace('/(\[.*?\])/m', '', $texte);
 	return $texte;
 }
+
+function suppressionCategories($listeCategories, $categoriesExclues){
+	$res=array();
+	foreach ($listeCategories as $id => $texte) {
+		if( in_array($id, $categoriesExclues)) continue;
+		$res[$id]=$texte;
+	}
+	return $res;
+}

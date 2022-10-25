@@ -106,7 +106,6 @@ function mettreAjaxPartout(){
 
   $(".ajaxable").each(function(){
     if( $(this).closest(".tournee-row").length>0){
-      //$(this).attr('onclick', 'ajaxable(this);return false;');
       $(this).attr('onclick', 'return false;');
       $(this).click(ajaxable);
     }
@@ -116,6 +115,13 @@ function mettreAjaxPartout(){
     id=$(this).closest(".tournee-row").attr('id');
     lineid=id.slice(4);
     valideFormulaire_edit_note_elt(lineid);
+    event.preventDefault();
+  });
+
+  $(".edit_tag_tiers").submit(function(event){
+    id=$(this).closest(".tournee-row").attr('id');
+    lineid=id.slice(4);
+    valideFormulaire(lineid,'edit_tag_tiers');
     event.preventDefault();
   });
 
@@ -148,6 +154,37 @@ function valideFormulaire_edit_note_elt(lineid){
 
     if( url.indexOf('cats_linerow-') != -1 ){
       url=url.replaceAll('cats_linerow-'+lineid,'cats_line');
+    }
+
+    console.log("GET :"+url);
+    //$.get(url,ajaxable_callback);
+    getAjaxable(url);
+  }
+}
+
+
+function valideFormulaire(lineid, tag){
+  if( $('#'+tag+'-'+lineid).length != 0){
+    url=$('#'+tag+'-'+lineid).attr('action');
+
+    if( url.indexOf('#') != -1 ){
+      suffix=url.slice(url.indexOf('#'));
+      url=url.slice(0,url.indexOf('#'));
+    } else {
+      suffix='';
+    }
+    if( url.indexOf('?') != -1 ){
+      url=url+'&';
+    } else {
+      url=url+'?';
+    }
+
+    url=url+$('#'+tag+'-'+lineid).serialize()+suffix;
+
+    url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+    if( url.indexOf('cats-') != -1 ){
+      url=url.replaceAll('cats-'+lineid,'cats');
     }
 
     console.log("GET :"+url);
@@ -269,6 +306,9 @@ function ajaxable_callback(data, status, xhr){
   if( id.slice(0,4) == "row-"){
     if( data.indexOf('id="cats_line"') != -1 ){
       data=data.replaceAll('cats_line','cats_line'+id);
+    }
+    if( data.indexOf('id="cats_tiers"') != -1 ){
+      data=data.replaceAll('cats_tiers','cats_tiers'+id);
     }
   }
 
