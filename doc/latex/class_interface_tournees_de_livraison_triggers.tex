@@ -1,0 +1,110 @@
+\hypertarget{class_interface_tournees_de_livraison_triggers}{}\doxysection{Interface\+Tournees\+De\+Livraison\+Triggers Class Reference}
+\label{class_interface_tournees_de_livraison_triggers}\index{InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}}
+
+
+Inheritance diagram for Interface\+Tournees\+De\+Livraison\+Triggers\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_interface_tournees_de_livraison_triggers__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Interface\+Tournees\+De\+Livraison\+Triggers\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_interface_tournees_de_livraison_triggers__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_interface_tournees_de_livraison_triggers_a800f8efee13692788b13ee57c5960092}{\+\_\+\+\_\+construct}} (\$db)
+\item 
+\mbox{\hyperlink{class_interface_tournees_de_livraison_triggers_a3d0963e68bb313b163a73f2803c64600}{get\+Name}} ()
+\item 
+\mbox{\hyperlink{class_interface_tournees_de_livraison_triggers_a05cb3b7faec133ab0d720c4bd4e562ac}{get\+Desc}} ()
+\item 
+\mbox{\hyperlink{class_interface_tournees_de_livraison_triggers_a874ff1744fba5424f9d5a8298f1d5fe6}{run\+Trigger}} (\$action, \$object, User \$user, Translate \$langs, Conf \$conf)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_interface_tournees_de_livraison_triggers_a1fa3127fc82f96b1436d871ef02be319}\label{class_interface_tournees_de_livraison_triggers_a1fa3127fc82f96b1436d871ef02be319}} 
+{\bfseries \$db}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class of triggers for Tournees\+De\+Livraison module 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_interface_tournees_de_livraison_triggers_a800f8efee13692788b13ee57c5960092}\label{class_interface_tournees_de_livraison_triggers_a800f8efee13692788b13ee57c5960092}} 
+\index{InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}!\_\_construct@{\_\_construct}}
+\index{\_\_construct@{\_\_construct}!InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}}
+\doxysubsubsection{\texorpdfstring{\_\_construct()}{\_\_construct()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{}]{\$db }\end{DoxyParamCaption})}
+
+Constructor
+
+
+\begin{DoxyParams}[1]{Parameters}
+Doli\+DB & {\em \$db} & Database handler \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_interface_tournees_de_livraison_triggers_a05cb3b7faec133ab0d720c4bd4e562ac}\label{class_interface_tournees_de_livraison_triggers_a05cb3b7faec133ab0d720c4bd4e562ac}} 
+\index{InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}!getDesc@{getDesc}}
+\index{getDesc@{getDesc}!InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}}
+\doxysubsubsection{\texorpdfstring{getDesc()}{getDesc()}}
+{\footnotesize\ttfamily get\+Desc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Trigger description
+
+\begin{DoxyReturn}{Returns}
+string Description of trigger file 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interface_tournees_de_livraison_triggers_a3d0963e68bb313b163a73f2803c64600}\label{class_interface_tournees_de_livraison_triggers_a3d0963e68bb313b163a73f2803c64600}} 
+\index{InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}!getName@{getName}}
+\index{getName@{getName}!InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Trigger name
+
+\begin{DoxyReturn}{Returns}
+string Name of trigger file 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interface_tournees_de_livraison_triggers_a874ff1744fba5424f9d5a8298f1d5fe6}\label{class_interface_tournees_de_livraison_triggers_a874ff1744fba5424f9d5a8298f1d5fe6}} 
+\index{InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}!runTrigger@{runTrigger}}
+\index{runTrigger@{runTrigger}!InterfaceTourneesDeLivraisonTriggers@{InterfaceTourneesDeLivraisonTriggers}}
+\doxysubsubsection{\texorpdfstring{runTrigger()}{runTrigger()}}
+{\footnotesize\ttfamily run\+Trigger (\begin{DoxyParamCaption}\item[{}]{\$action,  }\item[{}]{\$object,  }\item[{User}]{\$user,  }\item[{Translate}]{\$langs,  }\item[{Conf}]{\$conf }\end{DoxyParamCaption})}
+
+Function called when a Dolibarrr business event is done. All functions \char`\"{}run\+Trigger\char`\"{} are triggered if file is inside directory core/triggers
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$action} & Event action code \\
+\hline
+Common\+Object & {\em \$object} & Object \\
+\hline
+User & {\em \$user} & Object user \\
+\hline
+Translate & {\em \$langs} & Object langs \\
+\hline
+Conf & {\em \$conf} & Object conf \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$0 if KO, 0 if no triggered ran, $>$0 if OK 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/triggers/\mbox{\hyperlink{interface__99__mod_tournees_de_livraison___tournees_de_livraison_triggers_8class_8php}{interface\+\_\+99\+\_\+mod\+Tournees\+De\+Livraison\+\_\+\+Tournees\+De\+Livraison\+Triggers.\+class.\+php}}\end{DoxyCompactItemize}

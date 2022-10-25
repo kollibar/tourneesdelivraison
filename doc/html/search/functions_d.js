@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['rechercher_374',['rechercher',['../classCategorie.html#a63d73b5962b946574b04a7cc4f4d0629',1,'Categorie']]],
-  ['remove_375',['remove',['../classmodTourneesDeLivraison.html#aad184c60cb2e396ffd18c07aefaa24d8',1,'modTourneesDeLivraison']]],
-  ['replacethirdparty_376',['replaceThirdparty',['../classCategorie.html#a6880185641c7a011c64c8ed81722694c',1,'Categorie']]],
-  ['runtrigger_377',['runTrigger',['../classInterfaceTourneesDeLivraisonTriggers.html#a34392924822c757838c2580b021b30a0',1,'InterfaceTourneesDeLivraisonTriggers']]]
+  ['remove_331',['remove',['../classmod_tournees_de_livraison.html#ac26eda8e83f7c0afe5b00f6355a5f97d',1,'modTourneesDeLivraison']]],
+  ['runtrigger_332',['runTrigger',['../class_interface_tournees_de_livraison_triggers.html#a874ff1744fba5424f9d5a8298f1d5fe6',1,'InterfaceTourneesDeLivraisonTriggers']]]
 ];

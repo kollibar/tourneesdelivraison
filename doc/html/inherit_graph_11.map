@@ -1,11 +1,4 @@
-<map id="Graphe hiérarchique des classes" name="Graphe hiérarchique des classes">
-<area shape="rect" id="node1" href="$classtest_1_1unit_1_1TourneeDeLivraison__lines__contactsTest.html" title="test\\unit\\TourneeDeLivraison\l_lines_contactsTest" alt="" coords="5,221,195,263"/>
-<area shape="rect" id="node2" href="$classtest_1_1unit_1_1TourneeDeLivraison__linesTest.html" title="test\\unit\\TourneeDeLivraison\l_linesTest" alt="" coords="270,5,459,47"/>
-<area shape="rect" id="node3" href="$classtest_1_1unit_1_1TourneeDeLivraison__TourneesInclusesTest.html" title="test\\unit\\TourneeDeLivraison\l_TourneesInclusesTest" alt="" coords="270,71,459,112"/>
-<area shape="rect" id="node4" href="$classtest_1_1unit_1_1TourneeDeLivraisonTest.html" title="test\\unit\\TourneeDeLivraisonTest" alt="" coords="257,137,472,163"/>
-<area shape="rect" id="node5" href="$classtest_1_1unit_1_1TourneeUnique__clients__commandes__expeditionsTest.html" title="test\\unit\\TourneeUnique\l_clients_commandes_expeditionsTest" alt="" coords="243,188,487,229"/>
-<area shape="rect" id="node6" href="$classtest_1_1unit_1_1TourneeUnique__clients__commandesTest.html" title="test\\unit\\TourneeUnique\l_clients_commandesTest" alt="" coords="279,253,450,295"/>
-<area shape="rect" id="node7" href="$classtest_1_1unit_1_1TourneeUnique__clients__contactsTest.html" title="test\\unit\\TourneeUnique\l_clients_contactsTest" alt="" coords="284,319,445,360"/>
-<area shape="rect" id="node8" href="$classtest_1_1unit_1_1TourneeUnique__clientsTest.html" title="test\\unit\\TourneeUnique\l_clientsTest" alt="" coords="284,384,445,425"/>
-<area shape="rect" id="node9" href="$classtest_1_1unit_1_1TourneeUniqueTest.html" title="test\\unit\\TourneeUniqueTest" alt="" coords="271,450,458,477"/>
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,148,32"/>
+<area shape="rect" id="node2" href="$classpdf__crabe_message_alerte.html" title=" " alt="" coords="196,5,363,32"/>
 </map>

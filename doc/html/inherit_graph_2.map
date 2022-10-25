@@ -1,16 +1,3 @@
-<map id="Graphe hiérarchique des classes" name="Graphe hiérarchique des classes">
-<area shape="rect" id="node2" href="$classCategorie.html" title="Categorie" alt="" coords="181,181,259,208"/>
-<area shape="rect" id="node3" href="$classTourneeObject.html" title="TourneeObject" alt="" coords="167,232,273,259"/>
-<area shape="rect" id="node4" href="$classTourneeGeneric.html" title="TourneeGeneric" alt="" coords="355,56,470,83"/>
-<area shape="rect" id="node7" href="$classTourneeGeneric__lines.html" title="TourneeGeneric_lines" alt="" coords="339,173,487,200"/>
-<area shape="rect" id="node11" href="$classTourneeGeneric__lines__contacts.html" title="TourneeGeneric_lines\l_contacts" alt="" coords="339,225,487,266"/>
-<area shape="rect" id="node14" href="$classTourneeUnique__lines__cmde.html" title="TourneeUnique_lines_cmde" alt="" coords="321,291,504,317"/>
-<area shape="rect" id="node15" href="$classTourneeUnique__lines__cmde__elt.html" title="TourneeUnique_lines\l_cmde_elt" alt="" coords="341,342,485,383"/>
-<area shape="rect" id="node5" href="$classTourneeDeLivraison.html" title="TourneeDeLivraison" alt="" coords="555,5,693,32"/>
-<area shape="rect" id="node6" href="$classTourneeUnique.html" title="TourneeUnique" alt="" coords="569,56,679,83"/>
-<area shape="rect" id="node8" href="$classTourneeDeLivraison__lines.html" title="TourneeDeLivraison\l_lines" alt="" coords="555,107,693,149"/>
-<area shape="rect" id="node9" href="$classTourneeUnique__lines.html" title="TourneeUnique_lines" alt="" coords="552,173,696,200"/>
-<area shape="rect" id="node10" href="$classTourneesdelivraison.html" title="Tourneesdelivraison" alt="" coords="744,173,883,200"/>
-<area shape="rect" id="node12" href="$classTourneeDeLivraison__lines__contacts.html" title="TourneeDeLivraison\l_lines_contacts" alt="" coords="555,225,693,266"/>
-<area shape="rect" id="node13" href="$classTourneeUnique__lines__contacts.html" title="TourneeUnique_lines\l_contacts" alt="" coords="552,290,696,331"/>
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_dolibarr_api_access.html" title=" " alt="" coords="5,5,136,32"/>
 </map>

@@ -1,0 +1,205 @@
+\hypertarget{class_my_object_api}{}\doxysection{My\+Object\+Api Class Reference}
+\label{class_my_object_api}\index{MyObjectApi@{MyObjectApi}}
+
+
+Inheritance diagram for My\+Object\+Api\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=153pt]{class_my_object_api__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for My\+Object\+Api\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=153pt]{class_my_object_api__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_my_object_api_a095c5d389db211932136b53f25f39685}{\+\_\+\+\_\+construct}} ()
+\item 
+\mbox{\hyperlink{class_my_object_api_a50e3bfb586b2f42932a6a93f3fbb0828}{get}} (\$id)
+\item 
+\mbox{\hyperlink{class_my_object_api_ab1d28a2d4d16a877bdefa167dc6edd5c}{index}} (\$mode, \$sortfield=\char`\"{}t.\+rowid\char`\"{}, \$sortorder=\textquotesingle{}A\+SC\textquotesingle{}, \$limit=0, \$page=0, \$sqlfilters=\textquotesingle{}\textquotesingle{})
+\item 
+\mbox{\hyperlink{class_my_object_api_a58668380c25fc71bbec423946b4a3d8d}{post}} (\$request\+\_\+data=N\+U\+LL)
+\item 
+\mbox{\hyperlink{class_my_object_api_a4e1583b81e9a5885ebafd839408a1119}{put}} (\$id, \$request\+\_\+data=N\+U\+LL)
+\item 
+\mbox{\hyperlink{class_my_object_api_a2f8258add505482d7f00ea26493a5723}{delete}} (\$id)
+\item 
+\mbox{\hyperlink{class_my_object_api_a305707a21e1a181f965da638445cbf2f}{\+\_\+validate}} (\$data)
+\end{DoxyCompactItemize}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_my_object_api_a594b728d72e565d18af6fba910a89b10}\label{class_my_object_api_a594b728d72e565d18af6fba910a89b10}} 
+{\bfseries \$myobject}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static {\bfseries \$\+F\+I\+E\+L\+DS}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_my_object_api_a095c5d389db211932136b53f25f39685}\label{class_my_object_api_a095c5d389db211932136b53f25f39685}} 
+\index{MyObjectApi@{MyObjectApi}!\_\_construct@{\_\_construct}}
+\index{\_\_construct@{\_\_construct}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{\_\_construct()}{\_\_construct()}}
+{\footnotesize\ttfamily \+\_\+\+\_\+construct (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor
+
+@url G\+ET myobject/ 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_my_object_api_a305707a21e1a181f965da638445cbf2f}\label{class_my_object_api_a305707a21e1a181f965da638445cbf2f}} 
+\index{MyObjectApi@{MyObjectApi}!\_validate@{\_validate}}
+\index{\_validate@{\_validate}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{\_validate()}{\_validate()}}
+{\footnotesize\ttfamily \+\_\+validate (\begin{DoxyParamCaption}\item[{}]{\$data }\end{DoxyParamCaption})}
+
+Validate fields before create or update object
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$data} & Data to validate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Rest\+Exception} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_my_object_api_a2f8258add505482d7f00ea26493a5723}\label{class_my_object_api_a2f8258add505482d7f00ea26493a5723}} 
+\index{MyObjectApi@{MyObjectApi}!delete@{delete}}
+\index{delete@{delete}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{delete()}{delete()}}
+{\footnotesize\ttfamily delete (\begin{DoxyParamCaption}\item[{}]{\$id }\end{DoxyParamCaption})}
+
+Delete myobject
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$id} & My\+Object ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array
+\end{DoxyReturn}
+@url D\+E\+L\+E\+TE myobject/\{id\} \mbox{\Hypertarget{class_my_object_api_a50e3bfb586b2f42932a6a93f3fbb0828}\label{class_my_object_api_a50e3bfb586b2f42932a6a93f3fbb0828}} 
+\index{MyObjectApi@{MyObjectApi}!get@{get}}
+\index{get@{get}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily get (\begin{DoxyParamCaption}\item[{}]{\$id }\end{DoxyParamCaption})}
+
+Get properties of a myobject object
+
+Return an array with myobject informations
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$id} & ID of myobject \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array$\vert$mixed data without useless information
+\end{DoxyReturn}
+@url G\+ET myobject/\{id\} 
+\begin{DoxyExceptions}{Exceptions}
+{\em Rest\+Exception} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_my_object_api_ab1d28a2d4d16a877bdefa167dc6edd5c}\label{class_my_object_api_ab1d28a2d4d16a877bdefa167dc6edd5c}} 
+\index{MyObjectApi@{MyObjectApi}!index@{index}}
+\index{index@{index}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{index()}{index()}}
+{\footnotesize\ttfamily index (\begin{DoxyParamCaption}\item[{}]{\$mode,  }\item[{}]{\$sortfield = {\ttfamily \char`\"{}t.rowid\char`\"{}},  }\item[{}]{\$sortorder = {\ttfamily \textquotesingle{}ASC\textquotesingle{}},  }\item[{}]{\$limit = {\ttfamily 0},  }\item[{}]{\$page = {\ttfamily 0},  }\item[{}]{\$sqlfilters = {\ttfamily \textquotesingle{}\textquotesingle{}} }\end{DoxyParamCaption})}
+
+List myobjects
+
+Get a list of myobjects
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$mode} & Use this param to filter list \\
+\hline
+string & {\em \$sortfield} & Sort field \\
+\hline
+string & {\em \$sortorder} & Sort order \\
+\hline
+int & {\em \$limit} & Limit for list \\
+\hline
+int & {\em \$page} & Page number \\
+\hline
+string & {\em \$sqlfilters} & Other criteria to filter answers separated by a comma. Syntax example \char`\"{}(t.\+ref\+:like\+:\textquotesingle{}\+S\+O-\/\%\textquotesingle{}) and (t.\+date\+\_\+creation\+:$<$\+:\textquotesingle{}20160101\textquotesingle{}) or (t.\+import\+\_\+key\+:=\+:\textquotesingle{}20160101\textquotesingle{})\char`\"{} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of myobject objects
+\end{DoxyReturn}
+@url G\+ET /myobjects/ \mbox{\Hypertarget{class_my_object_api_a58668380c25fc71bbec423946b4a3d8d}\label{class_my_object_api_a58668380c25fc71bbec423946b4a3d8d}} 
+\index{MyObjectApi@{MyObjectApi}!post@{post}}
+\index{post@{post}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{post()}{post()}}
+{\footnotesize\ttfamily post (\begin{DoxyParamCaption}\item[{}]{\$request\+\_\+data = {\ttfamily NULL} }\end{DoxyParamCaption})}
+
+Create myobject object
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$request\+\_\+data} & Request datas \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int ID of myobject
+\end{DoxyReturn}
+@url P\+O\+ST myobject/ \mbox{\Hypertarget{class_my_object_api_a4e1583b81e9a5885ebafd839408a1119}\label{class_my_object_api_a4e1583b81e9a5885ebafd839408a1119}} 
+\index{MyObjectApi@{MyObjectApi}!put@{put}}
+\index{put@{put}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{put()}{put()}}
+{\footnotesize\ttfamily put (\begin{DoxyParamCaption}\item[{}]{\$id,  }\item[{}]{\$request\+\_\+data = {\ttfamily NULL} }\end{DoxyParamCaption})}
+
+Update myobject
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$id} & Id of myobject to update \\
+\hline
+array & {\em \$request\+\_\+data} & Datas \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int
+\end{DoxyReturn}
+@url P\+UT myobject/\{id\} 
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{class_my_object_api_a2e319c84d672043fa6d06d2552063929}\label{class_my_object_api_a2e319c84d672043fa6d06d2552063929}} 
+\index{MyObjectApi@{MyObjectApi}!\$FIELDS@{\$FIELDS}}
+\index{\$FIELDS@{\$FIELDS}!MyObjectApi@{MyObjectApi}}
+\doxysubsubsection{\texorpdfstring{\$FIELDS}{$FIELDS}}
+{\footnotesize\ttfamily \$F\+I\+E\+L\+DS\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= array(}
+\DoxyCodeLine{        \textcolor{stringliteral}{'name'}}
+\DoxyCodeLine{    )}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+class/\mbox{\hyperlink{api__myobject_8class_8php}{api\+\_\+myobject.\+class.\+php}}\end{DoxyCompactItemize}

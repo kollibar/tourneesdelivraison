@@ -1,4 +1,4 @@
-\hypertarget{setup_8php}{}\doxysection{Référence du fichier admin/setup.php}
+\hypertarget{setup_8php}{}\doxysection{admin/setup.php File Reference}
 \label{setup_8php}\index{admin/setup.php@{admin/setup.php}}
 
 
@@ -97,40 +97,46 @@ print {\bfseries \$\+\_\+\+S\+E\+R\+V\+ER} \mbox{[}\textquotesingle{}P\+H\+P\+\_
 \mbox{\Hypertarget{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}\label{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}} 
 print {\bfseries \$\+\_\+\+S\+E\+S\+S\+I\+ON} \mbox{[}\textquotesingle{}newtoken\textquotesingle{}\mbox{]}
 \item 
-\mbox{\Hypertarget{setup_8php_a412c4462b7cd20123e45d8888a0c772e}\label{setup_8php_a412c4462b7cd20123e45d8888a0c772e}} 
-print \$conf global {\bfseries T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+U\+R\+L\+\_\+\+O\+R\+I\+G\+IN}
+\mbox{\Hypertarget{setup_8php_aca40ecd65a8dd5ea5ca7954000efafb6}\label{setup_8php_aca40ecd65a8dd5ea5ca7954000efafb6}} 
+print$<$ td width=\textbackslash{}\char`\"{}120\textbackslash{}\char`\"{}$>$ \& {\bfseries nbsp}
 \item 
-\mbox{\Hypertarget{setup_8php_a99c58aee88d8b9d06af605e1d2564e4e}\label{setup_8php_a99c58aee88d8b9d06af605e1d2564e4e}} 
-print \$conf global {\bfseries T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+U\+R\+L\+\_\+\+R\+E\+P\+L\+A\+CE}
+\mbox{\Hypertarget{setup_8php_a2b596c6f93d14726cedde094189e00c4}\label{setup_8php_a2b596c6f93d14726cedde094189e00c4}} 
+print {\bfseries \$\+\_\+\+S\+E\+R\+V\+ER} \mbox{[}\textquotesingle{}P\+H\+P\+\_\+\+S\+E\+LF\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}\label{setup_8php_aaaa3bcf5b2223199f799002520f91bd7}} 
+print {\bfseries \$\+\_\+\+S\+E\+S\+S\+I\+ON} \mbox{[}\textquotesingle{}newtoken\textquotesingle{}\mbox{]}
 \item 
 {\bfseries \$avertissements}
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Description détaillée}
+\doxysubsection{Detailed Description}
 Tournees\+De\+Livraison setup page. 
 
 
 
-\doxysubsection{Documentation des variables}
+\doxysubsection{Variable Documentation}
 \mbox{\Hypertarget{setup_8php_a62c199dfc9bd2ea2c5002e821c541fae}\label{setup_8php_a62c199dfc9bd2ea2c5002e821c541fae}} 
 \index{setup.php@{setup.php}!\$actions@{\$actions}}
 \index{\$actions@{\$actions}!setup.php@{setup.php}}
 \doxysubsubsection{\texorpdfstring{\$actions}{$actions}}
 {\footnotesize\ttfamily if ((float) D\+O\+L\+\_\+\+V\+E\+R\+S\+I\+ON $>$=6) if ( \$action==\textquotesingle{}specimen\textquotesingle{}) else if ( \$action==\textquotesingle{}set\textquotesingle{}) else if ( \$action==\textquotesingle{}del\textquotesingle{}) else if ( \$action==\textquotesingle{}setdoc\textquotesingle{}) if (\$action==\textquotesingle{}setavertissement\textquotesingle{}) \$actions}
 
-{\bfseries Valeur initiale \+:}
+{\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=array(}
 \DoxyCodeLine{    }
 \DoxyCodeLine{    \textcolor{stringliteral}{'setpdfautodelete'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_DISABLE\_PDF\_AUTODELETE'},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setpdfautoupdate'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_DISABLE\_PDF\_AUTOUPDATE'},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setcontactintegre'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_AFFICHAGE\_CONTACT\_INTEGRE"},}
+\DoxyCodeLine{    \textcolor{stringliteral}{'setafficheinfofacture'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_AFFICHER\_INFO\_FACTURES'},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setpoidsbl'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_POIDS\_BL"},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setaffectautodateok'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_DATELIVRAISONOK"},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setaffectautosi1eltparcmde'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_SI\_1ELT\_PAR\_CMDE"},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setaffectauto1erecmde'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_REGLES\_AFFECTAUTO\_AFFECTAUTO\_1ERE\_FUTURE\_CMDE"},}
 \DoxyCodeLine{    \textcolor{stringliteral}{'setsms'} => \textcolor{stringliteral}{"TOURNEESDELIVRAISON\_SMS"},}
+\DoxyCodeLine{    \textcolor{stringliteral}{'setnotesupprimerentrecrochet'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_NOTE\_SUPPRIMER\_ENTRE\_CROCHET\_COMMANDE'},}
+\DoxyCodeLine{    \textcolor{stringliteral}{'setautorisereditiontag'} => \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_AUTORISER\_EDITION\_TAG'},}
 \DoxyCodeLine{)}
 
 \end{DoxyCode}
@@ -140,7 +146,7 @@ Tournees\+De\+Livraison setup page.
 \doxysubsubsection{\texorpdfstring{\$arrayofparameters}{$arrayofparameters}}
 {\footnotesize\ttfamily \$arrayofparameters}
 
-{\bfseries Valeur initiale \+:}
+{\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=array(}
 \DoxyCodeLine{    \textcolor{stringliteral}{'TOURNEESDELIVRAISON\_MYPARAM1'}=>array(\textcolor{stringliteral}{'css'}=>\textcolor{stringliteral}{'minwidth200'},\textcolor{stringliteral}{'enabled'}=>1),}
@@ -154,7 +160,7 @@ Tournees\+De\+Livraison setup page.
 \doxysubsubsection{\texorpdfstring{\$arrval}{$arrval}}
 {\footnotesize\ttfamily \$arrval}
 
-{\bfseries Valeur initiale \+:}
+{\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=array(\textcolor{charliteral}{'0'}=>\$langs-\/>trans(\textcolor{stringliteral}{"No"}),}
 \DoxyCodeLine{\textcolor{charliteral}{'1'}=>\$langs-\/>trans(\textcolor{stringliteral}{"Yes"}).\textcolor{stringliteral}{' ('}.\$langs-\/>trans(\textcolor{stringliteral}{"AffectationsManuellesSeulement"},1).\textcolor{charliteral}{')'},}
@@ -168,7 +174,7 @@ Tournees\+De\+Livraison setup page.
 \doxysubsubsection{\texorpdfstring{\$avertissements}{$avertissements}}
 {\footnotesize\ttfamily \$avertissements}
 
-{\bfseries Valeur initiale \+:}
+{\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{= array(\textcolor{stringliteral}{'Delete'} => \$conf-\/>global-\/>TOURNEESDELIVRAISON\_ASK\_DELETE,}
 \DoxyCodeLine{                                                \textcolor{stringliteral}{'Cancel'} => \$conf-\/>global-\/>TOURNEESDELIVRAISON\_ASK\_CANCEL,}
@@ -192,13 +198,13 @@ Tournees\+De\+Livraison setup page.
 \DoxyCodeLine{                                            )}
 
 \end{DoxyCode}
-\mbox{\Hypertarget{setup_8php_a2720c08c907ff39c34df1404f153f715}\label{setup_8php_a2720c08c907ff39c34df1404f153f715}} 
+\mbox{\Hypertarget{setup_8php_a7663a9e728649c893f477f6299db0432}\label{setup_8php_a7663a9e728649c893f477f6299db0432}} 
 \index{setup.php@{setup.php}!else@{else}}
 \index{else@{else}!setup.php@{setup.php}}
 \doxysubsubsection{\texorpdfstring{else}{else}}
-{\footnotesize\ttfamily if (!empty( \$conf-\/$>$global-\/$>$T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+A\+F\+F\+I\+C\+H\+A\+G\+E\+\_\+\+C\+O\+N\+T\+A\+C\+T\+\_\+\+I\+N\+T\+E\+G\+RE)) else}
+{\footnotesize\ttfamily if (!empty( \$conf-\/$>$global-\/$>$T\+O\+U\+R\+N\+E\+E\+S\+D\+E\+L\+I\+V\+R\+A\+I\+S\+O\+N\+\_\+\+S\+MS)) else}
 
-{\bfseries Valeur initiale \+:}
+{\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\{}
 \DoxyCodeLine{    print \textcolor{stringliteral}{'<a href="'}.\$\_SERVER[\textcolor{stringliteral}{'PHP\_SELF'}].\textcolor{stringliteral}{'?action=setaffectautodateok\&value=1">'}}

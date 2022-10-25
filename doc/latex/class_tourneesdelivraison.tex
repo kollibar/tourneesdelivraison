@@ -1,0 +1,187 @@
+\hypertarget{class_tourneesdelivraison}{}\doxysection{Tourneesdelivraison Class Reference}
+\label{class_tourneesdelivraison}\index{Tourneesdelivraison@{Tourneesdelivraison}}
+
+
+Inheritance diagram for Tourneesdelivraison\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{class_tourneesdelivraison__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Tourneesdelivraison\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{class_tourneesdelivraison__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_ace46836fcfebd269281e57e971d340cb}{fetch}} (\$id, \$ref=null)
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_a472ab29daa683f2356f6e1ac38ce3830}{delete}} (User \$user, \$notrigger=false)
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_a58b46de62df1ee4034e9cef3db8118db}{fetch\+\_\+lines}} ()
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_abe8a3e5788312cae25efc40d8f577999}{get\+Nom\+Url}} (\$withpicto=0, \$option=\textquotesingle{}\textquotesingle{}, \$notooltip=0, \$morecss=\textquotesingle{}\textquotesingle{}, \$save\+\_\+lastsearch\+\_\+value=-\/1)
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_a6c49090347eb54ea1a5b3f6750076995}{get\+Lib\+Statut}} (\$mode=0)
+\item 
+\mbox{\hyperlink{class_tourneesdelivraison_a31c9cefb5605511b3d28678e3359698b}{Lib\+Statut}} (\$status, \$mode=0)
+\end{DoxyCompactItemize}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_tourneesdelivraison_ab752ee21c2ece31fd847b399de3ce627}\label{class_tourneesdelivraison_ab752ee21c2ece31fd847b399de3ce627}} 
+{\bfseries \$date\+\_\+livraison}
+\item 
+\mbox{\Hypertarget{class_tourneesdelivraison_a4c1171be5f3916c15bc302544c9931b5}\label{class_tourneesdelivraison_a4c1171be5f3916c15bc302544c9931b5}} 
+{\bfseries \$thirdparty}
+\item 
+\mbox{\Hypertarget{class_tourneesdelivraison_ab56d1ff81f92d30e34df62e895565f8d}\label{class_tourneesdelivraison_ab56d1ff81f92d30e34df62e895565f8d}} 
+{\bfseries \$table\+\_\+element\+\_\+line} = \textquotesingle{}\textquotesingle{}
+\item 
+\mbox{\Hypertarget{class_tourneesdelivraison_ae6e2e0bef43350ff64a31239393344d5}\label{class_tourneesdelivraison_ae6e2e0bef43350ff64a31239393344d5}} 
+{\bfseries \$class\+\_\+element\+\_\+line} = \textquotesingle{}\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_tourneesdelivraison_a472ab29daa683f2356f6e1ac38ce3830}\label{class_tourneesdelivraison_a472ab29daa683f2356f6e1ac38ce3830}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!delete@{delete}}
+\index{delete@{delete}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{delete()}{delete()}}
+{\footnotesize\ttfamily delete (\begin{DoxyParamCaption}\item[{User}]{\$user,  }\item[{}]{\$notrigger = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Delete object in database
+
+
+\begin{DoxyParams}[1]{Parameters}
+User & {\em \$user} & User that deletes \\
+\hline
+bool & {\em \$notrigger} & false=launch triggers after, true=disable triggers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_unique__lines_a472ab29daa683f2356f6e1ac38ce3830}{Tournee\+Unique\+\_\+lines}}.
+
+\mbox{\Hypertarget{class_tourneesdelivraison_ace46836fcfebd269281e57e971d340cb}\label{class_tourneesdelivraison_ace46836fcfebd269281e57e971d340cb}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!fetch@{fetch}}
+\index{fetch@{fetch}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{fetch()}{fetch()}}
+{\footnotesize\ttfamily fetch (\begin{DoxyParamCaption}\item[{}]{\$id,  }\item[{}]{\$ref = {\ttfamily null} }\end{DoxyParamCaption})}
+
+Load object in memory from the database
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$id} & Id object \\
+\hline
+string & {\em \$ref} & Ref \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int $<$0 if KO, 0 if not found, $>$0 if OK 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_object_ace46836fcfebd269281e57e971d340cb}{Tournee\+Object}}.
+
+\mbox{\Hypertarget{class_tourneesdelivraison_a58b46de62df1ee4034e9cef3db8118db}\label{class_tourneesdelivraison_a58b46de62df1ee4034e9cef3db8118db}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!fetch\_lines@{fetch\_lines}}
+\index{fetch\_lines@{fetch\_lines}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{fetch\_lines()}{fetch\_lines()}}
+{\footnotesize\ttfamily fetch\+\_\+lines (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Load object line in memory from the database
+
+\begin{DoxyReturn}{Returns}
+int $<$0 if KO, $>$0 if OK 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_unique__lines_a58b46de62df1ee4034e9cef3db8118db}{Tournee\+Unique\+\_\+lines}}.
+
+\mbox{\Hypertarget{class_tourneesdelivraison_a6c49090347eb54ea1a5b3f6750076995}\label{class_tourneesdelivraison_a6c49090347eb54ea1a5b3f6750076995}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!getLibStatut@{getLibStatut}}
+\index{getLibStatut@{getLibStatut}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{getLibStatut()}{getLibStatut()}}
+{\footnotesize\ttfamily get\+Lib\+Statut (\begin{DoxyParamCaption}\item[{}]{\$mode = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return label of the status
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$mode} & 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Label of status 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_generic__lines_a6c49090347eb54ea1a5b3f6750076995}{Tournee\+Generic\+\_\+lines}}.
+
+\mbox{\Hypertarget{class_tourneesdelivraison_abe8a3e5788312cae25efc40d8f577999}\label{class_tourneesdelivraison_abe8a3e5788312cae25efc40d8f577999}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!getNomUrl@{getNomUrl}}
+\index{getNomUrl@{getNomUrl}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{getNomUrl()}{getNomUrl()}}
+{\footnotesize\ttfamily get\+Nom\+Url (\begin{DoxyParamCaption}\item[{}]{\$withpicto = {\ttfamily 0},  }\item[{}]{\$option = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$notooltip = {\ttfamily 0},  }\item[{}]{\$morecss = {\ttfamily \textquotesingle{}\textquotesingle{}},  }\item[{}]{\$save\+\_\+lastsearch\+\_\+value = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+
+Return a link to the object card (with optionaly the picto)
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$withpicto} & Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto) \\
+\hline
+string & {\em \$option} & On what the link point to (\textquotesingle{}nolink\textquotesingle{}, ...) \\
+\hline
+int & {\em \$notooltip} & 1=Disable tooltip \\
+\hline
+string & {\em \$morecss} & Add more css on link \\
+\hline
+int & {\em \$save\+\_\+lastsearch\+\_\+value} & -\/1=Auto, 0=No save of lastsearch\+\_\+values when clicking, 1=Save lastsearch\+\_\+values whenclicking \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string String with U\+RL 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_generic__lines_abe8a3e5788312cae25efc40d8f577999}{Tournee\+Generic\+\_\+lines}}.
+
+\mbox{\Hypertarget{class_tourneesdelivraison_a31c9cefb5605511b3d28678e3359698b}\label{class_tourneesdelivraison_a31c9cefb5605511b3d28678e3359698b}} 
+\index{Tourneesdelivraison@{Tourneesdelivraison}!LibStatut@{LibStatut}}
+\index{LibStatut@{LibStatut}!Tourneesdelivraison@{Tourneesdelivraison}}
+\doxysubsubsection{\texorpdfstring{LibStatut()}{LibStatut()}}
+{\footnotesize\ttfamily Lib\+Statut (\begin{DoxyParamCaption}\item[{}]{\$status,  }\item[{}]{\$mode = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+Return the status
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$status} & Id status \\
+\hline
+int & {\em \$mode} & 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Label of status 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_tournee_generic__lines_a31c9cefb5605511b3d28678e3359698b}{Tournee\+Generic\+\_\+lines}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+class/tourneesdelivraison.\+class.\+php\end{DoxyCompactItemize}

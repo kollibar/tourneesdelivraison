@@ -1,0 +1,8 @@
+<map id="TourneeGeneric" name="TourneeGeneric">
+<area shape="rect" id="node1" title=" " alt="" coords="165,155,279,181"/>
+<area shape="rect" id="node4" href="$class_tournee_de_livraison.html" title=" " alt="" coords="5,229,143,256"/>
+<area shape="rect" id="node5" href="$class_tournee_unique.html" title=" " alt="" coords="167,229,277,256"/>
+<area shape="rect" id="node6" href="$class_tournee_unique___arret.html" title=" " alt="" coords="301,229,445,256"/>
+<area shape="rect" id="node2" href="$class_tournee_object.html" title=" " alt="" coords="169,80,275,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="165,5,279,32"/>
+</map>

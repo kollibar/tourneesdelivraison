@@ -1,13 +1,10 @@
 var searchData=
 [
-  ['debug_5fcats_316',['debug_cats',['../classCategorie.html#a1ce1fc39978dbc51235945c2d6ae8d97',1,'Categorie']]],
-  ['del_5ftype_317',['del_type',['../classCategorie.html#a53f7505a40a26e6283c2060b60c04a7f',1,'Categorie']]],
-  ['delete_318',['delete',['../classMyObjectApi.html#ac1e08e0702436b404e774e401603da8a',1,'MyObjectApi\delete()'],['../classCategorie.html#aef3286a2e9471dc1824af192f67e4f5d',1,'Categorie\delete()'],['../classTourneeGeneric__lines__contacts.html#a5fdfed36da55fa22ebdc8a3841235cc6',1,'TourneeGeneric_lines_contacts\delete()'],['../classTourneeObject.html#a8d652020470deae2373d86509dcc86ea',1,'TourneeObject\delete()'],['../classTourneesdelivraison.html#ac82b8478866e488f5b9eb0f745f3afbe',1,'Tourneesdelivraison\delete()'],['../classTourneeUnique__lines.html#ad0a9095e6cc9fbeb404fbc9ff283c464',1,'TourneeUnique_lines\delete()']]],
-  ['delete_5fphoto_319',['delete_photo',['../classCategorie.html#a3a9059715e0e2506e61dc81f043067bd',1,'Categorie']]],
-  ['deleteline_320',['deleteline',['../classTourneeGeneric.html#a011b211a5a70aac1d8bd559d0db8bf7f',1,'TourneeGeneric\deleteline()'],['../classTourneeGeneric__lines.html#a280da7b38a2b18847431f72d23982ff5',1,'TourneeGeneric_lines\deleteline()']]],
-  ['deletelines_321',['deletelines',['../classTourneeObject.html#a46c3bb645f096ebf1668a76f7fea0595',1,'TourneeObject']]],
-  ['deletelinescmde_322',['deletelinescmde',['../classTourneeUnique__lines.html#a97bf251efe7d4bb5f6fe020749e30d21',1,'TourneeUnique_lines']]],
-  ['doactions_323',['doActions',['../classActionsTourneesDeLivraison.html#a50689a0e292dc23ca42fff8346b5a8ad',1,'ActionsTourneesDeLivraison']]],
-  ['domassactions_324',['doMassActions',['../classActionsTourneesDeLivraison.html#ab6e65ac3262c6dc5a5e30f2a923d0b58',1,'ActionsTourneesDeLivraison']]],
-  ['doscheduledjob_325',['doScheduledJob',['../classTourneeGeneric__lines.html#a83f7a2141e6f4f31a6391d960d4e00c5',1,'TourneeGeneric_lines\doScheduledJob()'],['../classTourneeGeneric__lines__contacts.html#a8321cf8fe4c73c68569c42f7425c0f57',1,'TourneeGeneric_lines_contacts\doScheduledJob()'],['../classTourneeObject.html#a7d1b14c0a0716433c556867ffd3e0494',1,'TourneeObject\doScheduledJob()']]]
+  ['delete_287',['delete',['../class_my_object_api.html#a2f8258add505482d7f00ea26493a5723',1,'MyObjectApi\delete()'],['../class_tournee_generic__lines__contacts.html#a472ab29daa683f2356f6e1ac38ce3830',1,'TourneeGeneric_lines_contacts\delete()'],['../class_tournee_object.html#a472ab29daa683f2356f6e1ac38ce3830',1,'TourneeObject\delete()'],['../class_tourneesdelivraison.html#a472ab29daa683f2356f6e1ac38ce3830',1,'Tourneesdelivraison\delete()'],['../class_tournee_unique__lines.html#a472ab29daa683f2356f6e1ac38ce3830',1,'TourneeUnique_lines\delete()']]],
+  ['deleteline_288',['deleteline',['../class_tournee_generic.html#a5b7eba55fafa60c53fdd100385e0c5a9',1,'TourneeGeneric\deleteline()'],['../class_tournee_generic__lines.html#a5b7eba55fafa60c53fdd100385e0c5a9',1,'TourneeGeneric_lines\deleteline()']]],
+  ['deletelines_289',['deletelines',['../class_tournee_object.html#aaddcc5d1fd2e7ea75044dee81972fa7d',1,'TourneeObject']]],
+  ['deletelinescmde_290',['deletelinescmde',['../class_tournee_unique__lines.html#ab1e22d5f4e0bcdc2181914b23e7e423f',1,'TourneeUnique_lines']]],
+  ['doactions_291',['doActions',['../class_actions_tournees_de_livraison.html#a13322d95086da5fe4aa497c5dc25fee0',1,'ActionsTourneesDeLivraison']]],
+  ['domassactions_292',['doMassActions',['../class_actions_tournees_de_livraison.html#a52bfcdcb7330b5c88b0e1f85716185ce',1,'ActionsTourneesDeLivraison']]],
+  ['doscheduledjob_293',['doScheduledJob',['../class_tournee_generic__lines.html#af0a38c55fe85cfa7dfd8c2feb167149f',1,'TourneeGeneric_lines\doScheduledJob()'],['../class_tournee_generic__lines__contacts.html#af0a38c55fe85cfa7dfd8c2feb167149f',1,'TourneeGeneric_lines_contacts\doScheduledJob()'],['../class_tournee_object.html#af0a38c55fe85cfa7dfd8c2feb167149f',1,'TourneeObject\doScheduledJob()']]]
 ];

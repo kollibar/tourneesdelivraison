@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "_abcdefgilmoprstuw",
   5: "$st",
   6: "m",
-  7: "clrt"
+  7: "crt"
 };
 
 var indexSectionNames =
@@ -24,13 +24,13 @@ var indexSectionNames =
 
 var indexSectionLabels =
 {
-  0: "Tout",
-  1: "Classes",
-  2: "Espaces de nommage",
-  3: "Fichiers",
-  4: "Fonctions",
+  0: "All",
+  1: "Data Structures",
+  2: "Namespaces",
+  3: "Files",
+  4: "Functions",
   5: "Variables",
-  6: "Groupes",
+  6: "Modules",
   7: "Pages"
 };
 
