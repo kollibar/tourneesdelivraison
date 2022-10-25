@@ -51,7 +51,7 @@ $domData .= ' data-id="'.$line->id.'"';
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE tourneeline_view.tpl.php -->
-<tr id="row-<?php echo $line->id;?>" class="drag drop oddeven tournee-row <?php echo (($reload || $ligneVide )?'tournee-row-reload':'');?>" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
+<tr id="row-<?php echo $line->id;?>" class="drag drop oddeven tournee-row <?php echo (($ligneVide || ($reload && $line->id != $selected ))?'tournee-row-reload':'');?>" <?php echo $domData;?>  data="<?php echo $paramsLienLigne;?>" >
 	<?php if( $ligneVide == false ) { ?>
 
 	<td class="linecolselect" align="center"><?php $coldisplay++; ?>
@@ -98,7 +98,7 @@ $domData .= ' data-id="'.$line->id.'"';
 						// print $langs->trans($line->nomelement . "CategoriesShort");
 						// . '</td>';
 						//print '<td>';
-						if( $action != 'edit_tag_tiers' || $lineid != $selected || empty($user->rights->societe->contact->creer)) {
+						if( $action != 'edit_tag_tiers' || $line->id != $selected || empty($user->rights->societe->contact->creer)) {
 							print '<div>';
 							if( !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG) ){
 								print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_tiers&id='.$this->id.$paramsLienLigne.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
@@ -156,7 +156,7 @@ $domData .= ' data-id="'.$line->id.'"';
 								$liste[]=$contactline->fk_socpeople;
 								print '<tr class="contactlineid" id="contactlineid_'.$contactline->id.'"><td>';
 								print $contactline->getBannerContact();
-								if( $action != 'edit_tag_contact' || $lineid != $selected || $contactline->rowid != $contactlineid || empty($user->rights->societe->creer)) {
+								if( $action != 'edit_tag_contact' || $line->id != $selected || $contactline->rowid != $contactlineid || empty($user->rights->societe->creer)) {
 									print '<div>';
 									if( !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG) ){
 										print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_contact&id='.$this->id.$paramsLienLigne.'&contactlineid='.$contactline->rowid.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
@@ -619,7 +619,7 @@ $domData .= ' data-id="'.$line->id.'"';
 					foreach ($cats as $cat) {
 						$arrayselected[] = $cat->id;
 					}
-					print $form->multiselectarray('cats_line', $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+					print $form->multiselectarray('cats', $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
 					//print "</td></tr>";
 				}
 				?>

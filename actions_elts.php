@@ -61,39 +61,39 @@ else if ($action == 'settag_contact' && !empty($conf->global->TOURNEESDELIVRAISO
     // Categories association
     $categories = GETPOST( 'cats', 'array' );
 
-    $contact = new Contact($line->db);
-    $contact->fetch($linecontact->fk_socpeople);
+    $staticcontact = new Contact($line->db);
+    $staticcontact->id = $linecontact->fk_socpeople;
 
     $categories = array_merge($categories, $existing);
 
-    $result3 = $contact->setCategories($categories,'contact');
+    $result3 = $staticcontact->setCategories($categories,'contact');
     //$result3 = $line->setCategories($categories);
+
+    unset($staticcontact);
 
     if ($result3 < 0) {
       $error++;
       setEventMessages($object->error, $object->errors, 'errors');
     }
 
-
-
-  if ($result3 >= 0){
-    if( empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE)){
-      $object->deleteAllDocuments();
-    }
-
-    if (empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE)) {	// génération de pdf désactivé
-      // Define output language
-      $outputlangs = $langs;
-      $newlang = GETPOST('lang_id', 'alpha');
-      if (! empty($newlang)) {
-        $outputlangs = new Translate("", $conf);
-        $outputlangs->setDefaultLang($newlang);
+    if ($result3 >= 0){
+      if( empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE)){
+        $object->deleteAllDocuments();
       }
 
-      $object->generateAllDocuments($modellist, $outputlangs, $hidedetails, $hidedesc, $hideref);
+      if (empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE)) {	// génération de pdf désactivé
+        // Define output language
+        $outputlangs = $langs;
+        $newlang = GETPOST('lang_id', 'alpha');
+        if (! empty($newlang)) {
+          $outputlangs = new Translate("", $conf);
+          $outputlangs->setDefaultLang($newlang);
+        }
+
+        $object->generateAllDocuments($modellist, $outputlangs, $hidedetails, $hidedesc, $hideref);
+      }
     }
   }
-}
 }
 
 
@@ -108,7 +108,6 @@ else if ($action == 'settag_contact' && !empty($conf->global->TOURNEESDELIVRAISO
 
       $c=new Categorie($db);
     	$existing = $c->containing($line->fk_soc, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier', 'id');
-
       $existing = array_intersect($existing, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure);
 
 
@@ -116,14 +115,15 @@ else if ($action == 'settag_contact' && !empty($conf->global->TOURNEESDELIVRAISO
       // Categories association
       $categories = GETPOST( 'cats', 'array' );
 
-      $societe = new Societe($line->db);
-      $societe->fetch($line->fk_soc);
+      $staticsociete = new Societe($line->db);
+      $staticsociete->id = $line->fk_soc;
 
       $categories = array_merge($categories, $existing);
 
 
-      $result3 = $societe->setCategories($categories, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier');
+      $result3 = $staticsociete->setCategories($categories, ($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier');
       //$result3 = $line->setCategories($categories);
+      unset($staticsociete);
 
       if ($result3 < 0) {
         $error++;
@@ -176,7 +176,7 @@ else if ($action == 'settag_contact' && !empty($conf->global->TOURNEESDELIVRAISO
 		if (!empty($user->rights->categorie->lire))
 		{
 			// Categories association
-			$categories = GETPOST( 'cats_line', 'array' );
+			$categories = GETPOST( 'cats', 'array' );
 
 			$result3 = $line->setCategories($categories, $object->element);
 			//$result3 = $line->setCategories($categories);

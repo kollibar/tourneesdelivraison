@@ -87,6 +87,7 @@ function supprimeLigne(rowid){
 Fonction pour l'ajaxisation
 */
 let listeGET = new Array();
+let listeGETattente=new Array();
 
 function auChargementNouvelleLigne(elt){
   mettreAjaxPartout(elt);
@@ -94,6 +95,32 @@ function auChargementNouvelleLigne(elt){
   onStartEdition(elt);
 }
 
+function reload(){
+  $(".tournee-row-reload").each(function(){
+    id=$(this).attr('id');
+    params=$(this).attr('data').slice(1);
+
+    lineid=id.slice(4);
+    url=$(location).attr('href').slice($(location).attr('href').indexOf($(location).attr('pathname')));
+    if( url.indexOf('#') != -1 ){
+      suffix=url.slice(url.indexOf('#'));
+      url=url.slice(0,url.indexOf('#'));
+    } else {
+      suffix='';
+    }
+    if( url.indexOf('?') != -1 ){
+      url=url+'&';
+    } else {
+      url=url+'?';
+    }
+    url = url + 'lineid='+lineid + '&' + params + suffix;
+    url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
+
+    getAjaxable(url, lineid);
+  });
+
+  setTimeout(reload, 1000*60*5);
+}
 function mettreAjaxPartout(){
   $(".askActionAjaxable").each(function(){
     if( $(this).closest(".tournee-row").length>0 ) $(this).attr("href", $(this).attr("href") + $(this).closest(".tournee-row").attr("data"));
@@ -111,64 +138,22 @@ function mettreAjaxPartout(){
     }
   });
 
-  $(".edit_note_elt").submit(function(event){
-    id=$(this).closest(".tournee-row").attr('id');
-    lineid=id.slice(4);
-    valideFormulaire_edit_note_elt(lineid);
-    event.preventDefault();
-  });
+  listeFormulaires=Array("edit_note_elt", "edit_tag_tiers", "edit_tag_tiers");
 
-  $(".edit_tag_tiers").submit(function(event){
-    id=$(this).closest(".tournee-row").attr('id');
-    lineid=id.slice(4);
-    valideFormulaire(lineid,'edit_tag_tiers');
-    event.preventDefault();
-  });
+  listeFormulaires.forEach(function(item, index, array){
+    $('.'+item).submit(function(event){
+      id=$(this).closest(".tournee-row").attr('id');
+      lineid=id.slice(4);
+      valideFormulaire(lineid,item);
+      event.preventDefault();
+    });
 
-  $(".edit_tag_contact").submit(function(event){
-    id=$(this).closest(".tournee-row").attr('id');
-    lineid=id.slice(4);
-    valideFormulaire(lineid,'edit_tag_contact');
-    event.preventDefault();
-  });
-
-
-  $('.edit_note_elt').find("input[name='']").click(function(){
-    id=$(this).closest(".tournee-row").attr('id');
-    $('#'+id).find("input[name='action']").attr('value',''); // met l'action à 0
+    $('.'+item).find("input[name='']").click(function(){
+      id=$(this).closest(".tournee-row").attr('id');
+      $('#'+id).find("input[name='action']").attr('value',''); // met l'action à 0
+    });
   });
 }
-
-function valideFormulaire_edit_note_elt(lineid){
-  if( $('#edit_note_elt-'+lineid).length != 0){
-    url=$('#edit_note_elt-'+lineid).attr('action');
-
-    if( url.indexOf('#') != -1 ){
-      suffix=url.slice(url.indexOf('#'));
-      url=url.slice(0,url.indexOf('#'));
-    } else {
-      suffix='';
-    }
-    if( url.indexOf('?') != -1 ){
-      url=url+'&';
-    } else {
-      url=url+'?';
-    }
-
-    url=url+$('#edit_note_elt-'+lineid).serialize()+suffix;
-
-    url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
-
-    if( url.indexOf('cats_linerow-') != -1 ){
-      url=url.replaceAll('cats_linerow-'+lineid,'cats_line');
-    }
-
-    console.log("GET :"+url);
-    //$.get(url,ajaxable_callback);
-    getAjaxable(url);
-  }
-}
-
 
 function valideFormulaire(lineid, tag){
   if( $('#'+tag+'-'+lineid).length != 0){
@@ -194,16 +179,73 @@ function valideFormulaire(lineid, tag){
       url=url.replaceAll('cats-'+lineid,'cats');
     }
 
-    console.log("GET :"+url);
-    //$.get(url,ajaxable_callback);
-    getAjaxable(url);
+    getAjaxable(url, lineid);
   }
 }
 
-function getAjaxable(url){
+function getAjaxable(url, lineid=0, action=''){
   if( listeGET.includes(url) ) return;
 
+  if( action == '' ){
+    pos = url.indexOf('action=');
+
+    if( pos >= 0 ){
+        pos2=url.indexOf('&', pos+7);
+        if( pos2 >= 0){
+          action = url.slice(pos+7, pos2);
+        } else {
+
+          action = url.slice(pos+7);
+        }
+    } else {
+      action='';
+    }
+  }
+
+  if( listeGET.length > 1 ){
+    console.log("GET en attente:"+url);
+
+    obj=new Object();
+    obj.url=url;
+    obj.lineid=lineid;
+    obj.action=action;
+
+    var i=0;
+    lastAction=0;
+
+    console.log('i:'+i);
+    if( listeGETattente.length >0) {
+
+      while(i < listeGETattente.length){
+        console.log('listeGETattente.length:'+listeGETattente.length);
+        if( listeGETattente[i].action != '' ) lastAction=i;
+
+        if( listeGETattente[i].lineid == obj.lineid && action == ''){
+          listeGETattente.splice(i,1);
+          i--;
+        }
+
+        i=i+1;
+      }
+
+      if( obj.action != '' ) {
+        t1=listeGETattente.splice(0,lastAction+1);
+        t2=listeGETattente.splice(lastAction+1);
+
+        console.log('GOTO:'+lastAction+1);
+
+        t1.push(obj);
+        listeGETattente = t1.concat(t2);
+      }
+      else listeGETattente.push(obj);
+    } else listeGETattente.push(obj);
+
+    return;
+  }
+
   listeGET.push(url);
+
+  console.log("GET :"+url);
 
   $.ajax({
     type: 'get',
@@ -243,14 +285,14 @@ function ajaxable(){
   id=$(this).closest(".tournee-row").attr('id');
 
   url=$(this).attr('href');
+
   url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
-  console.log("GET :"+url);
-
-  getAjaxable(url);
+  getAjaxable(url, id);
 }
 
 function ajaxable_callback(data, status, xhr){
+
   // recherche de la 1ere balise
   i=-1;
   do{
@@ -308,6 +350,11 @@ function ajaxable_callback(data, status, xhr){
   if( ok==false ) {
     //console.log("erreur");
     return;
+  }
+
+  if( listeGETattente.length > 0 ){
+    obj=listeGETattente.shift();
+    getAjaxable(obj.url);
   }
 
   if( id.slice(0,4) == "row-"){
