@@ -87,10 +87,21 @@ $langs->loadLangs(array("tourneesdelivraison@tourneesdelivraison","other","order
 
 // Get parameters
 $tourneeid			= GETPOST('id', 'int');
-$lineid = GETPOST('lineid', 'int');
+
+$action		= GETPOST('action', 'aZ09');
+
+if( GETPOSTISSET('lineid')){
+		if( GETPOST('lineid','az09') == 'recap' ){
+			$lineid=-1;
+			$action='get_ligne_recap';
+		} else $lineid = GETPOST('lineid', 'int');
+} else {
+	$lineid=-1;
+}
+
 $contactid = GETPOST('contactid', 'int');
 $ref        = GETPOST('ref', 'alpha');
-$action		= GETPOST('action', 'aZ09');
+
 $confirm    = GETPOST('confirm', 'alpha');
 $cancel     = GETPOST('cancel', 'aZ09');
 $contextpage= GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):$typetournee.'card';   // To manage different context of search
@@ -104,110 +115,120 @@ $statutTournee = GETPOST('statutTournee', 'int');
 if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison($db);
 else $object = new TourneeUnique($db);
 
-if( empty($object) && ! empty($lineid) ){
-	$sql = 'SELECT `fk_tournee` FROM ' . MAIN_DB_PREFIX . $typetournee . '_lines WHERE `rowid` = ' . $lineid;
+if( $lineid == -1){
+	/* *****************
+	* mode tournée
+	**********************/
 
-	dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
-	$result = $db->query($sql);
-	if ($result)
+	$id=$tourneeid;
+	// Initialize technical objects
+	if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison($db);
+	else $object = new TourneeUnique($db);
+
+	$extrafields = new ExtraFields($db);
+	$diroutputmassaction=$conf->tourneesdelivraison->dir_output . '/temp/massgeneration/'.$user->id;
+	$hookmanager->initHooks(array($typetournee.'card','globalcard'));     // Note that conf->hooks_modules contains array
+	// Fetch optionals attributes and labels
+	$extralabels = $extrafields->fetch_name_optionals_label($object->table_element);
+	$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
+
+	// Initialize array of search criterias
+	$search_all=trim(GETPOST("search_all",'alpha'));
+	$search=array();
+	foreach($object->fields as $key => $val)
 	{
-		$num = $db->num_rows($result);
-		if( i> 0 ){
-			$objp = $db->fetch_object($result);
-			$tourneeid = $objp->fk_tournee;
-		}
-
-		$db->free($result);
+		if (GETPOST('search_'.$key,'alpha')) $search[$key]=GETPOST('search_'.$key,'alpha');
 	}
-	/*
-	else
-	{
-		$this->error=$db->error();
-		return -3;
-	}*/
-}
 
-if( empty($statutTournee) || empty($dateTournee)){
-	$sql = 'SELECT statut, date_tournee FROM ' . MAIN_DB_PREFIX . $typetournee . ' WHERE `rowid`=' . $tourneeid;
+	if (empty($action) && empty($id) && empty($ref)) $action='view';
 
-	dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
-	$result = $db->query($sql);
-	if ($result)
-	{
-		if( $db->num_rows($result) > 0 ){
-			$objp = $db->fetch_object($result);
-			$statutTournee = $objp->statut;
-			$dateTournee = $objp->date_tournee;
+	// Load object
+	include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
+
+} else {
+	/* *****************
+	* mode tournée_line
+	**********************/
+	if( empty($object) && ! empty($lineid) ){
+		$sql = 'SELECT `fk_tournee` FROM ' . MAIN_DB_PREFIX . $typetournee . '_lines WHERE `rowid` = ' . $lineid;
+
+		dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
+		$result = $db->query($sql);
+		if ($result)
+		{
+			$num = $db->num_rows($result);
+			if( i> 0 ){
+				$objp = $db->fetch_object($result);
+				$tourneeid = $objp->fk_tournee;
+			}
+
+			$db->free($result);
 		}
-		$db->free($result);
+		/*
+		else
+		{
+			$this->error=$db->error();
+			return -3;
+		}*/
 	}
-	/*
-	else
-	{
-		$this->error=$db->error();
-		return -3;
-	}*/
-}
 
+	if( empty($statutTournee) || empty($dateTournee)){
+		$sql = 'SELECT statut, date_tournee FROM ' . MAIN_DB_PREFIX . $typetournee . ' WHERE `rowid`=' . $tourneeid;
 
-// Initialize technical objects
-if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison_lines($db);
-else $object = new TourneeUnique_lines($db);
-
-$id=$lineid;
-
-$extrafields = new ExtraFields($db);
-$diroutputmassaction=$conf->tourneesdelivraison->dir_output . '/temp/massgeneration/'.$user->id;
-$hookmanager->initHooks(array($typetournee.'card','globalcard'));     // Note that conf->hooks_modules contains array
-// Fetch optionals attributes and labels
-$extralabels = $extrafields->fetch_name_optionals_label($object->table_element);
-$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
-
-// Initialize array of search criterias
-$search_all=trim(GETPOST("search_all",'alpha'));
-$search=array();
-foreach($object->fields as $key => $val)
-{
-	if (GETPOST('search_'.$key,'alpha')) $search[$key]=GETPOST('search_'.$key,'alpha');
-}
-
-if (empty($action) && empty($id) && empty($ref)) $action='view';
-
-// Load object
-include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
-$line=$object;
-unset($object);
-
-if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison($db);
-else $object = new TourneeUnique($db);
-
-$object->miniLoad($tourneeid, $statutTournee);
-$line->tournee=$object;
-
-/*
-if( $typetournee == 'tourneeunique' ){
-	if( empty($noCheck) || $noCheck != true ){
-		if( $statutTournee == TourneeGeneric::STATUS_VALIDATED && $dateTournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
-			$line->checkCommande($user, $dateTournee);
+		dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
+		$result = $db->query($sql);
+		if ($result)
+		{
+			if( $db->num_rows($result) > 0 ){
+				$objp = $db->fetch_object($result);
+				$statutTournee = $objp->statut;
+				$dateTournee = $objp->date_tournee;
+			}
+			$db->free($result);
 		}
-		$line->checkElt($user);
+		/*
+		else
+		{
+			$this->error=$db->error();
+			return -3;
+		}*/
 	}
+
+
+	// Initialize technical objects
+	if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison_lines($db);
+	else $object = new TourneeUnique_lines($db);
+
+	$id=$lineid;
+
+	$extrafields = new ExtraFields($db);
+	$diroutputmassaction=$conf->tourneesdelivraison->dir_output . '/temp/massgeneration/'.$user->id;
+	$hookmanager->initHooks(array($typetournee.'card','globalcard'));     // Note that conf->hooks_modules contains array
+	// Fetch optionals attributes and labels
+	$extralabels = $extrafields->fetch_name_optionals_label($object->table_element);
+	$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
+
+	// Initialize array of search criterias
+	$search_all=trim(GETPOST("search_all",'alpha'));
+	$search=array();
+	foreach($object->fields as $key => $val)
+	{
+		if (GETPOST('search_'.$key,'alpha')) $search[$key]=GETPOST('search_'.$key,'alpha');
+	}
+
+	if (empty($action) && empty($id) && empty($ref)) $action='view';
+
+	// Load object
+	include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
+	$line=$object;
+	unset($object);
+
+	if( $typetournee == 'tourneedelivraison')  $object=new TourneeDeLivraison($db);
+	else $object = new TourneeUnique($db);
+
+	$object->miniLoad($tourneeid, $statutTournee, array($line));
+	$line->tournee=$object;
 }
-*/
-
-/*
-// Initialize array of search criterias
-$search_all=trim(GETPOST("search_all",'alpha'));
-$search=array();
-foreach($object->fields as $key => $val)
-{
-	if (GETPOST('search_'.$key,'alpha')) $search[$key]=GETPOST('search_'.$key,'alpha');
-}
-
-if (empty($action) && empty($id) && empty($ref)) $action='view';
-
-// Load object
-include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
 
 foreach($object->lines as $line){
 	if( ! empty(GETPOST('addcontact_'.$line->id))) {
@@ -222,7 +243,7 @@ foreach($object->lines as $line){
 		unset($_POST['addcontactid_'.$lineid.'_sms']);
 	}
 	unset($_POST['addcontactid_'.$line->id]);
-}*/
+}
 
 
 // Security check - Protection if external user
@@ -256,6 +277,9 @@ $form=new FormExp($db);
 $formtournee=new FormTourneesDeLivraison($db);
 $formfile=new FormFile($db);
 
+$data='';
+
+
 
 $includes=array('/tourneesdelivraison/actions_suppravertiss.php',
                 '/tourneesdelivraison/actions_ajax.php',
@@ -275,6 +299,7 @@ foreach($includes as $tpl){
 		include $tpl; // for debug
 	}
 }
+
 if( substr($action,0,4) === "ask_" && ! empty($formconfirm) ){
 	print $formconfirm;
 } else if( $action == 'createline'){
@@ -285,6 +310,10 @@ if( substr($action,0,4) === "ask_" && ! empty($formconfirm) ){
 	$i = GETPOST('i', 'int');
 	$num = GETPOST('num', 'int');
 
-	if( empty($num) || empty($i) ) $object->printTourneeLineUnique_fetchLines($lineid, $action, $seller, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false, false);
-	else $object->printTourneeLineUnique($action, $line, $var, $num, $i, $mysoc, (($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, false, false);
+	if( empty($num) || empty($i) ) {
+			$object->printTourneeLineUnique_fetchLines($lineid, $action, $seller, $lineid, 0, false, false);
+	}
+	else{
+		$object->printTourneeLineUnique($action, $line, $var, $num, $i, $mysoc, $lineid, 0, false, false);
+	}
 }

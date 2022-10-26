@@ -236,9 +236,9 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_OPENROUTESERVICE_APIKEY', 'chaine', '', 'Openrouteservice.org API KEY', 1, 'allentities', 1);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'chaine', '1', 'liste de catégories à supprimer après ajout de commande sur une ligne de tournée', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'chaine', '', 'liste de catégories à supprimer après ajout de commande sur une ligne de tournée', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER', 'chaine', '1', 'liste de catégories clients à afficher (dans l\'affichage des tournées)', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER', 'chaine', '', 'liste de catégories clients à afficher (dans l\'affichage des tournées)', 0);
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE', 'ouinon', '1', 'Supprimer les éléments entre crochet à l\'ajout d\'une commande ', 0);
 		$r++;
@@ -246,11 +246,13 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER', 'chaine', '1', 'liste de catégories contact à afficher (dans l\'affichage des tournées)', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'ouinon', '1', 'Afficher des infos sur l\'état des factures', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'ouinon', '0', 'Afficher des infos sur l\'état des factures', 0);
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'ouinon', '1', 'Autoriser l\'édition des tags tiers/contact dans les pages tournées', 0);
 		$r++;
-		$this->const[$r]=array('TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'ouinon', '1', 'Charger une page vide puis la remplir petit à petit (page tournée unique)', 0);
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'ouinon', '0', 'Charger une page vide puis la remplir petit à petit (page tournée unique)', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG', 'ouinon', '0', '1er chargement sans tags clients/contacts (page tournée unique)', 0);
 		$r++;
 
 		// Some keys to add into the overwriting translation tables

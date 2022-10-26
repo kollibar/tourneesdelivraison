@@ -650,13 +650,12 @@ class TourneeGeneric_lines extends TourneeObject
 		$out = '<div id="'.$htmlkey.'">';
 		$out .= '<div clear="both"></div>';
 
-		$thirdparty=new Societe($this->db);
-		$thirdparty->fetch($this->fk_soc);
+		$this->getSoc();
 
 		//$out .= '<div>'.$thirdparty->getFullName($langs).'</div>';
-		$out .= '<div>'.$thirdparty->getNomUrl(1).'</div>';
+		$out .= '<div>'.$this->thirdparty->getNomUrl(1).'</div>';
 
-		$out .= $thirdparty->getBannerAddress($hmlkey.'_address',$thirdparty);
+		$out .= $this->thirdparty->getBannerAddress($hmlkey.'_address',$this->thirdparty);
 
 		$out .= '</div>';
 
@@ -694,10 +693,12 @@ class TourneeGeneric_lines extends TourneeObject
 	}
 
 	public function getSoc(){
-		$soc=new Societe($this->db);
-		$soc->fetch($this->fk_soc);
+		if( empty($this->thirdparty)){
+				$this->thirdparty=new Societe($this->db);
+				$this->thirdparty->fetch($this->fk_soc);
+		}
 
-		return $soc;
+		return $this->thirdparty;
 	}
 
 

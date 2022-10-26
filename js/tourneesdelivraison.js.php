@@ -113,7 +113,10 @@ function reload(){
     } else {
       url=url+'?';
     }
-    url = url + 'lineid='+lineid + '&' + params + suffix;
+
+    if( params == '' ) url = url + 'lineid='+lineid + suffix;
+    else url = url + 'lineid='+lineid + '&' + params + suffix;
+
     url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
     getAjaxable(url, lineid);
@@ -138,10 +141,11 @@ function mettreAjaxPartout(){
     }
   });
 
-  listeFormulaires=Array("edit_note_elt", "edit_tag_tiers", "edit_tag_tiers");
+  listeFormulaires=Array("edit_note_elt", "edit_tag_tiers", "edit_tag_contact", "addcontact");
 
   listeFormulaires.forEach(function(item, index, array){
     $('.'+item).submit(function(event){
+      console.log('submit: '+item);
       id=$(this).closest(".tournee-row").attr('id');
       lineid=id.slice(4);
       valideFormulaire(lineid,item);

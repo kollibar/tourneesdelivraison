@@ -184,6 +184,7 @@ $actions=array(
 	'setnotesupprimerentrecrochet' => 'TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE',
 	'setautorisereditiontag' => 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG',
 	'setchargerpagevide' => 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE',
+	'set1erchargementsanstag' => 'TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG',
 );
 
 
@@ -857,62 +858,6 @@ AfficheLigneOnOff($langs->trans("AffichageContactIntegre"), 'TOURNEESDELIVRAISON
 AfficheLigneOnOff($langs->trans("AffichageInfoFacture"), 'TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'setafficheinfofacture');
 AfficheLigneOnOff($langs->trans("AutoriserEditionTagsClientContact"), 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'setautorisereditiontag');
 
-/*
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffichageContactIntegre").'</td>';
-print '<td>&nbsp</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=0#divaff">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setcontactintegre&value=1#divaff">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffichageInfoFacture").'</td>';
-print '<td>&nbsp</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setafficheinfofacture&value=0#divaff">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setafficheinfofacture&value=1#divaff">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AutoriserEditionTagsClientContact").'</td>';
-print '<td>&nbsp</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setautorisereditiontag&value=0#divaff">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setautorisereditiontag&value=1#divaff">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-*/
-
 if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
 
 	$liste=array(
@@ -949,7 +894,9 @@ if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lir
 	}
 
 AfficheLigneOnOff($langs->trans("ChargerPageVideTourneeUnique"), 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'setchargerpagevide');
-
+if( empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE)){
+	AfficheLigneOnOff($langs->trans("PremierChargementSansTag"), 'TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG', 'set1erchargementsanstag');
+}
 
 
 /*

@@ -671,7 +671,16 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// Show object lines
 	if (! empty($object->lines))
 		if( $action=='editline') $lineid=GETPOST('lineid');
-		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true, ($typetournee == 'tourneeunique') && !empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE));
+
+		$afficheTags=true;
+		$ligneVide=false;
+
+		if( $ajaxActif && ($typetournee == 'tourneeunique') ){
+			if( ! empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE) ) $ligneVide=true;
+			if( ! empty($conf->global->TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG ) ) $afficheTags = false;
+		}
+
+		$ret = $object->printTourneeLines($action,$mysoc,(($action=='editline'||$action=='edit_note_elt')?$lineid:0), 0, true, $ligneVide, $afficheTags);
 
 		$numlines = count($object->lines);
 
@@ -692,7 +701,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 		}
 	}
 
-	$object->printRecap();
+	$object->printRecap(true);
 
 	//print '</div>';
 	print '</table>';
