@@ -324,6 +324,10 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 	}
 
 
+/**
+Met les expeditions et les factures au statut AUTRE_AFFECTATION si le statut de la commande est STATUS_CLOSED
+*/
+
 	public function checkCmdeAutodesaffecte(User $user){
 		foreach ($this->lines_cmde as $line_cmde) {
 			if( $line_cmde->statut != TourneeUnique_lines_cmde::DATE_OK && $line_cmde->statut != TourneeUnique_lines_cmde::DATE_NON_OK){
@@ -448,6 +452,10 @@ class TourneeUnique_lines extends TourneeGeneric_lines
 
 
 	}
+
+	/**
+		Parcours toutes les lignes de commande et leur cherche des expédition et des factures
+	*/
 
 	public function checkElt(User $user){
 		// parcours de toutes les ligne cmde

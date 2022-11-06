@@ -105,7 +105,7 @@ $domData .= ' data-id="'.$line->id.'"';
 								print '<div>';
 								print $form->showCategoriesExcluding($line->fk_soc, (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?'customer':'supplier'), (($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT)?$categoriesClientExclure:$categoriesFournisseurExclure),1, 1);
 								print '<span style="width:20px;"></span>';
-								
+
 								if( !empty($conf->global->TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG) ){
 									print '<a href="'.$_SERVER['PHP_SELF'].'?action=edit_tag_tiers&id='.$this->id.$paramsLienLigne.'&lineid='.$line->id.'#row-'.$line->id.'" class="ajaxable">';
 									print img_edit($langs->trans($val['edit note']), 1);
@@ -321,7 +321,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	$coldisplay++;
 
-	if( $afficheTags ){
+	if( $afficheTags && $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT){
 		$boxstat = '';
 
 		$client = $line->getSoc();

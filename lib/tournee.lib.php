@@ -284,3 +284,13 @@ function suppressionCategories($listeCategories, $categoriesExclues){
 	}
 	return $res;
 }
+
+
+function suppressionCategoriesListeSansTexte($listeCategories, $categoriesExclues){
+	$res=array();
+	foreach ($listeCategories as $id) {
+		if( in_array($id, $categoriesExclues)) continue;
+		$res[]=$id;
+	}
+	return $res;
+}

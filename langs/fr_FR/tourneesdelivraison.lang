@@ -213,10 +213,17 @@ AffichageInfoFacture = Afficher les infos des factures non réglées.
 AutoriserEditionTagsClientContact = Autoriser l'édition des tags clients/contacts dans les pages de tournées
 ChargerPageVideTourneeUnique = Charger une page vide puis la remplir petit à petit (page tournée unique)
 PremierChargementSansTag = 1er chargement sans tags clients/contacts (page tournée unique)
+CategorieASupprimerBTL = Catégories (ou groupe de catégories) à masquer sur les bordereau de tournée de livraison
 
 ParametresDivers = Paramètres divers
 GestionsDesSMS = Gestion des SMS
 ActivelesSMS = Active les SMS
+
+TagClientGestionBL = Catégorie (ou groupe de catégorie) de client pour gestion Bl (pas de BL, BL simple, BL double)
+TagClientFactureMail = Catégorie (ou groupe de catégorie) de client pour lesquels les factures se font par mail
+GestionSignatureElectronique = Gestion de la signature électronique des BL
+TagClientPasDeSignatureElectronique = Catégorie (ou groupe de catégorie) de client pour lesquels la signature DOIT se faire par papier (pas de signature électronique)
+ActiverSignatureElectroniqueLivraison = Activer la signature électronique à la livraison
 
 #
 # SMS / mail

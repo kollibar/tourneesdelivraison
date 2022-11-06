@@ -69,8 +69,6 @@ else header('Cache-Control: no-cache');
 
 ?>
 
-.myclasscss {
-	/* ... */
+#iframe_login {
+
 }
-
-

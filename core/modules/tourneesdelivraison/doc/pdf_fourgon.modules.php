@@ -43,6 +43,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
 dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
+dol_include_once('/tourneesdelivraison/lib/tournee.lib.php');
 
 if( array_key_exists('qrcodescanneur', $conf) && $conf->qrcodescanneur->enabled ){ // si le module qrcodescanneur est activé
   dol_include_once('/qrcodescanneur/core/qrcodescanneur_actions.php');
@@ -153,6 +154,23 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
 
 		// Translations
 		$langs->loadLangs(array("main", "tourneesdelivraison@tourneesdelivraison","products"));
+
+    // préparation des tags clients/fournisseur à exclure
+    $listeParam=array("TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER"=>'categoriesClientExclure',
+    									"TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER"=>'categoriesFournisseurExclure',
+    									"TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER"=>'categoriesContactExclure',
+    									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" => 'categoriesLineCmdeExclure',
+    									"TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_BORDEREAU" => 'categoriesLineBTLExclure',
+    								);
+    foreach($listeParam as $param => $cat){
+    	if(strpos($conf->global->{$param},'|' === false )){
+    		$data=$conf->global->{$param};
+    	} else {
+    		$data=substr($conf->global->{$param}, strpos($conf->global->{$param},'|')+1);
+    	}
+    	//$$cat=explode(',',$data);
+      $this->{$cat}=explode(',',$data);
+    }
 
 		$this->db = $db;
 		$this->name = "fourgon";
@@ -337,7 +355,7 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
 				$tab_height = 220 - $tab_top;
 				$tab_height_newpage = 220 - $tab_top_newpage;
 
-				if (! empty($object->note_public) )
+				if (! empty(preg_replace('/(\[.*?\])/m', '', $object->note_public)) )
 				{
 					$tab_top = 88 + $height_incoterms;
 					$tab_top_alt = $tab_top;
@@ -348,10 +366,10 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
 					//$tab_top_alt += 1;
 
 					// Notes
-					if (! empty($object->note_public))
+					if (! empty(preg_replace('/(\[.*?\])/m', '', $object->note_public)))
 					{
 						$pdf->SetFont('','', $default_font_size - 1);   // Dans boucle pour gerer multi-page
-						$pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top_alt, dol_htmlentitiesbr($object->note_public), 0, 1);
+						$pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top_alt, dol_htmlentitiesbr(preg_replace('/(\[.*?\])/m', '', $object->note_public)), 0, 1);
 					}
 
 					$nexY = $pdf->GetY();
@@ -436,8 +454,10 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
             }
 
             $categorie=$object->lines[$i]->getCategories();
+            $categorie=array_diff($categorie, $this->categoriesLineCmdeExclure);
+            $categorie=array_diff($categorie, $this->categoriesLineBTLExclure);
 
-            if( count($expedition)==0 && empty($object->lines[$i]->note_public) && count($categorie)==0) continue;  // si pas de livraison, ni tag ni note -> on passe à la suivante
+            if( count($expedition)==0 && empty(preg_replace('/(\[.*?\])/m', '', $object->lines[$i]->note_public)) && count($categorie)==0) continue;  // si pas de livraison, ni tag ni note -> on passe à la suivante
 
 
 
@@ -481,7 +501,7 @@ class pdf_fourgon extends ModelePDFTourneesdelivraison
 
               // NOTE
               $txt_note='';
-              if( !empty($object->lines[$i]->note_public)) $txt_note=$object->lines[$i]->note_public;
+              if( !empty($object->lines[$i]->note_public)) $txt_note=preg_replace('/(\[.*?\])/m', '', $object->lines[$i]->note_public);
               if( $txt_note != '' && count($categorie) != 0) $txt .= "\n\n";
               foreach ($categorie as $c) {
                 $cat=new Categorie($this->db);

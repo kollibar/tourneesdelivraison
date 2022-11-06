@@ -28,9 +28,22 @@
  * @return 	array					Array of tabs
  */
 
+ dol_include_once('/categorie/class/categorie.class.php');
 
- function AfficheLigneOnOff($texte, $variable, $action){
-   global $langs, $conf;
+
+function AfficheEnteteTableau($titre, $id=""){
+  global $conf, $user, $form, $langs;
+  print '<div '.(!empty($id)?'id="'.$id.'"':'').'class="div-table-responsive-no-min">';
+  print '<table class="noborder" width="100%">';
+  print '<tr class="liste_titre">';
+  print '<td>'.$titre.'</td>'."\n";
+  print '<td width="120">&nbsp;</td>';
+  print '<td align="right" width="120">'.$langs->trans("Value").'</td>'."\n";
+  print '<td width="80">&nbsp;</td></tr>'."\n";
+}
+
+ function AfficheLigneOnOff($texte, $variable, $action, $idlink=''){
+   global $conf, $user, $form, $langs;
   print '<tr class="oddeven">';
   print '<td width="80%">'.$texte.'</td>';
   print '<td>&nbsp</td>';
@@ -38,14 +51,45 @@
   print '<td align="center">';
   if (!empty($conf->global->{$variable}))
   {
- 	 print '<a href="' . $_SERVER['PHP_SELF'].'?action='.$action.'&value=0#divaff">';
+ 	 print '<a href="' . $_SERVER['PHP_SELF'].'?action='.$action.'&value=0'.(!empty($idlink)?'#'.$idlink:'').'">';
  	 print img_picto($langs->trans("Activated"),'switch_on');
   }
   else
   {
- 	 print '<a href="'.$_SERVER['PHP_SELF'].'?action='.$action.'&value=1#divaff">';
+ 	 print '<a href="'.$_SERVER['PHP_SELF'].'?action='.$action.'&value=1'.(!empty($idlink)?'#'.$idlink:'').'">';
  	 print img_picto($langs->trans("Disabled"),'switch_off');
   }
   print '</a></td>';
   print '</tr>';
  }
+
+function AfficheLigneTag($texte, $varConf, $typeObject){
+  global $conf, $user, $form, $langs;
+  if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+
+  	$arrayselected=array();
+  	$cate_arbo = $form->select_all_categories($typeObject, null, null, null, null, 1);
+
+  	$c = new Categorie($db);
+
+  	if ( ! empty($conf->global->{$varConf})){
+  		if( strpos($conf->global->{$varConf}, '|') === false ){
+  				$arrayselected = explode(',', $conf->global->{$varConf});
+  		} else {
+  			$arrayselected = explode(',', substr($conf->global->{$varConf}, 0, strpos($conf->global->{$varConf}, '|')));
+  		}
+  	}
+
+  	print '<tr class="oddeven">';
+  	print '<td width="80%">'.$texte.'</td>';
+  	print '<td>&nbsp</td>';
+  	print '<td align="center">';
+
+  	print $form->multiselectarray('cats_'.$varConf, $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+
+  	print '</td><td align="right">';
+  	print '<input type="submit" class="button" name="'.$varConf.'" value="'.$langs->trans("Modify").'">';
+  	print "</td>";
+  	print '</tr>';
+  }
+}

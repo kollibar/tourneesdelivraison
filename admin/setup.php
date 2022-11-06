@@ -185,6 +185,7 @@ $actions=array(
 	'setautorisereditiontag' => 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG',
 	'setchargerpagevide' => 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE',
 	'set1erchargementsanstag' => 'TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG',
+	'setsignatureelec' => 'TOURNEESDELIVRAISON_ACTIVER_SIGNATURE_ELECTRONIQUE',
 );
 
 
@@ -286,7 +287,15 @@ if ($action == 'updateoptions') {
 		}
 	}
 
-	$listeParam=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE', 'TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER', 'TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER', 'TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER');
+	$listeParam=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_BORDEREAU',
+										'TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE',
+										'TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER',
+										'TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER',
+										'TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER',
+										'TOURNEESDELIVRAISON_TAG_CLIENT_GESTION_BL',
+										'TOURNEESDELIVRAISON_TAG_CLIENT_FACTURE_MAIL',
+										'TOURNEESDELIVRAISON_TAG_CLIENT_SANS_SIGNATURE_ELECTRONIQUE'
+									 );
 
 	foreach ($listeParam as $param) {
 		if( ! GETPOSTISSET($param)) continue;
@@ -398,65 +407,11 @@ print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 print '<input type="hidden" name="action" value="updateoptions">';
 
-print '<div class="div-table-responsive-no-min">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("Parameters")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
+AfficheEnteteTableau($langs->trans("Parameters"), 'paramsaffectation');
 
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffecteAutoDateLivraisonOK").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectautodateok&value=0">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectautodateok&value=1">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffecteAuto1ereFutureCmde").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectauto1erecmde&value=0">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectauto1erecmde&value=1">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("AffectationAutoSi1EltParCmde").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectautosi1eltparcmde&value=0">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setaffectautosi1eltparcmde&value=1">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
+AfficheLigneOnOff($langs->trans("AffecteAutoDateLivraisonOK"), 'TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_DATELIVRAISONOK', 'setaffectautodateok', 'pareamsaffectation');
+AfficheLigneOnOff($langs->trans("AffecteAuto1ereFutureCmde"), 'TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_1ERE_FUTURE_CMDE', 'setaffectauto1erecmde', 'pareamsaffectation');
+AfficheLigneOnOff($langs->trans("AffectationAutoSi1EltParCmde"), 'TOURNEESDELIVRAISON_REGLES_AFFECTAUTO_AFFECTAUTO_SI_1ELT_PAR_CMDE', 'setaffectautosi1eltparcmde', 'pareamsaffectation');
 
 print '<tr class="oddeven">';
 print '<td width="80%">'.$langs->trans("ChangeAutoDateLivraison").'</td>';
@@ -652,84 +607,46 @@ print "<br>";
 
 
 
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
 
 
+AfficheEnteteTableau($langs->trans("ParametersDocsTournee"), 'gestionbtl');
 
-print '<div class="div-table-responsive-no-min">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("ParametersDocsTournee")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
+AfficheLigneOnOff($langs->trans("PoidsSurBL"), 'TOURNEESDELIVRAISON_POIDS_BL', 'setpoidsbl', 'gestionbtl');
+AfficheLigneTag($langs->trans("CategorieASupprimerBTL"), 'TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_BORDEREAU','tourneeunique_lines', 'gestionbtl');
 
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("PoidsSurBL").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_POIDS_BL))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpoidsbl&value=0">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpoidsbl&value=1">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
 
 print '</table>';
 print '</div>';
+print '</form>';
 
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
+AfficheEnteteTableau($langs->trans("GestionDocs"), 'gestiondocs');
 
+AfficheLigneOnOff($langs->trans("GenerationAutoDocs"), 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'setpdfautoupdate', 'gestiondocs');
+AfficheLigneOnOff($langs->trans("SuppressionAutoDocs"), 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE', 'setpdfautodelete', 'gestiondocs');
 
+AfficheLigneTag($langs->trans("TagClientGestionBL"), 'TOURNEESDELIVRAISON_TAG_CLIENT_GESTION_BL','customer', 'gestiondocs');
+AfficheLigneTag($langs->trans("TagClientFactureMail"), 'TOURNEESDELIVRAISON_TAG_CLIENT_FACTURE_MAIL','customer', 'gestiondocs');
 
-print '<div id="gestiondocs" class="div-table-responsive-no-min">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("GestionDocs")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
+print '</table></div>';
+print '</form>';
 
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="updateoptions">';
 
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("GenerationAutoDocs").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautoupdate&value=0#gestiondocs">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautoupdate&value=1#gestiondocs">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-print '</a></td>';
-print '</tr>';
+AfficheEnteteTableau($langs->trans("GestionSignatureElectronique"), 'divsignelec');
 
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("SuppressionAutoDocs").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_DISABLE_PDF_AUTODELETE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautodelete&value=0#gestiondocs">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setpdfautodelete&value=1#gestiondocs">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-print '</a></td>';
-print '</tr>';
+AfficheLigneOnOff($langs->trans("ActiverSignatureElectroniqueLivraison"), 'TOURNEESDELIVRAISON_ACTIVER_SIGNATURE_ELECTRONIQUE', 'setsignatureelec', 'divsignelec');
+AfficheLigneTag($langs->trans("TagClientPasDeSignatureElectronique"), 'TOURNEESDELIVRAISON_TAG_CLIENT_SANS_SIGNATURE_ELECTRONIQUE','customer', 'divsignelec');
 
-print '</table>';
-print '</div>';
+print '</table></div>';
+print '</form>';
 
 print load_fiche_titre($langs->trans("Comportement"),'','');
 
@@ -737,161 +654,39 @@ print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 print '<input type="hidden" name="action" value="updateoptions">';
 
-print '<div id="comportementajoutcommande" class="div-table-responsive-no-min">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print '<td>'.$langs->trans("ComportementAjoutCommande")."</td>";
-print "<td width=\"120\">&nbsp;</td>";
-print '<td align="right" width="120">'.$langs->trans("Value").'</td>';
-print '<td width="80">&nbsp;</td></tr>';
+AfficheEnteteTableau($langs->trans("ComportementAjoutCommande"), 'comportementajoutcommande');
 
-if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
 
-	$arrayselected=array();
-	$cate_arbo = $form->select_all_categories('tourneeunique_lines', null, null, null, null, 1);
-
-	$c = new Categorie($db);
-
-	if ( ! empty($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE)){
-		if( strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, '|') === false ){
-				$arrayselected = explode(',', $conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE);
-		} else {
-			$arrayselected = explode(',', substr($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, 0, strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE, '|')));
-		}
-	}
-
-	print '<tr class="oddeven">';
-	print '<td width="80%">'.$langs->trans("CategorieASupprimer").'</td>';
-	print '<td>&nbsp</td>';
-	print '<td align="center">';
-
-	print $form->multiselectarray('cats_'."TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE", $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
-
-	print '</td><td align="right">';
-	print '<input type="submit" class="button" name="TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE" value="'.$langs->trans("Modify").'">';
-	print "</td>";
-	print '</tr>';
-}
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("SuppressionNoteEntreCrochet").'</td>';
-print '<td>&nbsp</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnotesupprimerentrecrochet&value=0#comportementajoutcommande">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setnotesupprimerentrecrochet=1#comportementajoutcommande">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-print '</a></td>';
-print '</tr>';
+AfficheLigneTag($langs->trans("CategorieASupprimer"), 'TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_COMMANDE','tourneeunique_lines', 'comportementajoutcommande');
+AfficheLigneOnOff($langs->trans("SuppressionNoteEntreCrochet"), 'TOURNEESDELIVRAISON_NOTE_SUPPRIMER_ENTRE_CROCHET_COMMANDE', 'setnotesupprimerentrecrochet', 'comportementajoutcommande');
 
 print '</table>';
 print '</div>';
 
 print '</form>';
 
-
-/*
-print '<div id="urlqrcode" class="div-table-responsive-no-min">';
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
-
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print '<td colspan="3" align="left">'.$langs->trans("SimplificationURLQrCode")."</td>\n";
-//print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
-
-
-print '<tr class="oddeven">';
-//print '<td width="80%">'.$langs->trans("GenerationAutoDocs").'</td>';
-
-print '<td width="35%"><input name="url_origin" class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_ORIGIN . '"></td>';
-print '<td> => </td>';
-print '<td width="35%"><input name="url_replace"  class="flat minwidth300" value="' . $conf->global->TOURNEESDELIVRAISON_URL_REPLACE . '"></td>';
-
-print '<td><input class="button" type="submit" name="URL_QRCODE" value="'.$langs->trans("Modify").'"></td>';
-
-print '</tr>';
-
-print '<tr class="oddeven">';
-print '<td width="80%" colspan="2">'.$langs->trans("MettreEnPlaceReducQRCode").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (! file_exists(DOL_DOCUMENT_ROOT.'/tdl.php'))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setup_reduc_qrcode&value=1#urlqrcode">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setup_reduc_qrcode&value=0#urlqrcode">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-print '</a></td>';
-print '</tr>';
-print '</table>';
-print '</form>';
-*/
 print load_fiche_titre($langs->trans("ParametresDAffichage"),'','');
 
 print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 print '<input type="hidden" name="action" value="updateoptions">';
 
-print '<div class="div-table-responsive-no-min" id="divaff">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("Parameters")."</td>\n";
-print "<td width=\"120\">&nbsp;</td>";
-print '<td align="right" width="120">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
+AfficheEnteteTableau($langs->trans("Parameters"),'paramsaffich');
 
 
-AfficheLigneOnOff($langs->trans("AffichageContactIntegre"), 'TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE', 'setcontactintegre');
-AfficheLigneOnOff($langs->trans("AffichageInfoFacture"), 'TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'setafficheinfofacture');
-AfficheLigneOnOff($langs->trans("AutoriserEditionTagsClientContact"), 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'setautorisereditiontag');
+AfficheLigneOnOff($langs->trans("AffichageContactIntegre"), 'TOURNEESDELIVRAISON_AFFICHAGE_CONTACT_INTEGRE', 'setcontactintegre', 'paramsaffich');
+AfficheLigneOnOff($langs->trans("AffichageInfoFacture"), 'TOURNEESDELIVRAISON_AFFICHER_INFO_FACTURES', 'setafficheinfofacture', 'paramsaffich');
+AfficheLigneOnOff($langs->trans("AutoriserEditionTagsClientContact"), 'TOURNEESDELIVRAISON_AUTORISER_EDITION_TAG', 'setautorisereditiontag', 'paramsaffich');
 
-if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
+$liste=array(
+	'customer' => "TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER",
+	'supplier' => "TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER",
+	'contact' => "TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER",
+);
+foreach ($liste as $key => $value) {
+	AfficheLigneTag($langs->trans("ListeCategorie".$key."ANePasAfficher"), $value, $key, 'paramsaffich');
+}
 
-	$liste=array(
-		'customer' => "TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER",
-		'supplier' => "TOURNEESDELIVRAISON_CATEGORIES_FOURNISSEUR_A_NE_PAS_AFFICHER",
-		'contact' => "TOURNEESDELIVRAISON_CATEGORIES_CONTACT_A_NE_PAS_AFFICHER",
-	);
-
-	foreach ($liste as $key => $value) {
-		$arrayselected=array();
-		$cate_arbo = $form->select_all_categories($key, null, null, null, null, 1);
-
-		$c = new Categorie($db);
-
-		if ( ! empty($conf->global->{$value})){
-			if( strpos($conf->global->{$value}, '|') === false ){
-					$arrayselected = explode(',', $conf->global->{$value});
-			} else {
-				$arrayselected = explode(',', substr($conf->global->{$value}, 0, strpos($conf->global->{$value}, '|')));
-			}
-		}
-
-		print '<tr class="oddeven">';
-		print '<td width="80%">'.$langs->trans("ListeCategorie".$key."ANePasAfficher").'</td>';
-		print '<td>&nbsp</td>';
-		print '<td align="center">';
-
-		print $form->multiselectarray('cats_'.$value, $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
-
-		print '</td><td align="right">';
-		print '<input type="submit" class="button" name="'.$value.'" value="'.$langs->trans("Modify").'">';
-		print "</td>";
-		print '</tr>';
-	}
 
 AfficheLigneOnOff($langs->trans("ChargerPageVideTourneeUnique"), 'TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE', 'setchargerpagevide');
 if( empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE)){
@@ -899,61 +694,12 @@ if( empty($conf->global->TOURNEESDELIVRAISON_CHARGER_PAGE_VIDE)){
 }
 
 
-/*
-	$arrayselected=array();
-	$cate_arbo = $form->select_all_categories('customer', null, null, null, null, 1);
-
-	$c = new Categorie($db);
-
-	if ( ! empty($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER)){
-		if( strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, '|') === false ){
-				$arrayselected = explode(',', $conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER);
-		} else {
-			$arrayselected = explode(',', substr($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, 0, strpos($conf->global->TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER, '|')));
-		}
-	}
-
-	print '<tr class="oddeven">';
-	print '<td width="80%">'.$langs->trans("ListeCategorieClientANePasAfficher").'</td>';
-	print '<td>&nbsp</td>';
-	print '<td align="center">';
-
-	print $form->multiselectarray('cats_'."TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER", $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
-
-	print '</td><td align="right">';
-	print '<input type="submit" class="button" name="TOURNEESDELIVRAISON_CATEGORIES_CLIENT_A_NE_PAS_AFFICHER" value="'.$langs->trans("Modify").'">';
-	print "</td>";
-	print '</tr>';
-*/
-}
-
 print '</table></div>';
 
 print load_fiche_titre($langs->trans("ParametresDivers"),'','');
 
-print '<div class="div-table-responsive-no-min" id="divdivers">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("GestionsDesSMS")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
-
-print '<tr class="oddeven">';
-print '<td width="80%">'.$langs->trans("ActivelesSMS").'</td>';
-print '<td>&nbsp</td>';
-print '<td align="center">';
-if (!empty($conf->global->TOURNEESDELIVRAISON_SMS))
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setsms&value=0#divdivers">';
-	print img_picto($langs->trans("Activated"),'switch_on');
-}
-else
-{
-	print '<a href="'.$_SERVER['PHP_SELF'].'?action=setsms&value=1#divdivers">';
-	print img_picto($langs->trans("Disabled"),'switch_off');
-}
-print '</a></td>';
-print '</tr>';
+AfficheEnteteTableau($langs->trans("GestionsDesSMS"),'divdivers');
+AfficheLigneOnOff($langs->trans("ActivelesSMS"), 'TOURNEESDELIVRAISON_SMS', 'setsms', 'divdivers');
 
 print '</table></div>';
 print '</form>';
@@ -962,53 +708,33 @@ print '</form>';
 
 print load_fiche_titre($langs->trans("ParametresDesAvertissements"),'','');
 
-print '<div class="div-table-responsive-no-min" id="divav">';
-print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print "<td>".$langs->trans("DemandeConfirmationAvantDe")."</td>\n";
-print '<td align="right" width="60">'.$langs->trans("Value").'</td>'."\n";
-print '<td width="80">&nbsp;</td></tr>'."\n";
+
+AfficheEnteteTableau($langs->trans("DemandeConfirmationAvantDe"),'divav');
 
 
-$avertissements = array('Delete' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETE,
-												'Cancel' => $conf->global->TOURNEESDELIVRAISON_ASK_CANCEL,
-												'Clone' => $conf->global->TOURNEESDELIVRAISON_ASK_CLONE,
-												'Close' => $conf->global->TOURNEESDELIVRAISON_ASK_CLOSE,
-												'Validate' => $conf->global->TOURNEESDELIVRAISON_ASK_VALIDATE,
-												'GenererDocs' => $conf->global->TOURNEESDELIVRAISON_ASK_GENERERDOCS,
-												'Unvalidate' => $conf->global->TOURNEESDELIVRAISON_ASK_UNVALIDATE,
-												'AffectationAuto' => $conf->global->TOURNEESDELIVRAISON_ASK_AFFECTATIONAUTO,
-												'Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_REOPEN,
-												'ChangeStatutElt' => $conf->global->TOURNEESDELIVRAISON_ASK_CHANGESTATUTELT,
-												'ChangeDateElt' => $conf->global->TOURNEESDELIVRAISON_ASK_CHANGEDATEELT,
-												'DeleteLine' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETELINE,
-												'DeleteContact' => $conf->global->TOURNEESDELIVRAISON_ASK_DELETECONTACT,
-												'Cmde_ClassifyBilled' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYBILLED,
-												'Cmde_ClassifyUnBilled' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYUNBILLED,
-												'Cmde_Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_REOPEN,
-												'Cmde_Shipped' => $conf->global->TOURNEESDELIVRAISON_ASK_CMDE_SHIPPED,
-												'Exp_Shipped' => $conf->global->TOURNEESDELIVRAISON_ASK_EXP_SHIPPED,
-												'Exp_Reopen' => $conf->global->TOURNEESDELIVRAISON_ASK_EXP_REOPEN,
+$avertissements = array('Delete' => 'TOURNEESDELIVRAISON_ASK_DELETE',
+												'Cancel' => 'TOURNEESDELIVRAISON_ASK_CANCEL',
+												'Clone' => 'TOURNEESDELIVRAISON_ASK_CLONE',
+												'Close' => 'TOURNEESDELIVRAISON_ASK_CLOSE',
+												'Validate' => 'TOURNEESDELIVRAISON_ASK_VALIDATE',
+												'GenererDocs' => 'TOURNEESDELIVRAISON_ASK_GENERERDOCS',
+												'Unvalidate' => 'TOURNEESDELIVRAISON_ASK_UNVALIDATE',
+												'AffectationAuto' => 'TOURNEESDELIVRAISON_ASK_AFFECTATIONAUTO',
+												'Reopen' => 'TOURNEESDELIVRAISON_ASK_REOPEN',
+												'ChangeStatutElt' => 'TOURNEESDELIVRAISON_ASK_CHANGESTATUTELT',
+												'ChangeDateElt' => 'TOURNEESDELIVRAISON_ASK_CHANGEDATEELT',
+												'DeleteLine' => 'TOURNEESDELIVRAISON_ASK_DELETELINE',
+												'DeleteContact' => 'TOURNEESDELIVRAISON_ASK_DELETECONTACT',
+												'Cmde_ClassifyBilled' => 'TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYBILLED',
+												'Cmde_ClassifyUnBilled' => 'TOURNEESDELIVRAISON_ASK_CMDE_CLASSIFYUNBILLED',
+												'Cmde_Reopen' => 'TOURNEESDELIVRAISON_ASK_CMDE_REOPEN',
+												'Cmde_Shipped' => 'TOURNEESDELIVRAISON_ASK_CMDE_SHIPPED',
+												'Exp_Shipped' => 'TOURNEESDELIVRAISON_ASK_EXP_SHIPPED',
+												'Exp_Reopen' => 'TOURNEESDELIVRAISON_ASK_EXP_REOPEN',
 											);
 
 foreach ($avertissements as $key => $value) {
-
-	print '<tr class="oddeven">';
-	print '<td width="80%">'.$langs->trans("AvertissementAvant".$key).'</td>';
-	print '<td>&nbsp</td>';
-	print '<td align="center">';
-	if (!empty($value))
-	{
-		print '<a href="'.$_SERVER['PHP_SELF'].'?action=setavertissement&avertissement='.mb_strtolower($key).'&value=0#divav">';
-		print img_picto($langs->trans("Disabled"),'switch_off');
-	}
-	else
-	{
-		print '<a href="'.$_SERVER['PHP_SELF'].'?action=setavertissement&avertissement='.mb_strtolower($key).'&value=1#divav">';
-		print img_picto($langs->trans("Activated"),'switch_on');
-	}
-	print '</a></td>';
-	print '</tr>';
+	AfficheLigneOnOff($langs->trans("AvertissementAvant".$key), $value, 'setavertissement&avertissement='.mb_strtolower($key), 'divav');
 }
 
 

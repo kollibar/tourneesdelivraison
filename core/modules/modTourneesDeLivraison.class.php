@@ -254,6 +254,17 @@ class modTourneesDeLivraison extends DolibarrModules
 		$r++;
 		$this->const[$r]=array('TOURNEESDELIVRAISON_1ER_CHARGEMENT_SANS_TAG', 'ouinon', '0', '1er chargement sans tags clients/contacts (page tournée unique)', 0);
 		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_CATEGORIES_A_SUPPRIMER_BORDEREAU', 'chaine', '', 'Catégories (ou groupe de catégories) à masquer sur les bordereau de tournée de livraison', 0);
+		$r++;
+
+		$this->const[$r]=array('TOURNEESDELIVRAISON_TAG_CLIENT_GESTION_BL', 'chaine', '', 'Catégorie (ou groupe de catégorie) de client pour gestion Bl (pas de BL, BL simple, BL double)', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_TAG_CLIENT_FACTURE_MAIL', 'chaine', '', 'Catégorie (ou groupe de catégorie) de client pour lesquels les factures se font par mail', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_ACTIVER_SIGNATURE_ELECTRONIQUE', 'ouinon', '0', 'Activer la signature électronique à la livraison', 0);
+		$r++;
+		$this->const[$r]=array('TOURNEESDELIVRAISON_TAG_CLIENT_SANS_SIGNATURE_ELECTRONIQUE', 'chaine', '', 'Catégorie (ou groupe de catégorie) de client pour lesquels la signature DOIT se faire par papier (pas de signature électronique)', 0);
+		$r++;
 
 		// Some keys to add into the overwriting translation tables
 		/*$this->overwrite_translation = array(

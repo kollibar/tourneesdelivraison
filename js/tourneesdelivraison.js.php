@@ -88,6 +88,8 @@ Fonction pour l'ajaxisation
 */
 let listeGET = new Array();
 let listeGETattente=new Array();
+let waitForLogin=0;
+let waitForLoginGET = new Array();
 
 function auChargementNouvelleLigne(elt){
   mettreAjaxPartout(elt);
@@ -295,8 +297,46 @@ function ajaxable(){
   getAjaxable(url, id);
 }
 
-function ajaxable_callback(data, status, xhr){
+function getLineId(url){
+  i=url.indexOf('lineid=');
+  if( i< 0) return '';
 
+  k=url.indexOf('&', i);
+  if( k < 0 ){
+    return url.slice(i+7)
+  }else{
+    return url.slice(i+7, k);s
+  }
+}
+
+
+function login(data, status, xhr){
+  $('body').append('<iframe id="iframe_login" src="/" style="width:70vw;height:70vh;position: fixed; top:15vh; right:15vw;"></iframe>');
+
+  $('#iframe_login').on('load',function(){
+    if(  $('#iframe_login').contents().find('body').find('form:first').attr('id') == login ) {  // écran de connection
+      waitForLogin=1;
+    } else if(  $('#iframe_login').contents().find('body:first').attr('id') == 'mainbody' ){
+        // la connection est déjà faite
+        loggedIn();
+    }
+  });
+}
+
+function loggedIn(){
+  $('#iframe_login').remove();
+
+  waitForLogin=0;
+  while( waitForLoginGET.length > 0){
+    url=waitForLoginGET.shift();
+    console.log('GET:'+url);
+    lineid=getLineId(url);
+    console.log('lineid:'+lineid);
+    getAjaxable(url, lineid);
+  }
+}
+
+function getFirstId(data){
   // recherche de la 1ere balise
   i=-1;
   do{
@@ -318,13 +358,57 @@ function ajaxable_callback(data, status, xhr){
     l=data.indexOf("\"",k+4);
   }
   id=data.slice(k+4,l);
+  return id;
+}
+
+function removeFromListeGet(url){
+  for (var i = 0; i <= listeGET.length; i++){
+
+    if( listeGET[i] == url ){
+      // console.log(i+': '+listeGET[i]+' <=====');
+      listeGET.splice(i,i);
+      return true;  // trouvé et enlevé !
+    } else {
+      // console.log(i+': '+listeGET[i]);
+    }
+  }
+  return false; // pas trouvé
+}
+
+function ajaxable_callback(data, status, xhr){
+  url=xhr.url;
+
+  id = getFirstId(data);
+
+  if( id=="login"){ // la connection a été coupé
+    if( waitForLogin ){
+      waitForLoginGET.push(url);
+      return;
+    } else {
+        waitForLogin=1;
+        waitForLoginGET.push(url);
+
+        removeFromListeGet(url)
+        // afficher l'écran de recherche d'url
+
+        login(data, status, xhr);
+    }
+  }
+
+  if( id == 'dialog-confirm'){
+    if( url.indexOf("actionajax=true") != -1){
+      data=data.replace('after location.href','after form validation');
+      $('#formulaireConfirm').html(data.replace('location.href = urljump;','getAjaxable(urljump)'));
+    } else {
+      $('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
+    }
+    return;
+  }
 
   m=data.indexOf('>',l);
   n=data.lastIndexOf('</'+balise+'>');
 
   data=data.slice(m+1,n);
-
-  url=xhr.url;
 
   i=url.indexOf('&_=');
   if( i==-1 ) i=url.indexOf('?_=');
@@ -339,22 +423,7 @@ function ajaxable_callback(data, status, xhr){
 
   console.log("reception :"+"#"+id+'    '+url);
 
-  var ok=false;
-  for (var i = 0; i <= listeGET.length; i++){
-
-    if( listeGET[i] == url ){
-      // console.log(i+': '+listeGET[i]+' <=====');
-      listeGET.splice(i,i);
-      ok=true;
-      break;
-    } else {
-      // console.log(i+': '+listeGET[i]);
-    }
-  }
-  if( ok==false ) {
-    //console.log("erreur");
-    return;
-  }
+  if( removeFromListeGet(url) == false ) return;
 
   if( listeGETattente.length > 0 ){
     obj=listeGETattente.shift();

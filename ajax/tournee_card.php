@@ -150,7 +150,9 @@ if( $lineid == -1){
 	* mode tournée_line
 	**********************/
 	if( empty($object) && ! empty($lineid) ){
-		$sql = 'SELECT `fk_tournee` FROM ' . MAIN_DB_PREFIX . $typetournee . '_lines WHERE `rowid` = ' . $lineid;
+
+		$sql = 'SELECT *';
+		$sql .= ' FROM ' . MAIN_DB_PREFIX . $typetournee . '_lines WHERE `rowid` = ' . $lineid;
 
 		dol_syslog("/tourneesdelivraison/ajax/tournee_card.php", LOG_DEBUG);
 		$result = $db->query($sql);
@@ -160,6 +162,11 @@ if( $lineid == -1){
 			if( i> 0 ){
 				$objp = $db->fetch_object($result);
 				$tourneeid = $objp->fk_tournee;
+
+				$ae_datelivraisonidentique = $objp->$ae_datelivraisonidentique;
+				$ae_1ere_future_cmde = $objp->$ae_1ere_future_cmde;
+				$ae_1elt_par_cmde = $objp->$ae_1elt_par_cmde;
+				$change_date_affectation = $objp->$change_date_affectation;
 			}
 
 			$db->free($result);
@@ -227,6 +234,23 @@ if( $lineid == -1){
 	else $object = new TourneeUnique($db);
 
 	$object->miniLoad($tourneeid, $statutTournee, array($line));
+
+/*
+POUR REMPLACER miniLoad
+
+$sql .= ' LIMIT 1'; // This is a fetch, to be sure to get only one record
+
+$res = $this->db->query($sql);
+if ($res)
+{
+	$obj = $this->db->fetch_object($res);
+	if ($obj)
+	{
+		$this->setVarsFromFetchObj($obj);
+
+*/
+
+
 	$line->tournee=$object;
 }
 
@@ -278,6 +302,16 @@ $formtournee=new FormTourneesDeLivraison($db);
 $formfile=new FormFile($db);
 
 $data='';
+
+if( $typetournee == 'tourneeunique' && ! empty($lineid) && $lineid != -1){
+	if( $statutTournee==TourneeGeneric::STATUS_VALIDATED && $dateTournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
+	// si date tournée unique non dépassé, cherche les nouvelles commandes
+		$line->checkCommande($user);
+	} else {
+		// sinon ne cherche que les nouveaux éléments (livraisons et factures correspondant aux commande déjà affectés)
+		$line->checkElt($user);
+	}
+}
 
 
 

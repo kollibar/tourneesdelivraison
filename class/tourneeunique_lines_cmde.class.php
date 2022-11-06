@@ -598,7 +598,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 
 				foreach ($this->lines as $line_elt) {
 					if( $line_elt->fk_elt == $objp->fk_target && $line_elt->type_element == $objp->targettype) {
-						$tulce=$line_cmde;
+						$tulce=$line_elt;
 						$tulce->fait=1;
 						if( $tulce->statut == TourneeUnique_lines_cmde_elt::INUTILE ) {	// si elle avais le statut inutile, réinitialisation de son styatut
 							if( $tulce->type_element == 'shipping'){	// cas d'une expédition
@@ -606,6 +606,7 @@ class TourneeUnique_lines_cmde extends TourneeObject
 								// vérification de la date
 								if( $elt->date_delivery == $tournee->date_tournee) $tulce->statut=TourneeUnique_lines_cmde_elt::NON_AFFECTE_DATE_OK;
 								else $tulce->statut=TourneeUnique_lines_cmde_elt::NON_AFFECTE;
+
 							} else if ($tulce->type_element == 'facture'){ // cas d'une facture
 								$tulce->statut=TourneeUnique_lines_cmde_elt::NON_AFFECTE;
 							}
