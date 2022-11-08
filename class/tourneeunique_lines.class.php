@@ -704,7 +704,7 @@ Met les expeditions et les factures au statut AUTRE_AFFECTATION si le statut de 
 			if( $result < 0 ) return -1;	// erreur lors de l'update*/
 
 			$cmde=new Commande($this->db);
-			$cmde->fecth($fk_order);
+			$cmde->fetch($fk_order);
 
 			$cmde->note_public=suppressionDataEntreCrochet($cmde->note_public);
 			$cmde->note_private=suppressionDataEntreCrochet($cmde->note_private);
