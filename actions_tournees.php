@@ -218,13 +218,14 @@
 	}
 
 	// action validate / unvalidate / cancel / close
-	else if( ($action=='confirm_validate' || $action=='confirm_unvalidate' || $action == 'confirm_cancel' || $action == 'confirm_close' || $action == 'confirm_reopen' ) && $confirm == 'yes' && !empty($permissiontoadd)){
+	else if( ($action=='confirm_validate' || $action=='confirm_unvalidate' || $action == 'confirm_cancel' || $action == 'confirm_reprendre' || $action == 'confirm_close' || $action == 'confirm_reopen' ) && $confirm == 'yes' && !empty($permissiontoadd)){
 		if( $object->id > 0) {
 			if( $action == 'confirm_validate' && $object->statut == TourneeGeneric::STATUS_DRAFT) $object->statut = TourneeGeneric::STATUS_VALIDATED;
 			elseif( $action == 'confirm_unvalidate' && $object->statut == TourneeGeneric::STATUS_VALIDATED) $object->statut = TourneeGeneric::STATUS_DRAFT;
 			elseif( $action == 'confirm_close' && $object->statut != TourneeGeneric::STATUS_DRAFT) $object->statut = TourneeGeneric::STATUS_CLOSED;
 			elseif( $action == 'confirm_reopen' && $object->statut != TourneeGeneric::STATUS_DRAFT) $object->statut = TourneeGeneric::STATUS_VALIDATED;
 			elseif( $action == 'confirm_cancel' ) $object->statut = TourneeGeneric::STATUS_CANCELED;
+			elseif( $action == 'confirm_reprendre' ) $object->statut = TourneeGeneric::STATUS_DRAFT;
 			else {
 				setEventMessages($object->error, $object->errors, 'errors');
 				$action='';

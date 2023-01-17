@@ -61,12 +61,13 @@ class modTourneesDeLivraison extends DolibarrModules
 		// Module label (no space allowed), used if translation string 'ModuleTourneesDeLivraisonName' not found (TourneesDeLivraison is name of module).
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleTourneesDeLivraisonDesc' not found (TourneesDeLivraison is name of module).
-		$this->description = "TourneesDeLivraisonDescription";
+		$this->description = "Module de gestion de tournées de livraison";
 		// Used only if file README.md and README-LL.md not found.
-		$this->descriptionlong = "TourneesDeLivraison description (Long)";
+		$this->descriptionlong = "Module permettant la gestion de tournées de livraison unique ou répété. Créer une liste de client (Tournée de livraison) correspondant à une tournée régulière. A chaque occurence de tournée, vous créer uen tournée unique (TourneeUnique) avec laquel vous gérer les commandes clients, la préparation de la tournée ainsi que la livraison.
+		Voius pouvez éditer une liste d'étiquettes pour préparation de commande, ainsi qu'un bordereau de tournée de livraison.";
 
 		$this->editor_name = 'SCOP Au-delà des nuages';
-		$this->editor_url = 'https://www.brasserieteddybeer.fr';
+		$this->editor_url = 'https://audeladesnuages.fr';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
 		$this->version = '1.0';

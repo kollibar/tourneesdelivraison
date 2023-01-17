@@ -8,7 +8,8 @@ Module de gestion de tournée de livraison pour Dolibarrr.
 ![Screenshot tourneesdelivraison](img/screenshot_tourneesdelivraison.png?raw=true "TourneesDeLivraison"){imgmd}
 -->
 
-Other modules are available on <a href="https://www.dolistore.com" target="_new">Dolistore.com</a>.
+Module permettant la gestion de tournées de livraison unique ou répété. Créer une liste de client (Tournée de livraison) correspondant à une tournée régulière. A chaque occurence de tournée, vous créer uen tournée unique (TourneeUnique) avec laquel vous gérer les commandes clients, la préparation de la tournée ainsi que la livraison.
+Voius pouvez éditer une liste d'étiquettes pour préparation de commande, ainsi qu'un bordereau de tournée de livraison.
 
 
 

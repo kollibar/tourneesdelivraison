@@ -63,33 +63,50 @@ function AfficheEnteteTableau($titre, $id=""){
   print '</tr>';
  }
 
-function AfficheLigneTag($texte, $varConf, $typeObject){
-  global $conf, $user, $form, $langs;
+function AfficheLigneTag($texte, $varConf, $typeObject, $idlink){
+  global $conf, $user, $form, $langs, $action;
+
   if (! empty($conf->categorie->enabled)  && ! empty($user->rights->categorie->lire)){
 
-  	$arrayselected=array();
+    $arrayselected=array();
+    if ( ! empty($conf->global->{$varConf})){
+      if( strpos($conf->global->{$varConf}, '|') === false ){
+          $arrayselected = explode(',', $conf->global->{$varConf});
+      } else {
+        $arrayselected = explode(',', substr($conf->global->{$varConf}, 0, strpos($conf->global->{$varConf}, '|')));
+      }
+    }
+
   	$cate_arbo = $form->select_all_categories($typeObject, null, null, null, null, 1);
 
-  	$c = new Categorie($db);
-
-  	if ( ! empty($conf->global->{$varConf})){
-  		if( strpos($conf->global->{$varConf}, '|') === false ){
-  				$arrayselected = explode(',', $conf->global->{$varConf});
-  		} else {
-  			$arrayselected = explode(',', substr($conf->global->{$varConf}, 0, strpos($conf->global->{$varConf}, '|')));
-  		}
-  	}
-
   	print '<tr class="oddeven">';
+
+
   	print '<td width="80%">'.$texte.'</td>';
   	print '<td>&nbsp</td>';
   	print '<td align="center">';
 
-  	print $form->multiselectarray('cats_'.$varConf, $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+    print '<form id="form_'.$varConf.'" method="POST" action="'.$_SERVER['PHP_SELF'].(!empty($idlink)?'#'.$idlink:'').'">';
+    print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 
+
+    if( $action == 'edit_'.$varConf ) {
+      print '<input type="hidden" name="action" value="updateoptions">';
+      print $form->multiselectarray('cats_'.$varConf, $cate_arbo, $arrayselected, '', 0, '', 0, '90%');
+    }
+    else {
+      print $form->showCategoriesListe($arrayselected, 1, 1);
+      print '<input type="hidden" name="action" value="edit_'.$varConf.'">';
+    }
+
+    print '</form>';
   	print '</td><td align="right">';
-  	print '<input type="submit" class="button" name="'.$varConf.'" value="'.$langs->trans("Modify").'">';
+  	print '<button form="form_'.$varConf.'" type="submit" class="button" name="'.$varConf.'" value="'.$langs->trans("Modify").'">'.$langs->trans("Modify").'</button>';
+    if( $action == 'edit_'.$varConf ) {
+      print '<button form="form_'.$varConf.'" type="submit" class="button" value="'.$langs->Trans("Cancel").'" name="" id="">'.$langs->Trans("Cancel").'</button>';
+    }
   	print "</td>";
+
   	print '</tr>';
   }
 }

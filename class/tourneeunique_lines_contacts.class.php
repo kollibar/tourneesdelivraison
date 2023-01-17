@@ -149,7 +149,7 @@ class TourneeUnique_lines_contacts extends TourneeGeneric_lines_contacts
 		// Translate some data of arrayofkeyval
 		foreach($this->fields as $key => $val)
 		{
-			if (is_array($this->fields['status']['arrayofkeyval']))
+			if (in_array('status', $this->fields) && is_array($this->fields['status']['arrayofkeyval']))
 			{
 				foreach($this->fields['status']['arrayofkeyval'] as $key2 => $val2)
 				{

@@ -601,10 +601,11 @@ Met les expeditions et les factures au statut AUTRE_AFFECTATION si le statut de 
 			if( $line->statut != TourneeUnique_lines_cmde::DATE_OK && $line->statut != TourneeUnique_lines_cmde::DATE_NON_OK ) continue;
 
 			$ret=$line->getTotalWeightVolume($type);
+			//var_dump($ret);
 			$totalWeight += $ret['weight'];
 			$totalVolume += $ret['volume'];
-			$totalOrdered += $ret['ordered'];
-			$totalToShip += $ret['toship'];
+			$totalOrdered += intval($ret['ordered']);
+			$totalToShip += intval($ret['toship']);
 		}
 		return array('weight'=>$totalWeight, 'volume'=>$totalVolume, 'ordered'=>$totalOrdered, 'toship'=>$totalToShip);
 	}

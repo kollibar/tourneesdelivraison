@@ -22,6 +22,8 @@
  *		\brief      Page to create/edit/view tourneedelivraison
  */
 
+use function PHPSTORM_META\type;
+
 //if (! defined('NOREQUIREDB'))              define('NOREQUIREDB','1');					// Do not create database handler $db
 //if (! defined('NOREQUIREUSER'))            define('NOREQUIREUSER','1');				// Do not load object $user
 //if (! defined('NOREQUIRESOC'))             define('NOREQUIRESOC','1');				// Do not load object $mysoc
@@ -303,8 +305,22 @@ $formfile=new FormFile($db);
 
 $data='';
 
+$date=getdate();
+
+if( is_int($dateTournee)){
+	$dateTourneeInt=$dateTournee;
+} else {
+	// echo('month:'.substr($dateTournee, 5,2).' day:'.substr($dateTournee, 8,2).' year:'.substr($dateTournee, 0,4));
+	//echo('date:'.strval($date).'month:'.strval($date['mon']).' day:'.strval($date['mday']).' year:'.strval($date['year']));
+
+	$dateTourneeInt=mktime(0,0,0,intval(substr($dateTournee, 5,2)),intval(substr($dateTournee, 8,2)), intval(substr($dateTournee, 0,4)));
+}
+
+// echo('dateTournee:'.  strval($dateTourneeInt) . 'date:'.  strval(mktime(0,0,0,$date['mon'], $date['mday'], $date['year'])));
+
+
 if( $typetournee == 'tourneeunique' && ! empty($lineid) && $lineid != -1){
-	if( $statutTournee==TourneeGeneric::STATUS_VALIDATED && $dateTournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
+	if( $statutTournee == TourneeGeneric::STATUS_VALIDATED &&  $dateTourneeInt >= mktime(0,0,0,$date['mon'], $date['mday'], $date['year'])) {
 	// si date tournée unique non dépassé, cherche les nouvelles commandes
 		$line->checkCommande($user);
 	} else {

@@ -190,6 +190,7 @@ function valideFormulaire(lineid, tag){
 }
 
 function getAjaxable(url, lineid=0, action=''){
+  console.log('getAjaxable('+url+','+lineid+','+action+')');
   if( listeGET.includes(url) ) return;
 
   if( action == '' ){
@@ -305,7 +306,7 @@ function getLineId(url){
   if( k < 0 ){
     return url.slice(i+7)
   }else{
-    return url.slice(i+7, k);s
+    return url.slice(i+7, k);
   }
 }
 
@@ -378,6 +379,12 @@ function removeFromListeGet(url){
 function ajaxable_callback(data, status, xhr){
   url=xhr.url;
 
+  if( data == "" ){
+    url=url.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee');
+    window.location.href=url;
+    return;
+  }
+
   id = getFirstId(data);
 
   if( id=="login"){ // la connection a été coupé
@@ -447,11 +454,13 @@ function ajaxable_callback(data, status, xhr){
 
 /* fonction à appeller sur les formulaires pour lesquels le formulaire est ajaxé mais pas sa validation (élément .askAjaxable) */
 function askAjaxable(elt){
+  console.log('askAjaxable('+elt+')');
   url=elt.href;
   url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
-  console.log("GET :"+url);
-  $.get(url, askAjaxable_callback);
+  // console.log("GET :"+url);
+  // $.get(url, askAjaxable_callback);
+  getAjaxable(url);
 }
 function askAjaxable_callback(data,status){
   $('#formulaireConfirm').html(data.replaceAll('tourneesdelivraison/ajax/tournee', 'tourneesdelivraison/tournee'));
@@ -460,11 +469,13 @@ function askAjaxable_callback(data,status){
 
 /* fonction à appeller sur les formulaires pour lesquels le formulaire est ajaxé ET la validation de ce formulaire (élément .askActionAjaxable) */
 function askActionAjaxable(elt){
+  console.log('askActionAjaxable('+elt+')');
   url=elt.href;
   url=url.replace('tourneesdelivraison/tournee','tourneesdelivraison/ajax/tournee');
 
-  console.log("GET :"+url);
-  $.get(url, askActionAjaxable_callback);
+  // console.log("GET :"+url);
+  // $.get(url, askActionAjaxable_callback);
+  getAjaxable(url);
 }
 
 function askActionAjaxable_callback(data,status){

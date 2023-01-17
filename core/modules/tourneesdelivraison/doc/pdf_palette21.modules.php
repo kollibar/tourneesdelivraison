@@ -44,7 +44,8 @@ dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_
 dol_include_once('/tourneesdelivraison/class/tourneeunique.class.php');
 dol_include_once('/tourneesdelivraison/class/tourneedelivraison.class.php');
 
-if( array_key_exists('qrcodescanneur', $conf) && $conf->qrcodescanneur->enabled ){ // si le module qrcodescanneur est activé
+if( isModEnabled('qrcodescanneur') ){ // si le module qrcodescanneur est activé
+//if( array_key_exists('qrcodescanneur', $conf) && $conf->qrcodescanneur->enabled ){ // si le module qrcodescanneur est activé
   dol_include_once('/qrcodescanneur/core/qrcodescanneur_actions.php');
 }
 

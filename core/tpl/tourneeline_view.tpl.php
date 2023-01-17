@@ -293,7 +293,7 @@ $domData .= ' data-id="'.$line->id.'"';
 	<?php
 	$parent=$line->getParent();
 
-	if( $line->element != 'tourneeunique_lines' || $parent->statut == STATUS_DRAFT){ ?>
+	if( $line->element != 'tourneeunique_lines' || $parent->statut == TourneeGeneric::STATUS_DRAFT){ ?>
 	<td align="right" class="linecoldocs nowrap"><?php $coldisplay++; ?>
 		<?php if($line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT){ ?>
 		<table class="noborderbottom">
@@ -505,7 +505,7 @@ $domData .= ' data-id="'.$line->id.'"';
 
 	<?php
 
-	if( $line->element=='tourneeunique_lines' && $parent->statut != STATUS_DRAFT){ ?>
+	if( $line->element=='tourneeunique_lines' && $parent->statut != TourneeGeneric::STATUS_DRAFT){ ?>
 	  <td class="linecolcmde">
 			<?php if( $line->type==TourneeGeneric_lines::TYPE_THIRDPARTY_CLIENT) { ?>
 

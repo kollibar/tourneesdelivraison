@@ -13,6 +13,11 @@ else if ($action == 'ask_cancel') {
   $formquestion = array();
   $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('CancelTourneeDeLivraison'), $langs->trans('ConfirmCancelTourneeDeLivraison', $object->ref), 'confirm_cancel', $formquestion, 'yes', 1);
 }
+else if ($action == 'ask_reprendre') {
+  // Create an array for form
+  $formquestion = array();
+  $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ReprendreTourneeDeLivraison'), $langs->trans('ConfirmReprendreTourneeDeLivraison', $object->ref), 'confirm_reprendre', $formquestion, 'yes', 1);
+}
 
 // Clone confirmation
 else if ($action == 'ask_clone') {

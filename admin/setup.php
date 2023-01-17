@@ -47,6 +47,7 @@ require_once '../lib/tournee_setup.lib.php';
 
 dol_include_once('/tourneesdelivraison/core/modules/tourneesdelivraison/modules_tourneesdelivraison.php');
 dol_include_once('/categorie/class/categorie.class.php');
+dol_include_once('/tourneesdelivraison/class/html.formexp.class.php');
 //require_once "../class/myclass.class.php";
 
 // Translations
@@ -401,11 +402,9 @@ else
 print load_fiche_titre($langs->trans("ReglesAutoAffectation"),'','');
 
 // Autres options
-$form=new Form($db);
+$form=new FormExp($db);
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
+
 
 AfficheEnteteTableau($langs->trans("Parameters"), 'paramsaffectation');
 
@@ -433,7 +432,6 @@ print '</tr>';
 print '</table>';
 print '</div>';
 
-print '</form>';
 
 
 
@@ -523,6 +521,7 @@ foreach ($dirmodels as $reldir)
 
 	                        if ($modulequalified)
 	                        {
+															if( empty($var)) $var=false;
 	                            $var = !$var;
 	                            print '<tr class="oddeven"><td width="100">';
 	                            print (empty($module->name)?$name:$module->name);
@@ -607,10 +606,6 @@ print "<br>";
 
 
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
-
 
 AfficheEnteteTableau($langs->trans("ParametersDocsTournee"), 'gestionbtl');
 
@@ -620,11 +615,7 @@ AfficheLigneTag($langs->trans("CategorieASupprimerBTL"), 'TOURNEESDELIVRAISON_CA
 
 print '</table>';
 print '</div>';
-print '</form>';
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
 AfficheEnteteTableau($langs->trans("GestionDocs"), 'gestiondocs');
 
 AfficheLigneOnOff($langs->trans("GenerationAutoDocs"), 'TOURNEESDELIVRAISON_DISABLE_PDF_AUTOUPDATE', 'setpdfautoupdate', 'gestiondocs');
@@ -634,11 +625,8 @@ AfficheLigneTag($langs->trans("TagClientGestionBL"), 'TOURNEESDELIVRAISON_TAG_CL
 AfficheLigneTag($langs->trans("TagClientFactureMail"), 'TOURNEESDELIVRAISON_TAG_CLIENT_FACTURE_MAIL','customer', 'gestiondocs');
 
 print '</table></div>';
-print '</form>';
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
+
 
 AfficheEnteteTableau($langs->trans("GestionSignatureElectronique"), 'divsignelec');
 
@@ -646,13 +634,11 @@ AfficheLigneOnOff($langs->trans("ActiverSignatureElectroniqueLivraison"), 'TOURN
 AfficheLigneTag($langs->trans("TagClientPasDeSignatureElectronique"), 'TOURNEESDELIVRAISON_TAG_CLIENT_SANS_SIGNATURE_ELECTRONIQUE','customer', 'divsignelec');
 
 print '</table></div>';
-print '</form>';
+
 
 print load_fiche_titre($langs->trans("Comportement"),'','');
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
+
 
 AfficheEnteteTableau($langs->trans("ComportementAjoutCommande"), 'comportementajoutcommande');
 
@@ -663,13 +649,11 @@ AfficheLigneOnOff($langs->trans("SuppressionNoteEntreCrochet"), 'TOURNEESDELIVRA
 print '</table>';
 print '</div>';
 
-print '</form>';
+
 
 print load_fiche_titre($langs->trans("ParametresDAffichage"),'','');
 
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="updateoptions">';
+
 
 AfficheEnteteTableau($langs->trans("Parameters"),'paramsaffich');
 
@@ -702,7 +686,7 @@ AfficheEnteteTableau($langs->trans("GestionsDesSMS"),'divdivers');
 AfficheLigneOnOff($langs->trans("ActivelesSMS"), 'TOURNEESDELIVRAISON_SMS', 'setsms', 'divdivers');
 
 print '</table></div>';
-print '</form>';
+
 
 
 

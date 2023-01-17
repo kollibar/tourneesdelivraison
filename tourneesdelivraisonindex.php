@@ -70,7 +70,7 @@ $langs->loadLangs(array("tourneesdelivraison@tourneesdelivraison","other"));
 
 // Security check
 $socid=0;
-if ($user->societe_id > 0 || (! $user->rights->tourneesdelivraison->tourneeunique->lire && ! $user->rights->tourneesdelivraison->tourneedelivraison->lire ) )	// Protection if external user
+if ($user->socid > 0 || (! $user->rights->tourneesdelivraison->tourneeunique->lire && ! $user->rights->tourneesdelivraison->tourneedelivraison->lire ) )	// Protection if external user
 {
 	//$socid = $user->societe_id;
 	accessforbidden();
@@ -134,7 +134,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 
 	// Security check
 	$socid=0;
-	if ($user->societe_id > 0)	// Protection if external user
+	if ($user->socid > 0)	// Protection if external user
 	{
 		//$socid = $user->societe_id;
 		accessforbidden();
@@ -153,7 +153,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 	$fieldstosearchall = array();
 	foreach($object->fields as $key => $val)
 	{
-		if ($val['searchall']) $fieldstosearchall['t.'.$key]=$val['label'];
+		if (in_array('searchall', $val) && $val['searchall']) $fieldstosearchall['t.'.$key]=$val['label'];
 	}
 
 
@@ -170,7 +170,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 		if (! empty($val['visible'])) $arrayfields['t.'.$key]=array('label'=>$val['label'], 'checked'=>(($val['visible']<0)?0:1), 'enabled'=>$val['enabled'], 'position'=>$val['position']);
 	}
 	// Extra fields
-	if (is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label']) > 0)
+	if (in_array( 'label', $extrafields->attributes[$object->table_element]) && is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label']) > 0)
 	{
 		foreach($extrafields->attributes[$object->table_element]['label'] as $key => $val)
 		{
@@ -253,7 +253,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 	$sql.=$hookmanager->resPrint;
 	$sql=preg_replace('/, $/','', $sql);
 	$sql.= " FROM ".MAIN_DB_PREFIX.$object->table_element." as t";
-	if (is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label'])) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX.$object->table_element."_extrafields as ef on (t.rowid = ef.fk_object)";
+	if (in_array('label', $extrafields->attributes[$object->table_element]) && is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label'])) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX.$object->table_element."_extrafields as ef on (t.rowid = ef.fk_object)";
 	if ($object->ismultientitymanaged == 1) $sql.= " WHERE t.entity IN (".getEntity($object->element).")";
 	else $sql.=" WHERE 1 = 1";
 
@@ -398,12 +398,6 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 	$trackid='xxxx'.$object->id;
 	include DOL_DOCUMENT_ROOT.'/core/tpl/massactions_pre.tpl.php';
 
-	if ($sall)
-	{
-		foreach($fieldstosearchall as $key => $val) $fieldstosearchall[$key]=$langs->trans($val);
-		print '<div class="divsearchfieldfilter">'.$langs->trans("FilterOnInto", $sall) . join(', ',$fieldstosearchall).'</div>';
-	}
-
 	$moreforfilter = '';
 
 	$parameters=array();
@@ -435,7 +429,9 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 		if (in_array($val['type'], array('date','datetime','timestamp'))) $cssforfield.=($cssforfield?' ':'').'center';
 		if (in_array($val['type'], array('timestamp'))) $cssforfield.=($cssforfield?' ':'').'nowrap';
 		if ($key == 'status') $cssforfield.=($cssforfield?' ':'').'center';
-		if (! empty($arrayfields['t.'.$key]['checked'])) print '<td class="liste_titre'.($cssforfield?' '.$cssforfield:'').'"><input type="text" class="flat maxwidth75" name="search_'.$key.'" value="'.dol_escape_htmltag($search[$key]).'"></td>';
+		if (! empty($arrayfields['t.'.$key]['checked'])) {
+			print '<td class="liste_titre'.($cssforfield?' '.$cssforfield:'').'"><input type="text" class="flat maxwidth75" name="search_'.$key.'" value="'.(in_array($key, $search)?dol_escape_htmltag($search[$key]):'').'"></td>';
+		}
 	}
 	// Extra fields
 	include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_input.tpl.php';
@@ -483,7 +479,7 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 
 	// Detect if we need a fetch on each output line
 	$needToFetchEachLine=0;
-	if (is_array($extrafields->attributes[$object->table_element]['computed']) && count($extrafields->attributes[$object->table_element]['computed']) > 0)
+	if (in_array('computed',$extrafields->attributes[$object->table_element]) && is_array($extrafields->attributes[$object->table_element]['computed']) && count($extrafields->attributes[$object->table_element]['computed']) > 0)
 	{
 		foreach ($extrafields->attributes[$object->table_element]['computed'] as $key => $val)
 		{
@@ -522,15 +518,18 @@ if( $user->rights->tourneesdelivraison->tourneeunique->lire){
 		    if (! empty($arrayfields['t.'.$key]['checked']))
 			{
 				print '<td';
-				if ($cssforfield || $val['css']) print ' class="';
+				if ($cssforfield || ! empty($val['css']) ) print ' class="';
 				print $cssforfield;
-				if ($cssforfield && $val['css']) print ' ';
-				print $val['css'];
-				if ($cssforfield || $val['css']) print '"';
+				if ($cssforfield && ! empty($val['css']) ) print ' ';
+				if( ! empty($val['css'] ) ) print $val['css'];
+				if ($cssforfield || ! empty($val['css']) ) print '"';
 				print '>';
 				print $object->showOutputField($val, $key, $obj->$key, '');
 				print '</td>';
-				if (! $i) $totalarray['nbfield']++;
+				if (! $i) {
+						if( ! in_array('nbfield', $totalarray) ) $totalarray['nbfield'] =0;
+						$totalarray['nbfield']++;
+				}
 				if (! empty($val['isameasure']))
 				{
 					if (! $i) $totalarray['pos'][$totalarray['nbfield']]='t.'.$key;

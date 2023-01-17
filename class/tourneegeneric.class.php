@@ -963,6 +963,7 @@ public function LibStatut($status, $mode=0)
 			if( empty(preg_replace('/(\[.*?\])/m', '', $line->note_public) ) ){
 
 				$c=$line->getCategories();
+				if( $categoriesContactExclure == null ) $categoriesContactExclure=array();
 				if( is_array($c) ) $c = array_intersect($c, $categoriesContactExclure);
 
 				if( ( ! is_array($c) || count($c)==0 ) ){ // si pas de note plublic ni de tag

@@ -48,7 +48,7 @@ if (! $res) die("Include of main fails");
 
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
-session_cache_limiter('public');
+//session_cache_limiter('public');
 // false or '' = keep cache instruction added by server
 // 'public'  = remove cache instruction added by server and if no cache-control added later, a default cache delay (10800) will be added by PHP.
 
@@ -69,6 +69,10 @@ else header('Cache-Control: no-cache');
 
 ?>
 
-#iframe_login {
-
+button.button{
+  background: var(--butactionbg) !important;
+color: var(--textbutaction) !important;
+border-radius: 3px !important;
+border-collapse: collapse !important;
+border: none;
 }

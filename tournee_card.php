@@ -184,8 +184,14 @@ if (empty($reshook)) {
 	$date=getdate();
 
 
+	if( is_int($object->date_tournee)){
+		$dateTourneeInt=$object->date_tournee;
+	} else {
+		$dateTourneeInt=mktime(0,0,0,intval(substr($object->date_tournee, 5,2)),intval(substr($object->date_tournee, 8,2)), intval(substr($object->date_tournee, 0,4)));
+	}
+
 	if( $typetournee == 'tourneeunique' && ! $ajaxActif){
-		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $object->date_tournee >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
+		if( $object->statut==TourneeGeneric::STATUS_VALIDATED && $dateTourneeInt >= mktime(0,0,0,$date['mon'], getdate['mday'], getdate['year'])) {
 		// si date tournée unique non dépassé, cherche les nouvelles commandes
 			$object->checkCommande($user);
 		} else {
@@ -803,15 +809,21 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     		// Clore / Cloner / Annuler
     		if (!empty($permissiontoadd))
     		{
-			if($object->statut!=TourneeGeneric::STATUS_CLOSED) print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_close">'.$langs->trans('Close').'</a></div>'."\n";
+			if($object->statut != TourneeGeneric::STATUS_CLOSED) print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_close">'.$langs->trans('Close').'</a></div>'."\n";
 			else print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_reopen">'.$langs->trans('Reopen').'</a></div>'."\n";
 
 			print '<div class="inline-block divButAction"><a class="butAction askAjaxable" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;socid=' . $object->socid . '&amp;action=ask_clone&amp;object=order">' . $langs->trans("ToClone") . '</a></div>';
-			print '<a class="butActionDelete askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_cancel">'.$langs->trans('Cancel').'</a>'."\n";
+
+			if( $object->statut != TourneeGeneric::STATUS_CANCELED){
+					print '<a class="butActionDelete askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_cancel">'.$langs->trans('Cancel').'</a>'."\n";
+			} else {
+				print '<a class="butActionDelete askAjaxable" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=ask_reprendre">'.$langs->trans('Reprendre').'</a>'."\n";
+			}
+
     		}
 		else
 		{
-			if($object->statut!=TourneeGeneric::STATUS_CLOSED)  print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('Reopen').'</a>'."\n";
+			if($object->statut != TourneeGeneric::STATUS_CLOSED)  print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('Reopen').'</a>'."\n";
 			print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('Cancel').'</a>'."\n";
 			print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('Delete').'</a>'."\n";
 		}
